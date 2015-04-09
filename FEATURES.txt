@@ -1,0 +1,15 @@
+Propozycje funkcji apki:
+	a. Widok sieci Petriego:
+		- Wybieranie typu sieci (uogólniona, czasowa, priorytetowa)
+		- Dodawanie przejść i miejsc metodą "drag&drop" lub PPM na canvas
+		- Łączenie miejsc i przejść PPM
+		- Widok aktualnego znakowania
+		- Schowek na znakowania z nazwami
+		- Konwertowanie sieci jednego typu na inny typ
+		- 
+	b. Widok grafu osiągalności:
+		- Generowanie grafu osiągalności na podstawie sieci Petriego
+		- Listing właściwości sieci
+		
+	c. Zapisywanie/wczytywanie na dysk
+		- Zapis/odczyt sieci, grafu osiągalności, 
