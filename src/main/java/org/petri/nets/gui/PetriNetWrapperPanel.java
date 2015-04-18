@@ -1,7 +1,6 @@
 package org.petri.nets.gui;
 
-import org.jgraph.JGraph;
-import org.petri.nets.model.Model;
+import org.petri.nets.model.DomainModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,10 +10,10 @@ public class PetriNetWrapperPanel extends JPanel{
     private final PetriNetGraphPanel petriNetGraphPanel;
     private final InitialMarkingPanel initialMarkingPanel;
 
-    public PetriNetWrapperPanel(Model model) {
+    public PetriNetWrapperPanel(DomainModel domainModel) {
         setLayout(new BorderLayout());
         
-        petriNetGraphPanel = new PetriNetGraphPanel(model);
+        petriNetGraphPanel = new PetriNetGraphPanel(domainModel);
         initialMarkingPanel = new InitialMarkingPanel();
 
         add(petriNetGraphPanel, BorderLayout.CENTER);

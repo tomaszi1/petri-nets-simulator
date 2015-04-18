@@ -1,7 +1,6 @@
 package org.petri.nets.gui;
 
-import org.jgraph.JGraph;
-import org.petri.nets.model.Model;
+import org.petri.nets.model.DomainModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,21 +13,21 @@ public class MainFrame extends JFrame {
     private SideMenuWrapper sideMenuWrapper;
     private JSplitPane graphsWrapper;
 
-    public MainFrame(Model model) {
+    public MainFrame(DomainModel domainModel) {
         super(FRAME_TITLE);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setLocationRelativeTo(null);
         setVisible(true);
 
-        initComponents(model);
+        initComponents(domainModel);
     }
 
-    private void initComponents(Model model) {
+    private void initComponents(DomainModel domainModel) {
         sideMenuWrapper = new SideMenuWrapper();
 
-        PetriNetWrapperPanel petriNetWrapperPanel = new PetriNetWrapperPanel(model);
-        ReachabilityGraphPanel reachGraphPanel = new ReachabilityGraphPanel(model);
+        PetriNetWrapperPanel petriNetWrapperPanel = new PetriNetWrapperPanel(domainModel);
+        ReachabilityGraphPanel reachGraphPanel = new ReachabilityGraphPanel(domainModel);
 
         graphsWrapper = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 petriNetWrapperPanel,
@@ -37,6 +36,5 @@ public class MainFrame extends JFrame {
 
         add(graphsWrapper, BorderLayout.CENTER);
         add(sideMenuWrapper, BorderLayout.LINE_END);
-
     }
 }

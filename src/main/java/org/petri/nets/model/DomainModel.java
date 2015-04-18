@@ -2,7 +2,7 @@ package org.petri.nets.model;
 
 import org.jgraph.graph.GraphModel;
 
-public class Model {
+public class DomainModel {
     private GraphModel petriNetGraphModel;
     private GraphModel reachabilityGraphModel;
     private PetriNet petriNet;
