@@ -19,6 +19,9 @@ public class ListPetriNet implements PetriNet {
         }
     }
 
+    public ListPetriNet() {
+    }
+
     @Override
     public void setInitialMarking(List<Integer> marking) {
         initialMarking = new ArrayList<>(marking);

@@ -1,6 +1,7 @@
 package org.petri.nets.gui;
 
 import org.jgraph.JGraph;
+import org.petri.nets.model.Model;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -10,9 +11,10 @@ public class PetriNetGraphPanel extends JScrollPane {
 
     private JGraph graph;
 
-    public PetriNetGraphPanel(JGraph graph) {
-        super(graph);
-        this.graph = graph;
+    public PetriNetGraphPanel(Model model) {
+        graph = new JGraph(model.getPetriNetGraphModel());
+
+        setViewportView(graph);
 
         Border etchedBorder = BorderFactory.createEtchedBorder();
         setBorder(BorderFactory.createTitledBorder(etchedBorder, PANEL_TITLE));
