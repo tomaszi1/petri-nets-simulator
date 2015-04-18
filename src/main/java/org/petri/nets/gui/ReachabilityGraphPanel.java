@@ -14,7 +14,7 @@ public class ReachabilityGraphPanel extends JScrollPane {
 
     public ReachabilityGraphPanel(Model model) {
         this.model = model;
-        graph = new JGraph(model.getPetriNetGraphModel());
+        graph = new JGraph(model.getReachabilityGraphModel());
 
         setViewportView(graph);
 
