@@ -3,30 +3,33 @@ package org.petri.nets.model;
 import java.util.List;
 
 public interface PetriNet {
-    void setMarking(List<Integer> marking);
+    void setInitialMarking(List<Integer> marking);
 
-    List<Integer> getMarking();
+    List<Integer> getInitialMarking();
 
     int getToken(int place);
 
-    List<Integer> getTransitions(int place);
+    List<Arc> getIngoingArcsForPlace(int place);
 
-    List<Integer> getIngoingArcValuesForTransition(int transition);
+    List<Arc> getOutgoingArcsForPlace(int place);
 
-    List<Integer> getOutgoingArcValuesForTransition(int transition);
+    List<Arc> getIngoingArcsForTransition(int transition);
 
-    int getPlaceToTransitionArcValue(int fromPlace, int toTransition);
+    List<Arc> getOutgoingArcsForTransition(int transition);
 
-    void setPlaceToTransitionArcValue(int fromPlace, int toTransition, int value);
+    Arc getArcFromPlaceToTransition(int fromPlace, int toTransition);
 
-    int getTransitionToPlaceArcValue(int fromTransition, int toPlace);
+    void putArcFromPlaceToTransition(int fromPlace, int toTransition, Arc arc);
 
-    void setTransitionToPlaceArcValue(int fromTransition, int toPlace, int value);
+    Arc getArcFromTransitionToPlace(int fromTransition, int toPlace);
+
+    void putArcFromTransitionToPlace(int fromTransition, int toPlace, Arc arc);
 
     int getTransitionsCount();
 
     int getPlacesCount();
 
+/*
     boolean doTransition(int transition);
 
     boolean isTransitionPossible(int transition);
@@ -36,4 +39,5 @@ public interface PetriNet {
     List<Integer> doTransitions(List<Integer> transitions);
 
     List<Integer> getAliveTransitions();
+*/
 }
