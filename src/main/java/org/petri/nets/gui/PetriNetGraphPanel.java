@@ -1,15 +1,13 @@
 package org.petri.nets.gui;
 
 import org.jgraph.JGraph;
-import org.jgraph.graph.*;
-import org.jgraph.plaf.basic.BasicGraphUI;
+import org.jgraph.graph.DefaultCellViewFactory;
+import org.jgraph.graph.GraphLayoutCache;
+import org.jgraph.graph.GraphModel;
 import org.petri.nets.gui.graph.PlaceGraphCell;
 import org.petri.nets.model.DomainModel;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
-import java.awt.geom.Rectangle2D;
 
 public class PetriNetGraphPanel extends JScrollPane {
     public static final String PANEL_TITLE = "Sieć Petriego";
