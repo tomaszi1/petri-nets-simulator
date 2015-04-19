@@ -9,15 +9,12 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-
-        System.out.println("Drop the bass");
+        DomainModel domainModel = new DomainModel();
+        domainModel.setPetriNet(new ListPetriNet());
+        domainModel.setPetriNetGraphModel(new DefaultGraphModel());
+        domainModel.setReachabilityGraphModel(new DefaultGraphModel());
 
         SwingUtilities.invokeLater(() -> {
-            DomainModel domainModel = new DomainModel();
-            domainModel.setPetriNet(new ListPetriNet());
-            domainModel.setPetriNetGraphModel(new DefaultGraphModel());
-            domainModel.setReachabilityGraphModel(new DefaultGraphModel());
-
             MainFrame mainFrame = new MainFrame(domainModel);
         });
 

@@ -7,7 +7,9 @@ public interface PetriNet {
 
     List<Integer> getInitialMarking();
 
-    int getToken(int place);
+    int getInitialMarking(int place);
+
+    void setInitialMarking(int place, int marking);
 
     List<Arc> getIngoingArcsForPlace(int place);
 

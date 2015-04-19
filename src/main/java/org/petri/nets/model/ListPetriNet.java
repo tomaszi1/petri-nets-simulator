@@ -12,6 +12,7 @@ public class ListPetriNet implements PetriNet {
     public ListPetriNet(int numOfPlaces, int numOfTransitions) {
         placeToTransitionArcs = new ArrayList<>(numOfTransitions);
         transitionToPlaceArcs = new ArrayList<>(numOfTransitions);
+        initialMarking = new ArrayList<>();
 
         for (int i = 0; i < numOfTransitions; i++) {
             placeToTransitionArcs.add(Collections.nCopies(numOfPlaces, (Arc) null));
@@ -20,6 +21,7 @@ public class ListPetriNet implements PetriNet {
     }
 
     public ListPetriNet() {
+        this(0, 0);
     }
 
     @Override
@@ -28,14 +30,22 @@ public class ListPetriNet implements PetriNet {
     }
 
     @Override
+    public void setInitialMarking(int place, int marking) {
+        if (marking < 0)
+            throw new IllegalArgumentException("Negative marking");
+        initialMarking.set(place, marking);
+    }
+
+    @Override
     public List<Integer> getInitialMarking() {
         return new ArrayList<>(initialMarking);
     }
 
     @Override
-    public int getToken(int place) {
+    public int getInitialMarking(int place) {
         return initialMarking.get(place);
     }
+
 
     @Override
     public List<Arc> getIngoingArcsForPlace(int place) {
@@ -84,7 +94,7 @@ public class ListPetriNet implements PetriNet {
 
     @Override
     public int getPlacesCount() {
-        if(transitionToPlaceArcs.isEmpty())
+        if (transitionToPlaceArcs.isEmpty())
             return 0;
         return transitionToPlaceArcs.get(0).size();
     }
