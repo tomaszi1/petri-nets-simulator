@@ -4,6 +4,9 @@ import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultCellViewFactory;
 import org.jgraph.graph.GraphLayoutCache;
 import org.jgraph.graph.GraphModel;
+import org.jgraph.plaf.GraphUI;
+import org.jgraph.plaf.basic.BasicGraphUI;
+import org.petri.nets.gui.graph.PetriNetGraphUI;
 import org.petri.nets.gui.graph.PlaceGraphCell;
 import org.petri.nets.model.DomainModel;
 
@@ -33,7 +36,7 @@ public class PetriNetGraphPanel extends JScrollPane {
     }
 
     private void initGraph(){
-
+        graph.setUI(new PetriNetGraphUI());
         graphLayoutCache.insert(new PlaceGraphCell("P1"));
     }
 }

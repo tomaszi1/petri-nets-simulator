@@ -7,6 +7,6 @@ import java.awt.event.MouseListener;
 public class PetriNetGraphUI extends BasicGraphUI{
     @Override
     protected MouseListener createMouseListener() {
-        return new BasicGraphUI.MouseHandler();
+        return new MouseHandler();
     }
 }

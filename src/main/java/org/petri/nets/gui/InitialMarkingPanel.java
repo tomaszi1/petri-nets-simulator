@@ -13,8 +13,8 @@ import java.util.Enumeration;
 public class InitialMarkingPanel extends JPanel {
     public static final String PANEL_TITLE = "Znakowanie początkowe";
     public static final int PANEL_HEIGHT = 80;
-    private final JTable table;
-    private final MarkingTableModel tableModel;
+    private JTable table;
+    private MarkingTableModel tableModel;
     private final DomainModel domainModel;
 
     public InitialMarkingPanel(DomainModel domainModel) {
@@ -23,6 +23,10 @@ public class InitialMarkingPanel extends JPanel {
         setPreferredSize(new Dimension(100 /*ignored*/, PANEL_HEIGHT));
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
         setLayout(new BorderLayout());
+        initMarkingTable();
+    }
+
+    private void initMarkingTable() {
         tableModel = new MarkingTableModel();
         table = new JTable(tableModel);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -66,7 +70,7 @@ public class InitialMarkingPanel extends JPanel {
 
         @Override
         public String getColumnName(int col) {
-            return "P"+(col+1);
+            return "P" + (col + 1);
         }
 
         @Override
@@ -86,8 +90,7 @@ public class InitialMarkingPanel extends JPanel {
 
                 if (value instanceof String) {
                     petriNet.setInitialMarking(col, Integer.parseInt((String) value));
-                }
-                else if (!(value instanceof Integer))
+                } else if (!(value instanceof Integer))
                     return;
                 else {
                     Integer intval = (Integer) value;
