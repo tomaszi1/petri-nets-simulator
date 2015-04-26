@@ -1,6 +1,7 @@
 package org.petri.nets.gui;
 
 import org.jgraph.JGraph;
+import org.jgraph.graph.DefaultGraphModel;
 import org.petri.nets.model.DomainModel;
 
 import javax.swing.*;
@@ -14,7 +15,7 @@ public class ReachabilityGraphPanel extends JScrollPane {
 
     public ReachabilityGraphPanel(DomainModel domainModel) {
         this.domainModel = domainModel;
-        graph = new JGraph(domainModel.getReachabilityGraphModel());
+        graph = new JGraph(new DefaultGraphModel(), domainModel.getReachabilityGraphLayoutCache());
 
         setViewportView(graph);
 

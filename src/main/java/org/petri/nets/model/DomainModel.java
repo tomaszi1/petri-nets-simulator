@@ -1,26 +1,26 @@
 package org.petri.nets.model;
 
-import org.jgraph.graph.GraphModel;
+import org.jgraph.graph.GraphLayoutCache;
 
 public class DomainModel {
-    private GraphModel petriNetGraphModel;
-    private GraphModel reachabilityGraphModel;
+    private GraphLayoutCache petriNetGraphLayoutCache;
+    private GraphLayoutCache reachabilityGraphLayoutCache;
     private PetriNet petriNet;
 
-    public GraphModel getPetriNetGraphModel() {
-        return petriNetGraphModel;
+    public GraphLayoutCache getPetriNetGraphLayoutCache() {
+        return petriNetGraphLayoutCache;
     }
 
-    public void setPetriNetGraphModel(GraphModel petriNetGraphModel) {
-        this.petriNetGraphModel = petriNetGraphModel;
+    public void setPetriNetGraphLayoutCache(GraphLayoutCache petriNetGraphLayoutCache) {
+        this.petriNetGraphLayoutCache = petriNetGraphLayoutCache;
     }
 
-    public GraphModel getReachabilityGraphModel() {
-        return reachabilityGraphModel;
+    public GraphLayoutCache getReachabilityGraphLayoutCache() {
+        return reachabilityGraphLayoutCache;
     }
 
-    public void setReachabilityGraphModel(GraphModel reachabilityGraphModel) {
-        this.reachabilityGraphModel = reachabilityGraphModel;
+    public void setReachabilityGraphLayoutCache(GraphLayoutCache reachabilityGraphLayoutCache) {
+        this.reachabilityGraphLayoutCache = reachabilityGraphLayoutCache;
     }
 
     public PetriNet getPetriNet() {

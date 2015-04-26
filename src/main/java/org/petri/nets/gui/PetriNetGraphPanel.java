@@ -2,8 +2,8 @@ package org.petri.nets.gui;
 
 import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultCellViewFactory;
+import org.jgraph.graph.DefaultGraphModel;
 import org.jgraph.graph.GraphLayoutCache;
-import org.jgraph.graph.GraphModel;
 import org.jgraph.plaf.GraphUI;
 import org.jgraph.plaf.basic.BasicGraphUI;
 import org.petri.nets.gui.graph.PetriNetGraphUI;
@@ -16,27 +16,24 @@ public class PetriNetGraphPanel extends JScrollPane {
     public static final String PANEL_TITLE = "Sieć Petriego";
 
     private DomainModel domainModel;
-    private GraphModel graphModel;
     private GraphLayoutCache graphLayoutCache;
     private JGraph graph;
 
     public PetriNetGraphPanel(DomainModel domainModel) {
         this.domainModel = domainModel;
-        graphModel = domainModel.getPetriNetGraphModel();
+        graphLayoutCache = domainModel.getPetriNetGraphLayoutCache();
+        DefaultGraphModel defaultGraphModel = new DefaultGraphModel();
         graphLayoutCache = new GraphLayoutCache(
-                graphModel,
+                defaultGraphModel,
                 new DefaultCellViewFactory());
-        graph = new JGraph(graphModel, graphLayoutCache);
+        graph = new JGraph(defaultGraphModel, graphLayoutCache);
 
         setViewportView(graph);
+        graph.setEditable(false);
+        graph.setUI(new PetriNetGraphUI());
 
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
 
-        initGraph();
     }
 
-    private void initGraph(){
-        graph.setUI(new PetriNetGraphUI());
-        graphLayoutCache.insert(new PlaceGraphCell("P1"));
-    }
 }
