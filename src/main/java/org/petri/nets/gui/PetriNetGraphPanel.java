@@ -21,13 +21,7 @@ public class PetriNetGraphPanel extends JScrollPane {
 
     public PetriNetGraphPanel(DomainModel domainModel) {
         this.domainModel = domainModel;
-        graphLayoutCache = domainModel.getPetriNetGraphLayoutCache();
-        DefaultGraphModel defaultGraphModel = new DefaultGraphModel();
-        graphLayoutCache = new GraphLayoutCache(
-                defaultGraphModel,
-                new DefaultCellViewFactory());
-        graph = new JGraph(defaultGraphModel, graphLayoutCache);
-
+        graph = domainModel.getPetriNetGraph();
         setViewportView(graph);
         graph.setEditable(false);
         graph.setUI(new PetriNetGraphUI());

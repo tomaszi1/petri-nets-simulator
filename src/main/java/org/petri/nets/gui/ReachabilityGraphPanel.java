@@ -15,10 +15,10 @@ public class ReachabilityGraphPanel extends JScrollPane {
 
     public ReachabilityGraphPanel(DomainModel domainModel) {
         this.domainModel = domainModel;
-        graph = new JGraph(new DefaultGraphModel(), domainModel.getReachabilityGraphLayoutCache());
+        graph = domainModel.getReachabilityGraph();
 
         setViewportView(graph);
 
-        setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(),PANEL_TITLE));
+        setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
     }
 }

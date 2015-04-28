@@ -9,6 +9,7 @@ import org.jgraph.plaf.basic.BasicGraphUI;
 import org.petri.nets.gui.popup.BackgroundPopupMenu;
 import org.petri.nets.gui.popup.PlacePopupMenu;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -49,7 +50,7 @@ public class PetriNetGraphUI extends BasicGraphUI {
 
         @Override
         public void mousePressed(MouseEvent event) {
-            if (event.getButton() != MouseEvent.BUTTON1) {
+            if (!SwingUtilities.isLeftMouseButton(event)) {
                 showPopupMenu(event);
             }
             cellHandle.mousePressed(event);
@@ -67,19 +68,21 @@ public class PetriNetGraphUI extends BasicGraphUI {
     }
 
     private void showPopupMenu(MouseEvent event) {
-        if(focus instanceof VertexView)
-            placePopupMenu.show(event.getComponent(),event.getX(),event.getY());
-        else if(focus==null)
-            backgroundPopupMenu.show(event.getComponent(),event.getX(),event.getY());
+        if (focus instanceof VertexView)
+            placePopupMenu.show(event.getComponent(), event.getX(), event.getY());
+        else if (focus == null)
+            backgroundPopupMenu.show(event.getComponent(), event.getX(), event.getY());
     }
 
-    /*
+
     @Override
     protected MouseListener createMouseListener() {
         return new CustomMouseHandler();
     }
 
     private class CustomMouseHandler extends MouseHandler {
+
+        @Override
         public void mousePressed(MouseEvent e) {
             handler = null;
             if (!e.isConsumed() && graph.isEnabled()) {
@@ -110,6 +113,9 @@ public class PetriNetGraphUI extends BasicGraphUI {
                         if (handle != null) {
                             handle.mousePressed(e);
                             handler = handle;
+                        } else if (!SwingUtilities.isLeftMouseButton(e)) {
+                            showPopupMenu(e);
+                            e.consume();
                         }
                         // Immediate Selection
                         if (!e.isConsumed() && cell != null
@@ -138,7 +144,7 @@ public class PetriNetGraphUI extends BasicGraphUI {
         @Override
         public void mouseDragged(MouseEvent e) {
             autoscroll(graph, e.getPoint());
-            if (graph.isEnabled()) {
+            if (graph.isEnabled() && SwingUtilities.isLeftMouseButton(e)) {
                 if (handler != null && handler == marquee)
                     marquee.mouseDragged(e);
                 else if (handler == null && !isEditing(graph) && focus != null) {
@@ -154,63 +160,5 @@ public class PetriNetGraphUI extends BasicGraphUI {
                     handle.mouseDragged(e);
             }
         }
-
-        @Override
-        public void mouseMoved(MouseEvent e) {
-            if (previousCursor == null) {
-                previousCursor = graph.getCursor();
-            }
-            if (graph != null && graph.isEnabled()) {
-                if (marquee != null)
-                    marquee.mouseMoved(e);
-                if (handle != null)
-                    handle.mouseMoved(e);
-                if (!e.isConsumed() && previousCursor != null) {
-                    Cursor currentCursor = graph.getCursor();
-                    if (currentCursor != previousCursor) {
-                        graph.setCursor(previousCursor);
-                    }
-                    previousCursor = null;
-                }
-            }
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-            try {
-                if (e != null && !e.isConsumed() && graph != null
-                        && graph.isEnabled()) {
-                    if (handler == marquee && marquee != null)
-                        marquee.mouseReleased(e);
-                    else if (handler == handle && handle != null)
-                        handle.mouseReleased(e);
-                    if (isDescendant(cell, focus) && e.getModifiers() != 0) {
-                        // Do not switch to parent if Special Selection
-                        cell = focus;
-                    }
-                    if (!e.isConsumed() && cell != null) {
-                        Object tmp = cell.getCell();
-                        boolean wasSelected = graph.isCellSelected(tmp);
-                        if (!e.isPopupTrigger() || !wasSelected) {
-                            selectCellForEvent(tmp, e);
-                            focus = cell;
-                            postProcessSelection(e, tmp, wasSelected);
-                        }
-                    }
-                }
-            } finally {
-                handler = null;
-                cell = null;
-            }
-        }
-
-        @Override
-        protected boolean handleEditTrigger(Object cell, MouseEvent e) {
-            graph.scrollCellToVisible(cell);
-            if (cell != null)
-                startEditing(cell, e);
-            return graph.isEditing();
-        }
-
-*/
+    }
 }
