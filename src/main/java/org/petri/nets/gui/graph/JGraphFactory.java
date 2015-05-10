@@ -9,7 +9,7 @@ public class JGraphFactory {
 
     public static JGraph createGraph() {
         DefaultGraphModel defaultGraphModel = new DefaultGraphModel();
-        GraphLayoutCache graphLayoutCache  = new GraphLayoutCache(defaultGraphModel, new DefaultCellViewFactory());
+        GraphLayoutCache graphLayoutCache  = new GraphLayoutCache(defaultGraphModel, new CustomCellViewFactory());
         return new JGraph(defaultGraphModel, graphLayoutCache);
     }
 }

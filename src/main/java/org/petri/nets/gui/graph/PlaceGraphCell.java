@@ -7,8 +7,9 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class PlaceGraphCell extends DefaultGraphCell{
-    public PlaceGraphCell(String text) {
-        super(text);
+    public PlaceGraphCell(int id) {
+        super("P" + id);
+        
         GraphConstants.setBounds(getAttributes(),
                 new Rectangle2D.Double(20, 20, 40, 40));
         GraphConstants.setSizeable(getAttributes(), false);
