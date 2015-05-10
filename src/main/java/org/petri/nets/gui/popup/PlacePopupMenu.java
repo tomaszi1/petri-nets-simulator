@@ -4,7 +4,7 @@ package org.petri.nets.gui.popup;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
-public class PlacePopupMenu extends JPopupMenu{
+public class PlacePopupMenu extends CustomJPopupMenu{
 
     public static final String CONNECT_ITEM_TEXT = "Połącz z...";
     private static final String RENAME_ITEM_TEXT = "Zmień nazwę";

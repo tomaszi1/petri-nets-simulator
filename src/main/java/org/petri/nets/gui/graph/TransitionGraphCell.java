@@ -6,12 +6,9 @@ import org.jgraph.graph.GraphConstants;
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
-public class TransitionGraphCell extends DefaultGraphCell {
-    public TransitionGraphCell(int id) {
-        super("T" + id);
-        GraphConstants.setBounds(getAttributes(), new Rectangle2D.Double(60, 60, 40, 40));
-        GraphConstants.setOpaque(getAttributes(), true);
+public class TransitionGraphCell extends PetriNetGraphCell {
+    public TransitionGraphCell(int id, int posX, int posY) {
+        super("T" + id, posX, posY);
         GraphConstants.setBackground(getAttributes(), Color.CYAN);
-        GraphConstants.setSizeable(getAttributes(), false);
     }
 }

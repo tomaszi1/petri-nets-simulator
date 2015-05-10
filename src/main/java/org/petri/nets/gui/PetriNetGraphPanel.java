@@ -24,7 +24,7 @@ public class PetriNetGraphPanel extends JScrollPane {
         graph = domainModel.getPetriNetGraph();
         setViewportView(graph);
         graph.setEditable(false);
-        graph.setUI(new PetriNetGraphUI());
+        graph.setUI(new PetriNetGraphUI(domainModel));
 
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
 

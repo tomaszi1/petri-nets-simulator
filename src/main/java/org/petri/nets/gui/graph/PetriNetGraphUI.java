@@ -8,6 +8,8 @@ import org.jgraph.graph.VertexView;
 import org.jgraph.plaf.basic.BasicGraphUI;
 import org.petri.nets.gui.popup.BackgroundPopupMenu;
 import org.petri.nets.gui.popup.PlacePopupMenu;
+import org.petri.nets.model.DomainModel;
+import org.petri.nets.model.PetriNet;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +20,11 @@ import java.io.Serializable;
 
 public class PetriNetGraphUI extends BasicGraphUI {
     private PlacePopupMenu placePopupMenu = new PlacePopupMenu();
-    private BackgroundPopupMenu backgroundPopupMenu = new BackgroundPopupMenu();
+    private BackgroundPopupMenu backgroundPopupMenu;
+
+    public PetriNetGraphUI(DomainModel model) {
+        backgroundPopupMenu = new BackgroundPopupMenu(model);
+    }
 
     @Override
     public CellHandle createHandle(GraphContext context) {

@@ -1,7 +1,6 @@
 package org.petri.nets;
 
 import org.jgraph.JGraph;
-import org.jgraph.graph.GraphLayoutCache;
 import org.petri.nets.gui.MainFrame;
 import org.petri.nets.gui.graph.JGraphFactory;
 import org.petri.nets.gui.graph.PlaceGraphCell;
@@ -16,8 +15,8 @@ public class Main {
         DomainModel domainModel = new DomainModel();
         domainModel.setPetriNet(new ListPetriNet());
         JGraph graph = JGraphFactory.createGraph();
-        graph.getGraphLayoutCache().insert(new PlaceGraphCell(1));
-        graph.getGraphLayoutCache().insert(new TransitionGraphCell(1));
+        graph.getGraphLayoutCache().insert(new PlaceGraphCell(1,0,0));
+        graph.getGraphLayoutCache().insert(new TransitionGraphCell(1, 40, 40));
         domainModel.setPetriNetGraph(graph);
         domainModel.setReachabilityGraph(JGraphFactory.createGraph());
 
