@@ -13,8 +13,7 @@ import org.petri.nets.model.PetriNet;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
@@ -30,6 +29,11 @@ public class PetriNetGraphUI extends BasicGraphUI {
     public CellHandle createHandle(GraphContext context) {
         CellHandle rootHandle = super.createHandle(context);
         return new DecoratorHandle(rootHandle);
+    }
+
+    @Override
+    protected KeyListener createKeyListener() {
+        return new CustomKeyHandler();
     }
 
     public class DecoratorHandle implements CellHandle, Serializable {
@@ -164,6 +168,45 @@ public class PetriNetGraphUI extends BasicGraphUI {
                 }
                 if (handle != null && handler == handle)
                     handle.mouseDragged(e);
+            }
+        }
+    }
+
+    private class CustomKeyHandler extends KeyHandler {
+
+        @Override
+        public void keyPressed(KeyEvent e) {
+            if (graph != null && graph.hasFocus() && graph.isEnabled()) {
+                KeyStroke keyStroke = KeyStroke.getKeyStroke(e.getKeyCode(), e
+                        .getModifiers());
+
+                if (graph.getConditionForKeyStroke(keyStroke) == JComponent.WHEN_FOCUSED) {
+                    ActionListener listener = graph
+                            .getActionForKeyStroke(keyStroke);
+
+                    if (listener instanceof Action)
+                        repeatKeyAction = (Action) listener;
+                    else
+                        repeatKeyAction = null;
+                } else {
+                    repeatKeyAction = null;
+                    if (keyStroke.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                        if (marquee != null)
+                            marquee.mouseReleased(null);
+                        if (mouseListener != null)
+                            mouseListener.mouseReleased(null);
+                        updateHandle();
+                        graph.repaint();
+                    } else if (keyStroke.getKeyCode() == KeyEvent.VK_DELETE && focus != null) {
+                        graphLayoutCache.remove(new Object[]{focus.getCell()});
+                    }
+                }
+                if (isKeyDown && repeatKeyAction != null) {
+                    repeatKeyAction.actionPerformed(new ActionEvent(graph,
+                            ActionEvent.ACTION_PERFORMED, ""));
+                    e.consume();
+                } else
+                    isKeyDown = true;
             }
         }
     }
