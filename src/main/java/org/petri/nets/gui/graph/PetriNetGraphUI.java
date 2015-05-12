@@ -10,6 +10,8 @@ import org.petri.nets.gui.popup.BackgroundPopupMenu;
 import org.petri.nets.gui.popup.PlacePopupMenu;
 import org.petri.nets.model.DomainModel;
 import org.petri.nets.model.PetriNet;
+import org.petri.nets.service.GraphService;
+import org.petri.nets.service.GraphServiceImpl;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,11 +20,13 @@ import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
 
 public class PetriNetGraphUI extends BasicGraphUI {
-    private PlacePopupMenu placePopupMenu = new PlacePopupMenu();
+    private PlacePopupMenu placePopupMenu;
     private BackgroundPopupMenu backgroundPopupMenu;
 
-    public PetriNetGraphUI(DomainModel model) {
-        backgroundPopupMenu = new BackgroundPopupMenu(model);
+    public PetriNetGraphUI(DomainModel model) { // maybe graphService
+        GraphService graphService = new GraphServiceImpl(model);
+        backgroundPopupMenu = new BackgroundPopupMenu(graphService);
+        placePopupMenu = new PlacePopupMenu(graphService);
     }
 
     @Override
@@ -78,9 +82,10 @@ public class PetriNetGraphUI extends BasicGraphUI {
     }
 
     private void showPopupMenu(MouseEvent event) {
-        if (focus instanceof VertexView)
+        if (focus instanceof VertexView) {
+            placePopupMenu.setFocus(focus);
             placePopupMenu.show(event.getComponent(), event.getX(), event.getY());
-        else if (focus == null)
+        } else if (focus == null)
             backgroundPopupMenu.show(event.getComponent(), event.getX(), event.getY());
     }
 

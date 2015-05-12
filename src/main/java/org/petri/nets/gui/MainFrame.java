@@ -1,5 +1,8 @@
 package org.petri.nets.gui;
 
+import org.petri.nets.gui.panel.PetriNetWrapperPanel;
+import org.petri.nets.gui.panel.ReachabilityGraphPanel;
+import org.petri.nets.gui.panel.SideMenuWrapper;
 import org.petri.nets.model.DomainModel;
 
 import javax.swing.*;

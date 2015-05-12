@@ -15,14 +15,14 @@ public class Main {
         DomainModel domainModel = new DomainModel();
         domainModel.setPetriNet(new ListPetriNet());
         JGraph graph = JGraphFactory.createGraph();
-        graph.getGraphLayoutCache().insert(new PlaceGraphCell(1,0,0));
-        graph.getGraphLayoutCache().insert(new TransitionGraphCell(1, 40, 40));
+        graph.getGraphLayoutCache().insert(new PlaceGraphCell(1, 20, 20));
+        graph.getGraphLayoutCache().insert(new TransitionGraphCell(1, 60, 60));
         domainModel.setPetriNetGraph(graph);
         domainModel.setReachabilityGraph(JGraphFactory.createGraph());
 
 
         SwingUtilities.invokeLater(() -> {
-            MainFrame mainFrame = new MainFrame(domainModel);
+            new MainFrame(domainModel);
         });
 
     }

@@ -1,4 +1,4 @@
-package org.petri.nets.gui;
+package org.petri.nets.gui.panel;
 
 import org.petri.nets.model.DomainModel;
 import org.petri.nets.model.PetriNet;

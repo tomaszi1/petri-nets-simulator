@@ -3,6 +3,7 @@ package org.petri.nets.gui.popup;
 import org.petri.nets.gui.graph.PlaceGraphCell;
 import org.petri.nets.gui.graph.TransitionGraphCell;
 import org.petri.nets.model.DomainModel;
+import org.petri.nets.service.GraphService;
 
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
@@ -13,7 +14,7 @@ import java.util.Random;
 
 public class BackgroundPopupMenu extends CustomJPopupMenu {
 
-    private final DomainModel model;
+    private final GraphService graphService;
 
     public static final String ADD_PLACE_TEXT = "Dodaj miejsce";
     public static final String ADD_TRANSITION_TEXT = "Dodaj przejście";
@@ -21,8 +22,8 @@ public class BackgroundPopupMenu extends CustomJPopupMenu {
     private final JMenuItem addPlaceMenuItem;
     private final JMenuItem addTransitionMenuItem;
 
-    public BackgroundPopupMenu(DomainModel model) {
-        this.model = model;
+    public BackgroundPopupMenu(GraphService graphService) {
+        this.graphService = graphService;
         addPlaceMenuItem = new JMenuItem(ADD_PLACE_TEXT);
         addTransitionMenuItem = new JMenuItem(ADD_TRANSITION_TEXT);
 
@@ -34,20 +35,11 @@ public class BackgroundPopupMenu extends CustomJPopupMenu {
     }
 
     private void addTransitionItemClicked(ActionEvent e) {
-        TransitionGraphCell cell = new TransitionGraphCell(
-                new Random().nextInt(), // FIXME
-                (int) getPosition().getX(),
-                (int) getPosition().getY());
-
-        model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
+        graphService.addTransition(getPosition());
     }
 
     private void addPlaceItemClicked(ActionEvent e) {
-        PlaceGraphCell cell = new PlaceGraphCell(
-                new Random().nextInt(),
-                (int) getPosition().getX(),
-                (int) getPosition().getY());
-        model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
+        graphService.addPlace(getPosition());
     }
 
 }

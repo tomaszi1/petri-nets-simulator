@@ -1,4 +1,4 @@
-package org.petri.nets.gui;
+package org.petri.nets.gui.panel;
 
 import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultGraphModel;
