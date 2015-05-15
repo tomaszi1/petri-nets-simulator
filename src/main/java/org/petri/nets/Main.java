@@ -20,10 +20,16 @@ public class Main {
         domainModel.setPetriNetGraph(graph);
         domainModel.setReachabilityGraph(JGraphFactory.createGraph());
 
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (ClassNotFoundException |
+                InstantiationException |
+                UnsupportedLookAndFeelException |
+                IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
-        SwingUtilities.invokeLater(() -> {
-            new MainFrame(domainModel);
-        });
+        SwingUtilities.invokeLater(() -> new MainFrame(domainModel));
 
     }
 

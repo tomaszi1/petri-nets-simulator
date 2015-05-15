@@ -1,8 +1,6 @@
 package org.petri.nets.gui.graph;
 
-import org.jgraph.graph.CellView;
-import org.jgraph.graph.DefaultCellViewFactory;
-import org.jgraph.graph.VertexView;
+import org.jgraph.graph.*;
 
 public class CustomCellViewFactory extends DefaultCellViewFactory {
     @Override
@@ -12,11 +10,11 @@ public class CustomCellViewFactory extends DefaultCellViewFactory {
         else return new TransitionVertexView(cell);
     }
 
-    public static boolean isPlaceView(CellView cellView){
+    public static boolean isPlaceView(CellView cellView) {
         return cellView instanceof PlaceVertexView;
     }
 
-    public static boolean isTransitionView(CellView cellView){
+    public static boolean isTransitionView(CellView cellView) {
         return cellView instanceof TransitionVertexView;
     }
 
@@ -30,5 +28,25 @@ public class CustomCellViewFactory extends DefaultCellViewFactory {
 
     public static boolean isVertex(Object cell) {
         return cell instanceof PetriNetGraphCell;
+    }
+
+    public static boolean isPort(Object obj) {
+        return obj instanceof Port;
+    }
+
+    public static Port tryCastToPort(Object o) {
+        if (!isPort(o))
+            return null;
+        return (Port) o;
+    }
+
+    public static DefaultGraphCell tryCastToCell(Object obj) {
+        if(!isCell(obj))
+            return null;
+        return (DefaultGraphCell) obj;
+    }
+
+    private static boolean isCell(Object obj) {
+        return obj instanceof GraphCell;
     }
 }

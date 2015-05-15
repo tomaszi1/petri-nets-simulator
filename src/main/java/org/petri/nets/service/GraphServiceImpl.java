@@ -1,7 +1,6 @@
 package org.petri.nets.service;
 
-import org.jgraph.graph.CellView;
-import org.jgraph.graph.DefaultEdge;
+import org.jgraph.graph.*;
 import org.petri.nets.gui.graph.*;
 import org.petri.nets.model.DomainModel;
 
@@ -17,13 +16,44 @@ public class GraphServiceImpl implements GraphService {
         this.model = model;
     }
 
+    public void cascadeRemoveEdges(PetriNetGraphCell cell) {
+        for (Object o : cell.getChildren()) {
+            Port port = CustomCellViewFactory.tryCastToPort(o);
+            if (port!=null) {
+                Iterator edges = port.edges();
+                while(edges.hasNext()){
+                    Edge edge = (Edge) edges.next();
+                    removeFromGraph(edge);
+                }
+            }
+        }
+    }
+
     @Override
     public void removeFromGraph(Object cell) {
-        if (cell instanceof CellView) {
+        if (cell instanceof Object[])
+            removeFromGraph((Object[])cell);
+        else if (cell instanceof CellView) {
             CellView cellView = (CellView) cell;
-            model.getPetriNetGraph().getGraphLayoutCache().remove(new Object[]{cellView.getCell()});
-        } else
+            removeFromGraph(new Object[]{cellView.getCell()});
+        } else {
+            removeFromGraph(new Object[]{cell});
+        }
+    }
+
+    public void removeFromGraph(Object[] cells){
+        for (Object cell : cells) {
+            DefaultGraphCell graphCell = CustomCellViewFactory.tryCastToCell(cell);
+            if(graphCell!=null){
+                for (Object child : graphCell.getChildren()) {
+                    Port port = CustomCellViewFactory.tryCastToPort(child);
+                    if(port!=null){
+                        port.edges().forEachRemaining(this::removeFromGraph);
+                    }
+                }
+            }
             model.getPetriNetGraph().getGraphLayoutCache().remove(new Object[]{cell});
+        }
     }
 
     @Override

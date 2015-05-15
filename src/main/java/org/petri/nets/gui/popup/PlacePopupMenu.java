@@ -34,7 +34,7 @@ public class PlacePopupMenu extends CustomJPopupMenu {
     }
 
     private void removeCellMenuItemClicked(ActionEvent e) {
-        graphService.removeFromGraph(graphService.getLastFocusedCell());
+        graphService.removeFromGraph(graphService.getSelectedCells());
     }
 
     private void editCellMenuItemClicked(ActionEvent e) {

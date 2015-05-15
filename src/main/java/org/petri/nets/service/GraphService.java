@@ -11,6 +11,7 @@ public interface GraphService {
 
     void removeFromGraph(Object cell);
 
+
     PlaceGraphCell addPlace(Point position);
 
     TransitionGraphCell addTransition(Point position);

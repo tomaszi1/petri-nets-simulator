@@ -24,9 +24,10 @@ public class PetriNetGraphUI extends BasicGraphUI {
     private PlacePopupMenu placePopupMenu;
     private BackgroundPopupMenu backgroundPopupMenu;
     private MultipleSelectionsPopupMenu multipleSelectionsPopupMenu;
+    private final GraphService graphService;
 
     public PetriNetGraphUI(DomainModel model) { // maybe graphService
-        GraphService graphService = new GraphServiceImpl(model);
+        graphService = new GraphServiceImpl(model);
         backgroundPopupMenu = new BackgroundPopupMenu(graphService);
         placePopupMenu = new PlacePopupMenu(graphService);
         multipleSelectionsPopupMenu = new MultipleSelectionsPopupMenu(graphService);
@@ -213,7 +214,11 @@ public class PetriNetGraphUI extends BasicGraphUI {
                         updateHandle();
                         graph.repaint();
                     } else if (keyStroke.getKeyCode() == KeyEvent.VK_DELETE && focus != null) {
-                        graphLayoutCache.remove(new Object[]{focus.getCell()});
+                        graphService.removeFromGraph(graphService.getSelectedCells());
+                    } else if(keyStroke.getKeyCode()==KeyEvent.VK_Z){
+                        int mods = keyStroke.getModifiers();
+                        if((mods & InputEvent.CTRL_MASK) !=0)
+                            System.out.println("Implement undo action!"); // TODO implement UNDO
                     }
                 }
                 if (isKeyDown && repeatKeyAction != null) {

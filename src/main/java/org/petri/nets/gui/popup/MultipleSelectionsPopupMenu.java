@@ -24,9 +24,16 @@ public class MultipleSelectionsPopupMenu extends CustomJPopupMenu {
         deleteCellsMenuItem = new JMenuItem(DELETE_CELLS_MENU_ITEM_TEXT);
 
         connectCellsMenuItem.addActionListener(this::connectCellsMenuItemClicked);
+        deleteCellsMenuItem.addActionListener(this::deleteCellsMenuItemClicked);
 
         add(connectCellsMenuItem);
         add(deleteCellsMenuItem);
+    }
+
+    private void deleteCellsMenuItemClicked(ActionEvent event) {
+        Object[] selectedCells = graphService.getSelectedCells();
+        graphService.removeFromGraph(selectedCells);
+
     }
 
     @Override
