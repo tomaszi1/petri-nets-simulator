@@ -21,5 +21,6 @@ public class PetriNetGraphCell extends DefaultGraphCell {
                 new Rectangle2D.Double(posX - CELL_HEIGHT / 2, posY - CELL_HEIGHT / 2, CELL_WIDTH, CELL_HEIGHT));
         GraphConstants.setSizeable(getAttributes(), false);
         GraphConstants.setOpaque(getAttributes(), true);
+        addPort();
     }
 }

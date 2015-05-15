@@ -4,7 +4,7 @@ import org.jgraph.graph.CellViewRenderer;
 import org.jgraph.graph.VertexRenderer;
 import org.jgraph.graph.VertexView;
 
-public class CustomVertexView extends VertexView {
+public class PlaceVertexView extends VertexView {
 
     private static VertexRenderer vertexRenderer = new CustomVertexRenderer();
 
@@ -13,11 +13,11 @@ public class CustomVertexView extends VertexView {
         return vertexRenderer;
     }
 
-    public CustomVertexView() {
+    public PlaceVertexView() {
         super();
     }
 
-    public CustomVertexView(Object cell) {
+    public PlaceVertexView(Object cell) {
         super(cell);
     }
 

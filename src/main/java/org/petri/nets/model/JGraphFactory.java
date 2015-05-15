@@ -1,9 +1,10 @@
-package org.petri.nets.gui.graph;
+package org.petri.nets.model;
 
 import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultCellViewFactory;
 import org.jgraph.graph.DefaultGraphModel;
 import org.jgraph.graph.GraphLayoutCache;
+import org.petri.nets.gui.graph.CustomCellViewFactory;
 
 public class JGraphFactory {
 

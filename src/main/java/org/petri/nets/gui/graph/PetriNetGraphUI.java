@@ -7,6 +7,7 @@ import org.jgraph.graph.GraphContext;
 import org.jgraph.graph.VertexView;
 import org.jgraph.plaf.basic.BasicGraphUI;
 import org.petri.nets.gui.popup.BackgroundPopupMenu;
+import org.petri.nets.gui.popup.MultipleSelectionsPopupMenu;
 import org.petri.nets.gui.popup.PlacePopupMenu;
 import org.petri.nets.model.DomainModel;
 import org.petri.nets.model.PetriNet;
@@ -22,11 +23,13 @@ import java.io.Serializable;
 public class PetriNetGraphUI extends BasicGraphUI {
     private PlacePopupMenu placePopupMenu;
     private BackgroundPopupMenu backgroundPopupMenu;
+    private MultipleSelectionsPopupMenu multipleSelectionsPopupMenu;
 
     public PetriNetGraphUI(DomainModel model) { // maybe graphService
         GraphService graphService = new GraphServiceImpl(model);
         backgroundPopupMenu = new BackgroundPopupMenu(graphService);
         placePopupMenu = new PlacePopupMenu(graphService);
+        multipleSelectionsPopupMenu = new MultipleSelectionsPopupMenu(graphService);
     }
 
     @Override
@@ -38,6 +41,10 @@ public class PetriNetGraphUI extends BasicGraphUI {
     @Override
     protected KeyListener createKeyListener() {
         return new CustomKeyHandler();
+    }
+
+    public CellView getLastFocus() {
+        return lastFocus;
     }
 
     public class DecoratorHandle implements CellHandle, Serializable {
@@ -82,11 +89,14 @@ public class PetriNetGraphUI extends BasicGraphUI {
     }
 
     private void showPopupMenu(MouseEvent event) {
-        if (focus instanceof VertexView) {
+        if (graph.getSelectionCells().length > 1) {
+            multipleSelectionsPopupMenu.show(event.getComponent(), event.getX(), event.getY());
+        } else if (focus instanceof VertexView) {
             placePopupMenu.setFocus(focus);
             placePopupMenu.show(event.getComponent(), event.getX(), event.getY());
         } else if (focus == null)
             backgroundPopupMenu.show(event.getComponent(), event.getX(), event.getY());
+
     }
 
 

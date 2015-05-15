@@ -28,20 +28,20 @@ public class PlacePopupMenu extends CustomJPopupMenu {
         add(editCellMenuItem);
         add(removeCellMenuItem);
 
-        connectCellMenuItem.addActionListener(this::connectMenuItemClicked);
-        editCellMenuItem.addActionListener(this::editMenuItemClicked);
-        removeCellMenuItem.addActionListener(this::removeMenuItemClicked);
+        connectCellMenuItem.addActionListener(this::connectCellMenuItemClicked);
+        editCellMenuItem.addActionListener(this::editCellMenuItemClicked);
+        removeCellMenuItem.addActionListener(this::removeCellMenuItemClicked);
     }
 
-    private void removeMenuItemClicked(ActionEvent e) {
-        graphService.removeFromGraph(getFocus());
+    private void removeCellMenuItemClicked(ActionEvent e) {
+        graphService.removeFromGraph(graphService.getLastFocusedCell());
     }
 
-    private void editMenuItemClicked(ActionEvent e) {
+    private void editCellMenuItemClicked(ActionEvent e) {
         // TODO small frame over window?
     }
 
-    private void connectMenuItemClicked(ActionEvent e) {
-        // TODO activate connecting mode
+    private void connectCellMenuItemClicked(ActionEvent e) {
+        // not necessary for now
     }
 }

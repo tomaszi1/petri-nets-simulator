@@ -1,5 +1,7 @@
 package org.petri.nets.gui.popup;
 
+import org.petri.nets.service.GraphService;
+
 import javax.swing.*;
 import java.awt.*;
 
