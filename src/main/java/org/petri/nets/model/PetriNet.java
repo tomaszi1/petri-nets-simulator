@@ -1,5 +1,6 @@
 package org.petri.nets.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface PetriNet {
@@ -30,6 +31,19 @@ public interface PetriNet {
     int getTransitionsCount();
 
     int getPlacesCount();
+    public List<List<Arc>> getPlaceToTransitionArcs();
+
+    public void setPlaceToTransitionArcs(List<List<Arc>> placeToTransitionArcs);
+
+    public List<List<Arc>> getTransitionToPlaceArcs();
+
+    public void setTransitionToPlaceArcs(List<List<Arc>> transitionToPlaceArcs);
+    public ArrayList<Place> getPlaceList();
+
+    public void setPlaceList(ArrayList<Place> placeList);
+    public ArrayList<Transition> getTransitionList();
+
+    public void setTransitionList(ArrayList<Transition> transitionList);
 
 /*
     boolean doTransition(int transition);

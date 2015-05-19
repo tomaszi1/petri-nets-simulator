@@ -70,7 +70,8 @@ public class InitialMarkingPanel extends JPanel {
 
         @Override
         public String getColumnName(int col) {
-            return "P" + (col + 1);
+
+            return "P" + (domainModel.getPetriNet().getPlaceList().get(col).getIdPlace()+1);
         }
 
         @Override

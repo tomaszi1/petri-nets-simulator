@@ -11,9 +11,13 @@ import java.util.stream.Collectors;
 
 public class GraphServiceImpl implements GraphService {
     private final DomainModel model;
+    private SynchronizeService syncService;
+    private int placeIdCounter = 1;
+    private int transitionIdCounter = 1;
 
     public GraphServiceImpl(DomainModel model) {
         this.model = model;
+        this.syncService =  new SynchronizeServiceImpl(model);
     }
 
     public void cascadeRemoveEdges(PetriNetGraphCell cell) {
@@ -39,6 +43,7 @@ public class GraphServiceImpl implements GraphService {
         } else {
             removeFromGraph(new Object[]{cell});
         }
+
     }
 
     public void removeFromGraph(Object[] cells){
@@ -53,24 +58,31 @@ public class GraphServiceImpl implements GraphService {
                 }
             }
             model.getPetriNetGraph().getGraphLayoutCache().remove(new Object[]{cell});
+            syncService.removeFromGraph(getId(((PlaceGraphCell) cell).getUserObject().toString()));
         }
     }
 
     @Override
     public PlaceGraphCell addPlace(Point position) {
+        placeIdCounter++;
         PlaceGraphCell cell = new PlaceGraphCell(
-                new Random().nextInt(), // FIXME
+                //new Random().nextInt(), // FIXME
+                placeIdCounter,
                 position);
         model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
+        syncService.addPlace(placeIdCounter-1);
         return cell;
     }
 
     @Override
     public TransitionGraphCell addTransition(Point position) {
+        transitionIdCounter++;
         TransitionGraphCell cell = new TransitionGraphCell(
-                new Random().nextInt(), // FIXME
+                transitionIdCounter,
+                //new Random().nextInt(), // FIXME
                 position);
         model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
+        syncService.addTransition(transitionIdCounter-1);
         return cell;
     }
 
@@ -80,6 +92,17 @@ public class GraphServiceImpl implements GraphService {
         edge.setSource(start.getFirstChild());
         edge.setTarget(end.getFirstChild());
         model.getPetriNetGraph().getGraphLayoutCache().insert(edge);
+
+        if(isPlace(start.getUserObject().toString())){
+           int idPlace = getId(start.getUserObject().toString());
+           int idTrans = getId(end.getUserObject().toString());
+            syncService.addArc(idTrans,idPlace,true);
+        }else{
+            int idPlace = getId(end.getUserObject().toString());
+            int idTrans = getId(start.getUserObject().toString());
+            syncService.addArc(idTrans,idPlace,false);
+        }
+
     }
 
     public DomainModel getModel() {
@@ -120,6 +143,18 @@ public class GraphServiceImpl implements GraphService {
                 .map(c -> (PetriNetGraphCell) c)
                 .collect(Collectors.toList());
         return collect.toArray(new PetriNetGraphCell[collect.size()]);
+    }
+
+    private int getId(String stringId){
+        int id = Integer.valueOf(stringId.substring(1));
+        return id-1;
+    }
+
+    private boolean isPlace(String stringId){
+        if(stringId.substring(0,1).equals("P")){
+            return true;
+        }
+        return false;
     }
 
 
