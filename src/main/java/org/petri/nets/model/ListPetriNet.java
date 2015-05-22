@@ -1,88 +1,104 @@
 package org.petri.nets.model;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
+
 public class ListPetriNet implements PetriNet {
-    //To
-    private List<List<Arc>> placeToTransitionArcs;
-    //From
-    //nie powinno miec innej nazwy? np
-    private List<List<Arc>> transitionToPlaceArcs;
+
     private List<Integer> initialMarking;
+    private HashMap<Place, Integer> initialMarkingMap;
+    private HashMap<Integer,Place> placeMap;
+    private HashMap<Integer,Transition> transitionMap;
 
-    // nie wiem czy nam to potrzebne, ale chyba warto miec tez taka reprezentacje sieci w razie
-    // gdyby latwiej sie na niej liczylo
-    private ArrayList<Place> placeList;
-    private ArrayList<Transition> transitionList;
-
-    public ListPetriNet(int numOfPlaces, int numOfTransitions) {
-        setPlaceToTransitionArcs(new ArrayList<>(numOfTransitions));
-        setTransitionToPlaceArcs(new ArrayList<>(numOfTransitions));
-        initialMarking = new ArrayList<Integer>();
-
-        for (int i = 0; i < numOfTransitions; i++) {
-            getPlaceToTransitionArcs().add(Collections.nCopies(numOfPlaces, (Arc) null));
-            getTransitionToPlaceArcs().add(Collections.nCopies(numOfPlaces, (Arc) null));
-        }
-
-        setPlaceList(new ArrayList<Place>(numOfPlaces));
-        setTransitionList(new ArrayList<Transition>(numOfTransitions));
-    }
-/*//to bedzie domyslnie uzywany konstruktor - nie uzuwac
+/*//to bedzie domyslnie uzywany konstruktor - nie usuwac
     public ListPetriNet() {
         setPlaceToTransitionArcs(new ArrayList<List<Arc>>());
         setTransitionToPlaceArcs(new ArrayList<List<Arc>>());
         initialMarking = new ArrayList<Integer>();
 
-        setPlaceList(new ArrayList<Place>());
-        setTransitionList(new ArrayList<Transition>());
+        setPlaceMap(new ArrayList<Place>());
+        setTransitionMap(new ArrayList<Transition>());
     }*/
 //konstruktor do obecnego poczatkowego stanu aplikacji
     public ListPetriNet() {
-        setPlaceToTransitionArcs(new ArrayList<List<Arc>>());
-        setTransitionToPlaceArcs(new ArrayList<List<Arc>>());
         initialMarking = new ArrayList<Integer>();
-        setPlaceList(new ArrayList<Place>());
-        setTransitionList(new ArrayList<Transition>());
-
-        initialMarking.add(0);
-        placeList.add(0,new Place(0));
-        transitionList.add(0,new Transition(0));
-        placeToTransitionArcs.add(new ArrayList<Arc>());
-        transitionToPlaceArcs.add(new ArrayList<Arc>());
-
+        setPlaceMap(new HashMap<Integer, Place>());
+        setTransitionMap(new HashMap<Integer, Transition>());
+        initialMarkingMap = new HashMap<Place, Integer>();
     }
 
     @Override
     public void setInitialMarking(List<Integer> marking) {
-        initialMarking = new ArrayList<>(marking);
+        this.initialMarking = marking;
     }
 
     @Override
     public void setInitialMarking(int place, int marking) {
-        if (marking < 0)
-            throw new IllegalArgumentException("Negative marking");
-        initialMarking.set(place, marking);
+       initialMarking.add(place,marking);
     }
 
     @Override
     public List<Integer> getInitialMarking() {
-        return new ArrayList<>(initialMarking);
+        return initialMarking;
+    }
+
+    @Override
+    public HashMap<Place, Integer> getInitialMarkingMap() {
+        return initialMarkingMap;
+    }
+
+
+    @Override
+    public void setInitialMarkingMap( Place place,int marking) {
+        this.initialMarkingMap.put(place,marking);
     }
 
     @Override
     public int getInitialMarking(int place) {
         return initialMarking.get(place);
     }
-
+    @Override
+    public HashMap<Integer,Place> getPlaceMap() {
+        return placeMap;
+    }
 
     @Override
-    public List<Arc> getIngoingArcsForPlace(int placeId) {
+    public void setPlaceMap(HashMap<Integer, Place> placeMap) {
+        this.placeMap = placeMap;
+    }
+
+    @Override
+    public HashMap<Integer,Transition> getTransitionMap() {
+        return transitionMap;
+    }
+
+    @Override
+    public void setTransitionMap(HashMap<Integer, Transition> transitionMap) {
+        this.transitionMap = transitionMap;
+    }
+
+    @Override
+    public int getTransitionsCount() {
+        return transitionMap.size();
+    }
+
+    @Override
+    public int getPlacesCount() {
+        return placeMap.size();
+    }
+
+    public void setInitialMarkingMap(HashMap<Place, Integer> initialMarkingMap) {
+        this.initialMarkingMap = initialMarkingMap;
+    }
+
+//chyba nie sa nam potrzbne te metody w nowej reprezentacji sieci
+/*    @Override
+   public List<Arc> getIngoingArcsForPlace(Place place) {
         ArrayList<Arc> ingoingArc= new ArrayList<Arc>();
-        for(Integer idTransition : getPlaceList().get(placeId).getTransitionFrom().keySet()){
-            ingoingArc.add(getPlaceList().get(placeId).getTransitionFrom().get(idTransition));
+        for(Integer Transition : getPlaceMap().get(placeId).getTransitionFrom().keySet()){
+            ingoingArc.add(getPlaceMap().get(placeId).getTransitionFrom().get(idTransition));
         }
         return  ingoingArc;
         //throw new UnsupportedOperationException();
@@ -91,8 +107,8 @@ public class ListPetriNet implements PetriNet {
     @Override
     public List<Arc> getOutgoingArcsForPlace(int placeId) {
         ArrayList<Arc> outgoingArc= new ArrayList<Arc>();
-        for(Integer idTransition : getPlaceList().get(placeId).getTransitionTo().keySet()){
-            outgoingArc.add(getPlaceList().get(placeId).getTransitionFrom().get(idTransition));
+        for(Integer idTransition : getPlaceMap().get(placeId).getTransitionTo().keySet()){
+            outgoingArc.add(getPlaceMap().get(placeId).getTransitionFrom().get(idTransition));
         }
         return  outgoingArc;
 
@@ -127,21 +143,9 @@ public class ListPetriNet implements PetriNet {
     @Override
     public void putArcFromTransitionToPlace(int fromTransition, int toPlace, Arc arc) {
         getTransitionToPlaceArcs().get(fromTransition).set(toPlace, arc);
-    }
+    }*/
 
-    @Override
-    public int getTransitionsCount() {
-        return getTransitionToPlaceArcs().size();
-    }
-
-    @Override
-    public int getPlacesCount() {
-        if (getTransitionToPlaceArcs().isEmpty())
-            return 0;
-        return getTransitionToPlaceArcs().get(0).size();
-    }
-
-    @Override
+ /*   @Override
     public List<List<Arc>> getPlaceToTransitionArcs() {
         return placeToTransitionArcs;
     }
@@ -160,24 +164,6 @@ public class ListPetriNet implements PetriNet {
     public void setTransitionToPlaceArcs(List<List<Arc>> transitionToPlaceArcs) {
         this.transitionToPlaceArcs = transitionToPlaceArcs;
     }
+*/
 
-    @Override
-    public ArrayList<Place> getPlaceList() {
-        return placeList;
-    }
-
-    @Override
-    public void setPlaceList(ArrayList<Place> placeList) {
-        this.placeList = placeList;
-    }
-
-    @Override
-    public ArrayList<Transition> getTransitionList() {
-        return transitionList;
-    }
-
-    @Override
-    public void setTransitionList(ArrayList<Transition> transitionList) {
-        this.transitionList = transitionList;
-    }
 }

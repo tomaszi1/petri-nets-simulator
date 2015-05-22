@@ -8,15 +8,22 @@ import java.util.HashMap;
 public class Place {
     private int idPlace;
     //z ktorych przejsc wchodzi sie do miejsca
-    //HashMap<idPrzejscia, Luk>
-    private HashMap<Integer, Arc> transitionFrom;
+    private HashMap<Transition, Arc> transitionFrom;
     // do ktorych przejsc mozna isc
-    private HashMap<Integer, Arc> transitionTo;
+    private HashMap<Transition, Arc> transitionTo;
+    private int marking;
 
     public Place(int idPlace){
         this.idPlace = idPlace;
-        transitionFrom = new HashMap<Integer, Arc>();
-        transitionTo = new HashMap<Integer, Arc>();
+        transitionFrom = new HashMap<Transition, Arc>();
+        transitionTo = new HashMap<Transition, Arc>();
+        marking = 0;
+    }
+    public Place(int idPlace, int marking){
+        this.idPlace = idPlace;
+        transitionFrom = new HashMap<Transition, Arc>();
+        transitionTo = new HashMap<Transition, Arc>();
+        this.marking = marking;
     }
 
     public int getIdPlace() {
@@ -27,19 +34,27 @@ public class Place {
         this.idPlace = idPlace;
     }
 
-    public HashMap<Integer, Arc> getTransitionFrom() {
+    public HashMap<Transition, Arc> getTransitionFrom() {
         return transitionFrom;
     }
 
-    public void setTransitionFrom(HashMap<Integer, Arc> transitionFrom) {
+    public void setTransitionFrom(HashMap<Transition, Arc> transitionFrom) {
         this.transitionFrom = transitionFrom;
     }
 
-    public HashMap<Integer, Arc> getTransitionTo() {
+    public HashMap<Transition, Arc> getTransitionTo() {
         return transitionTo;
     }
 
-    public void setTransitionTo(HashMap<Integer, Arc> transitionTo) {
+    public void setTransitionTo(HashMap<Transition, Arc> transitionTo) {
         this.transitionTo = transitionTo;
+    }
+
+    public int getMarking() {
+        return marking;
+    }
+
+    public void setMarking(int marking) {
+        this.marking = marking;
     }
 }

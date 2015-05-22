@@ -1,8 +1,12 @@
 package org.petri.nets.service;
 
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import org.jgraph.graph.*;
 import org.petri.nets.gui.graph.*;
 import org.petri.nets.model.DomainModel;
+import org.petri.nets.model.Place;
+import org.petri.nets.model.Transition;
 
 import java.awt.*;
 import java.util.*;
@@ -12,12 +16,16 @@ import java.util.stream.Collectors;
 public class GraphServiceImpl implements GraphService {
     private final DomainModel model;
     private SynchronizeService syncService;
-    private int placeIdCounter = 1;
-    private int transitionIdCounter = 1;
+    private int placeIdCounter = 0;
+    private int transitionIdCounter = 0;
+    BiMap<PlaceGraphCell, Place> placeGUI;
+    BiMap<TransitionGraphCell, Transition> transitonGUI;
 
     public GraphServiceImpl(DomainModel model) {
         this.model = model;
         this.syncService =  new SynchronizeServiceImpl(model);
+        this.placeGUI =  HashBiMap.create();
+        this.transitonGUI =  HashBiMap.create();
     }
 
     public void cascadeRemoveEdges(PetriNetGraphCell cell) {
@@ -58,19 +66,30 @@ public class GraphServiceImpl implements GraphService {
                 }
             }
             model.getPetriNetGraph().getGraphLayoutCache().remove(new Object[]{cell});
-            syncService.removeFromGraph(getId(((PlaceGraphCell) cell).getUserObject().toString()));
+            removeFromGraphSynh(cell);
+
         }
     }
 
+    private void removeFromGraphSynh(Object cell){
+        if(isPlace(cell)){
+            syncService.removePlace(placeGUI.get((PlaceGraphCell)cell));
+        }else if(isTransition(cell)){
+            syncService.removeTransition(transitonGUI.get((TransitionGraphCell) cell));
+        }else{
+            removeArc((ArcGraphCell)cell);
+        }
+    }
     @Override
     public PlaceGraphCell addPlace(Point position) {
         placeIdCounter++;
         PlaceGraphCell cell = new PlaceGraphCell(
-                //new Random().nextInt(), // FIXME
                 placeIdCounter,
                 position);
         model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
-        syncService.addPlace(placeIdCounter-1);
+        Place place = new Place(placeIdCounter-1);
+        syncService.addPlace(placeIdCounter-1,place);
+        placeGUI.put(cell,place);
         return cell;
     }
 
@@ -79,10 +98,11 @@ public class GraphServiceImpl implements GraphService {
         transitionIdCounter++;
         TransitionGraphCell cell = new TransitionGraphCell(
                 transitionIdCounter,
-                //new Random().nextInt(), // FIXME
                 position);
         model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
-        syncService.addTransition(transitionIdCounter-1);
+        Transition transition = new Transition(transitionIdCounter-1);
+        syncService.addTransition(transitionIdCounter - 1, transition);
+        transitonGUI.put(cell, transition);
         return cell;
     }
 
@@ -91,16 +111,17 @@ public class GraphServiceImpl implements GraphService {
         ArcGraphCell edge = new ArcGraphCell();
         edge.setSource(start.getFirstChild());
         edge.setTarget(end.getFirstChild());
+        edge.setStart(start);
+        edge.setEnd(end);
         model.getPetriNetGraph().getGraphLayoutCache().insert(edge);
 
         if(isPlace(start.getUserObject().toString())){
-           int idPlace = getId(start.getUserObject().toString());
-           int idTrans = getId(end.getUserObject().toString());
-            syncService.addArc(idTrans,idPlace,true);
+            //place is start
+            syncService.addArc(placeGUI.get(start), transitonGUI.get(end), true);
+
         }else{
-            int idPlace = getId(end.getUserObject().toString());
-            int idTrans = getId(start.getUserObject().toString());
-            syncService.addArc(idTrans,idPlace,false);
+            //transit is start
+            syncService.addArc(placeGUI.get(end), transitonGUI.get(start), false);
         }
 
     }
@@ -156,6 +177,8 @@ public class GraphServiceImpl implements GraphService {
         }
         return false;
     }
-
+    private void removeArc(ArcGraphCell arc){
+        //todo
+    }
 
 }

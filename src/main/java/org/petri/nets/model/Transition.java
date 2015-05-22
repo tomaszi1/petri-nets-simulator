@@ -9,15 +9,14 @@ import java.util.HashMap;
 public class Transition {
     private int idTransition;
     //z ktorych miejsc wchodzi sie do przejscia
-    //HashMap<idPrzejscia, Luk>
-    private HashMap<Integer, Arc> placeFrom;
+    private HashMap<Place, Arc> placeFrom;
     // do ktorych miejsc idzie sie z przejscia
-    private HashMap<Integer, Arc> placeTo;
+    private HashMap<Place, Arc> placeTo;
 
     public Transition(int idTrans){
         this.idTransition = idTrans;
-        placeFrom = new HashMap<Integer, Arc>();
-        placeTo = new HashMap<Integer, Arc>();
+        placeFrom = new HashMap<Place, Arc>();
+        placeTo = new HashMap<Place, Arc>();
     }
     public int getIdTransition() {
         return idTransition;
@@ -27,19 +26,19 @@ public class Transition {
         this.idTransition = idTransition;
     }
 
-    public HashMap<Integer, Arc> getPlaceFrom() {
+    public HashMap<Place, Arc> getPlaceFrom() {
         return placeFrom;
     }
 
-    public void setPlaceFrom(HashMap<Integer, Arc> placeFrom) {
+    public void setPlaceFrom(HashMap<Place, Arc> placeFrom) {
         this.placeFrom = placeFrom;
     }
 
-    public HashMap<Integer, Arc> getPlaceTo() {
+    public HashMap<Place, Arc> getPlaceTo() {
         return placeTo;
     }
 
-    public void setPlaceTo(HashMap<Integer, Arc> placeTo) {
+    public void setPlaceTo(HashMap<Place, Arc> placeTo) {
         this.placeTo = placeTo;
     }
 }

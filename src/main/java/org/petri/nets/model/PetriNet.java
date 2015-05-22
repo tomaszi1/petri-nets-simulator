@@ -1,18 +1,30 @@
 package org.petri.nets.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public interface PetriNet {
-    void setInitialMarking(List<Integer> marking);
+    public void setInitialMarking(List<Integer> marking);
 
-    List<Integer> getInitialMarking();
+    public List<Integer> getInitialMarking();
+    public int getInitialMarking(int place);
+    public void setInitialMarking(int place, int marking);
 
-    int getInitialMarking(int place);
+    public HashMap<Place,Integer> getInitialMarkingMap();
+    public void setInitialMarkingMap(Place place,int marking);
 
-    void setInitialMarking(int place, int marking);
+    public int getTransitionsCount();
+    public int getPlacesCount();
 
-    List<Arc> getIngoingArcsForPlace(int place);
+    public HashMap<Integer,Place> getPlaceMap();
+
+    public void setPlaceMap(HashMap<Integer, Place> placeList);
+    public HashMap<Integer,Transition> getTransitionMap();
+
+    public void setTransitionMap(HashMap<Integer, Transition> transitionList);
+
+/*    List<Arc> getIngoingArcsForPlace(int place);
 
     List<Arc> getOutgoingArcsForPlace(int place);
 
@@ -27,25 +39,15 @@ public interface PetriNet {
     Arc getArcFromTransitionToPlace(int fromTransition, int toPlace);
 
     void putArcFromTransitionToPlace(int fromTransition, int toPlace, Arc arc);
+    //public List<List<Arc>> getPlaceToTransitionArcs();
 
-    int getTransitionsCount();
+   // public void setPlaceToTransitionArcs(List<List<Arc>> placeToTransitionArcs);
 
-    int getPlacesCount();
-    public List<List<Arc>> getPlaceToTransitionArcs();
+    //public List<List<Arc>> getTransitionToPlaceArcs();
 
-    public void setPlaceToTransitionArcs(List<List<Arc>> placeToTransitionArcs);
+    //public void setTransitionToPlaceArcs(List<List<Arc>> transitionToPlaceArcs);
 
-    public List<List<Arc>> getTransitionToPlaceArcs();
 
-    public void setTransitionToPlaceArcs(List<List<Arc>> transitionToPlaceArcs);
-    public ArrayList<Place> getPlaceList();
-
-    public void setPlaceList(ArrayList<Place> placeList);
-    public ArrayList<Transition> getTransitionList();
-
-    public void setTransitionList(ArrayList<Transition> transitionList);
-
-/*
     boolean doTransition(int transition);
 
     boolean isTransitionPossible(int transition);
