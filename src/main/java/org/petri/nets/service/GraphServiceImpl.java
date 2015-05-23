@@ -113,15 +113,16 @@ public class GraphServiceImpl implements GraphService {
         edge.setTarget(end.getFirstChild());
         edge.setStart(start);
         edge.setEnd(end);
+        edge.setPriority(0);
+        edge.setValue(0);
         model.getPetriNetGraph().getGraphLayoutCache().insert(edge);
 
         if(isPlace(start.getUserObject().toString())){
             //place is start
-            syncService.addArc(placeGUI.get(start), transitonGUI.get(end), true);
-
+            syncService.addArc(placeGUI.get(start), transitonGUI.get(end), 0,0,true);
         }else{
             //transit is start
-            syncService.addArc(placeGUI.get(end), transitonGUI.get(start), false);
+            syncService.addArc(placeGUI.get(end), transitonGUI.get(start), 0,0,false);
         }
 
     }
