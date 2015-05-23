@@ -1,5 +1,6 @@
 package org.petri.nets.service;
 
+import org.petri.nets.gui.graph.TransitionGraphCell;
 import org.petri.nets.model.Arc;
 import org.petri.nets.model.DomainModel;
 import org.petri.nets.model.Place;
@@ -74,12 +75,25 @@ public class SynchronizeServiceImpl implements SynchronizeService{
 
     @Override
     public void removePlace(Place place) {
-
+        model.getPetriNet().getPlaceMap().remove(place.getIdPlace());
+        for(Transition transit : place.getTransitionFrom().keySet()){
+            model.getPetriNet().getTransitionMap().get(transit.getIdTransition()).getPlaceTo().remove(place);
+        }
+        for(Transition transit : place.getTransitionTo().keySet()){
+            model.getPetriNet().getTransitionMap().get(transit.getIdTransition()).getPlaceFrom().remove(place);
+        }
     }
 
     @Override
     public void removeTransition(Transition transition) {
+        model.getPetriNet().getTransitionMap().remove(transition.getIdTransition());
+        for(Place place : transition.getPlaceFrom().keySet()){
+            model.getPetriNet().getPlaceMap().get(place.getIdPlace()).getTransitionTo().remove(transition);
+        }
 
+        for(Place place : transition.getPlaceTo().keySet()){
+            model.getPetriNet().getPlaceMap().get(place.getIdPlace()).getTransitionFrom().remove(transition);
+        }
     }
 
     @Override

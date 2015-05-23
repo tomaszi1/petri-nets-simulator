@@ -178,7 +178,11 @@ public class GraphServiceImpl implements GraphService {
         return false;
     }
     private void removeArc(ArcGraphCell arc){
-        //todo
+        if(isPlace(arc.getStart())){
+            syncService.removeArc(transitonGUI.get(arc.getEnd()), placeGUI.get(arc.getStart()), true);
+        }else{
+            syncService.removeArc(transitonGUI.get(arc.getStart()), placeGUI.get(arc.getEnd()), false);
+        }
     }
 
 }
