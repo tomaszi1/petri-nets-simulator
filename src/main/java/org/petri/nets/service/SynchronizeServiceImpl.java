@@ -91,7 +91,26 @@ public class SynchronizeServiceImpl implements SynchronizeService{
 
     @Override
     public void removeArc(Transition transition, Place place, boolean isPlaceStart){
+        removeArcFromTransitionListInPlace(transition, place, isPlaceStart);
+        removeArcFromPlaceListInTransition(transition, place, isPlaceStart);
 
+    }
+
+    private void removeArcFromTransitionListInPlace(Transition transition, Place place, boolean isPlaceStart){
+        if(isPlaceStart){
+            model.getPetriNet().getPlaceMap().get(place.getIdPlace()).getTransitionTo().remove(transition);
+        }else{
+            model.getPetriNet().getPlaceMap().get(place.getIdPlace()).getTransitionFrom().remove(transition);
+        }
+
+    }
+
+    private void removeArcFromPlaceListInTransition(Transition transition, Place place, boolean isPlaceStart){
+        if(isPlaceStart){
+            model.getPetriNet().getTransitionMap().get(transition.getIdTransition()).getPlaceFrom().remove(place);
+        }else{
+            model.getPetriNet().getTransitionMap().get(transition.getIdTransition()).getPlaceTo().remove(place);
+        }
     }
 
 /*    @Override
