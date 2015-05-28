@@ -1,6 +1,5 @@
 package org.petri.nets.gui.graph;
 
-import javafx.scene.control.Cell;
 import org.jgraph.graph.CellHandle;
 import org.jgraph.graph.CellView;
 import org.jgraph.graph.GraphContext;
@@ -10,9 +9,9 @@ import org.petri.nets.gui.popup.BackgroundPopupMenu;
 import org.petri.nets.gui.popup.MultipleSelectionsPopupMenu;
 import org.petri.nets.gui.popup.PlacePopupMenu;
 import org.petri.nets.model.DomainModel;
-import org.petri.nets.model.PetriNet;
 import org.petri.nets.service.GraphService;
 import org.petri.nets.service.GraphServiceImpl;
+import org.petri.nets.synhronize.SynchronizePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,8 +25,8 @@ public class PetriNetGraphUI extends BasicGraphUI {
     private MultipleSelectionsPopupMenu multipleSelectionsPopupMenu;
     private final GraphService graphService;
 
-    public PetriNetGraphUI(DomainModel model) { // maybe graphService
-        graphService = new GraphServiceImpl(model);
+    public PetriNetGraphUI(DomainModel model, SynchronizePanel synchronizePanel) { // maybe graphService
+        graphService = new GraphServiceImpl(model, synchronizePanel);
         backgroundPopupMenu = new BackgroundPopupMenu(graphService);
         placePopupMenu = new PlacePopupMenu(graphService);
         multipleSelectionsPopupMenu = new MultipleSelectionsPopupMenu(graphService);

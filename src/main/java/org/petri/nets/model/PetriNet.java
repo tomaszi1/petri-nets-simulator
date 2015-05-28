@@ -7,21 +7,20 @@ import java.util.List;
 public interface PetriNet {
     public void setInitialMarking(List<Integer> marking);
 
+    //markings
     public List<Integer> getInitialMarking();
     public int getInitialMarking(int place);
     public void setInitialMarking(int place, int marking);
 
-    public HashMap<Place,Integer> getInitialMarkingMap();
-    public void setInitialMarkingMap(Place place,int marking);
-
     public int getTransitionsCount();
     public int getPlacesCount();
 
+    //place
     public HashMap<Integer,Place> getPlaceMap();
-
     public void setPlaceMap(HashMap<Integer, Place> placeList);
-    public HashMap<Integer,Transition> getTransitionMap();
 
+    //Transition
+    public HashMap<Integer,Transition> getTransitionMap();
     public void setTransitionMap(HashMap<Integer, Transition> transitionList);
 
 /*    List<Arc> getIngoingArcsForPlace(int place);

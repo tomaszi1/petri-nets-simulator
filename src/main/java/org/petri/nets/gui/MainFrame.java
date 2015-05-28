@@ -32,12 +32,20 @@ public class MainFrame extends JFrame {
         PetriNetWrapperPanel petriNetWrapperPanel = new PetriNetWrapperPanel(domainModel);
         ReachabilityGraphPanel reachGraphPanel = new ReachabilityGraphPanel(domainModel);
 
-        graphsWrapper = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+        setGraphsWrapper(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 petriNetWrapperPanel,
-                reachGraphPanel);
-        graphsWrapper.setResizeWeight(0.5);
+                reachGraphPanel));
+        getGraphsWrapper().setResizeWeight(0.5);
 
-        add(graphsWrapper, BorderLayout.CENTER);
+        add(getGraphsWrapper(), BorderLayout.CENTER);
         add(sideMenuWrapper, BorderLayout.LINE_END);
+    }
+
+    public JSplitPane getGraphsWrapper() {
+        return graphsWrapper;
+    }
+
+    public void setGraphsWrapper(JSplitPane graphsWrapper) {
+        this.graphsWrapper = graphsWrapper;
     }
 }

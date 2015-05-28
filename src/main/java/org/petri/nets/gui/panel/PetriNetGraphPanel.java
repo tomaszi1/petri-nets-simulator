@@ -1,14 +1,10 @@
 package org.petri.nets.gui.panel;
 
 import org.jgraph.JGraph;
-import org.jgraph.graph.DefaultCellViewFactory;
-import org.jgraph.graph.DefaultGraphModel;
 import org.jgraph.graph.GraphLayoutCache;
-import org.jgraph.plaf.GraphUI;
-import org.jgraph.plaf.basic.BasicGraphUI;
 import org.petri.nets.gui.graph.PetriNetGraphUI;
-import org.petri.nets.gui.graph.PlaceGraphCell;
 import org.petri.nets.model.DomainModel;
+import org.petri.nets.synhronize.SynchronizePanel;
 
 import javax.swing.*;
 
@@ -19,12 +15,12 @@ public class PetriNetGraphPanel extends JScrollPane {
     private GraphLayoutCache graphLayoutCache;
     private JGraph graph;
 
-    public PetriNetGraphPanel(DomainModel domainModel) {
+    public PetriNetGraphPanel(DomainModel domainModel, SynchronizePanel synchronizePanel) {
         this.domainModel = domainModel;
         graph = domainModel.getPetriNetGraph();
         setViewportView(graph);
         graph.setEditable(false);
-        graph.setUI(new PetriNetGraphUI(domainModel));
+        graph.setUI(new PetriNetGraphUI(domainModel, synchronizePanel));
 
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
 

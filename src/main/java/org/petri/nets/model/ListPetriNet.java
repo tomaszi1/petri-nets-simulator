@@ -8,7 +8,6 @@ import java.util.List;
 public class ListPetriNet implements PetriNet {
 
     private List<Integer> initialMarking;
-    private HashMap<Place, Integer> initialMarkingMap;
     private HashMap<Integer,Place> placeMap;
     private HashMap<Integer,Transition> transitionMap;
 
@@ -26,8 +25,12 @@ public class ListPetriNet implements PetriNet {
         initialMarking = new ArrayList<Integer>();
         setPlaceMap(new HashMap<Integer, Place>());
         setTransitionMap(new HashMap<Integer, Transition>());
-        initialMarkingMap = new HashMap<Place, Integer>();
     }
+
+    ////////////
+    //
+    // marking
+
 
     @Override
     public void setInitialMarking(List<Integer> marking) {
@@ -45,20 +48,15 @@ public class ListPetriNet implements PetriNet {
     }
 
     @Override
-    public HashMap<Place, Integer> getInitialMarkingMap() {
-        return initialMarkingMap;
-    }
-
-
-    @Override
-    public void setInitialMarkingMap( Place place,int marking) {
-        this.initialMarkingMap.put(place,marking);
-    }
-
-    @Override
     public int getInitialMarking(int place) {
         return initialMarking.get(place);
     }
+
+    //////////////////
+    //
+    // place
+
+
     @Override
     public HashMap<Integer,Place> getPlaceMap() {
         return placeMap;
@@ -68,6 +66,10 @@ public class ListPetriNet implements PetriNet {
     public void setPlaceMap(HashMap<Integer, Place> placeMap) {
         this.placeMap = placeMap;
     }
+
+    /////////
+    //
+    // transition
 
     @Override
     public HashMap<Integer,Transition> getTransitionMap() {
@@ -89,9 +91,6 @@ public class ListPetriNet implements PetriNet {
         return placeMap.size();
     }
 
-    public void setInitialMarkingMap(HashMap<Place, Integer> initialMarkingMap) {
-        this.initialMarkingMap = initialMarkingMap;
-    }
 
 //chyba nie sa nam potrzbne te metody w nowej reprezentacji sieci
 /*    @Override

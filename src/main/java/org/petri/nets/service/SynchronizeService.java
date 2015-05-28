@@ -12,6 +12,5 @@ public interface SynchronizeService {
     public void removePlace(Place place);
     public void removeTransition(Transition transition);
     public void removeArc(Transition transition, Place place, boolean isPlaceStart);
-    //public void removeFromGraph(int id);
 
 }

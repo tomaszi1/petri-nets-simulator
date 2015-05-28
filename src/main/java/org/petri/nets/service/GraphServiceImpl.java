@@ -7,6 +7,7 @@ import org.petri.nets.gui.graph.*;
 import org.petri.nets.model.DomainModel;
 import org.petri.nets.model.Place;
 import org.petri.nets.model.Transition;
+import org.petri.nets.synhronize.SynchronizePanel;
 
 import java.awt.*;
 import java.util.*;
@@ -21,9 +22,9 @@ public class GraphServiceImpl implements GraphService {
     BiMap<PlaceGraphCell, Place> placeGUI;
     BiMap<TransitionGraphCell, Transition> transitonGUI;
 
-    public GraphServiceImpl(DomainModel model) {
+    public GraphServiceImpl(DomainModel model, SynchronizePanel synchronizePanel) {
         this.model = model;
-        this.syncService =  new SynchronizeServiceImpl(model);
+        this.syncService =  new SynchronizeServiceImpl(model, synchronizePanel);
         this.placeGUI =  HashBiMap.create();
         this.transitonGUI =  HashBiMap.create();
     }
@@ -66,12 +67,12 @@ public class GraphServiceImpl implements GraphService {
                 }
             }
             model.getPetriNetGraph().getGraphLayoutCache().remove(new Object[]{cell});
-            removeFromGraphSynh(cell);
+            synhronizeRemoveFromGraph(cell);
 
         }
     }
 
-    private void removeFromGraphSynh(Object cell){
+    private void synhronizeRemoveFromGraph(Object cell){
         if(isPlace(cell)){
             syncService.removePlace(placeGUI.get((PlaceGraphCell)cell));
         }else if(isTransition(cell)){
@@ -185,5 +186,6 @@ public class GraphServiceImpl implements GraphService {
             syncService.removeArc(transitonGUI.get(arc.getStart()), placeGUI.get(arc.getEnd()), false);
         }
     }
+
 
 }

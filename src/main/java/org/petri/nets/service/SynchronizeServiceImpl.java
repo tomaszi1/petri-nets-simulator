@@ -4,6 +4,7 @@ import org.petri.nets.model.Arc;
 import org.petri.nets.model.DomainModel;
 import org.petri.nets.model.Place;
 import org.petri.nets.model.Transition;
+import org.petri.nets.synhronize.SynchronizePanel;
 
 /**
  * Created by Asia on 2015-05-17.
@@ -11,17 +12,18 @@ import org.petri.nets.model.Transition;
 public class SynchronizeServiceImpl implements SynchronizeService{
 
     DomainModel model;
+    SynchronizePanel synchronizePanel;
 
 
-    public SynchronizeServiceImpl(DomainModel model){
+    public SynchronizeServiceImpl(DomainModel model,SynchronizePanel synchronizePanel){
         this.model = model;
+        this.synchronizePanel = synchronizePanel;
     }
 
     @Override
     public void addPlace(int idPlace, Place place) {
         model.getPetriNet().getPlaceMap().put(idPlace, place);
-        model.getPetriNet().getInitialMarking().add(idPlace,0);
-
+        synchronizePanel.getInitialMarkingPanel().getTableModel().addNewMarking(idPlace, 0);
     }
 
     @Override
@@ -68,6 +70,7 @@ public class SynchronizeServiceImpl implements SynchronizeService{
 
     @Override
     public void removePlace(Place place) {
+        model.getPetriNet().getInitialMarking().remove(place.getIdPlace());
         model.getPetriNet().getPlaceMap().remove(place.getIdPlace());
         for(Transition transit : place.getTransitionFrom().keySet()){
             model.getPetriNet().getTransitionMap().get(transit.getIdTransition()).getPlaceTo().remove(place);

@@ -35,6 +35,7 @@ public class BackgroundPopupMenu extends CustomJPopupMenu {
     }
 
     private void addTransitionItemClicked(ActionEvent e) {
+
         graphService.addTransition(getPosition());
     }
 
