@@ -25,7 +25,7 @@ public class ReachGraph {
     }
 
     public void RunReachGraph() {
-        GenerateGraph(petriNet.getInitialMarking());
+        //GenerateGraph(petriNet.getInitialMarking());
     }
 
     public void GenerateGraph(List<Integer> marking) {
@@ -33,7 +33,7 @@ public class ReachGraph {
         //jesli w jakims miejscu jest znacznik, probujemy wykonac z niego przejscie
 
         List<Integer> prevMarking = new ArrayList<>();
-        prevMarking.addAll(petriNet.getInitialMarking());
+        //prevMarking.addAll(petriNet.getInitialMarking());
 
         if (reachGraph.getVertexCount() <= 0) {
             //root
@@ -101,7 +101,7 @@ public class ReachGraph {
                 Arc arcLeavingStartPlace = sPSet.getValue();
                 takenMarkingCount += arcLeavingStartPlace.getValue();
                 startPlace.setMarking(startPlace.getMarking() - arcLeavingStartPlace.getValue());   //odejmujemy znaczniki z miejsca startowego (tyle ile wartość łuku wychodzacego)
-                petriNet.getInitialMarking().set(startPlace.getIdPlace(), startPlace.getMarking()); //ustawiamy nowe znakowanie w miejscu
+               // petriNet.getInitialMarking().set(startPlace.getIdPlace(), startPlace.getMarking()); //ustawiamy nowe znakowanie w miejscu
             }
             for (Map.Entry<Place, Arc> endPlaceSet : transition.getPlaceTo().entrySet()) //iterujemy sie po miejscach, do ktorych prowadzi przejscie
             {
@@ -114,10 +114,10 @@ public class ReachGraph {
                 if (takenMarkingCount >= arcEnteringEndPlace.getValue())     //jesli nie, przejscia nie mozna wykonac - chyba wtedy jest niezywotne
                 {
                     endPlace.setMarking(endPlace.getMarking() + arcEnteringEndPlace.getValue()); //dodajemy znaczniki do miejsca koncowego (tyle ile wartość łuku wchodzacego)
-                    petriNet.getInitialMarking().set(endPlace.getIdPlace(), endPlace.getMarking());
+                    //petriNet.getInitialMarking().set(endPlace.getIdPlace(), endPlace.getMarking());
                 }
             }
-            possibleTransitions.put(transition, petriNet.getInitialMarking()); //dodaj do listy mozliwych przejsc
+            //possibleTransitions.put(transition, petriNet.getInitialMarking()); //dodaj do listy mozliwych przejsc
         }
         return possibleTransitions;
     }

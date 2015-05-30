@@ -16,7 +16,7 @@ public class TransitionGraphCell extends PetriNetGraphCell {
         GraphConstants.setBackground(getAttributes(), Color.CYAN);
 
         // TEMPORARY
-        setDescription("Przejście T"+id);
+        //setDescription("Przejście T"+id);
     }
 
 }

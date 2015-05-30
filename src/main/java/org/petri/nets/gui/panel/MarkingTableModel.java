@@ -2,8 +2,10 @@ package org.petri.nets.gui.panel;
 
 import org.petri.nets.model.DomainModel;
 import org.petri.nets.model.PetriNet;
+import org.petri.nets.model.Place;
 
 import javax.swing.table.AbstractTableModel;
+import java.util.HashMap;
 
 
 /**
@@ -26,13 +28,24 @@ public class MarkingTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int row, int col) {
-        return getDomainModel().getPetriNet().getInitialMarking().get(col);
+        PetriNet petriNet = getDomainModel().getPetriNet();
+
+        Place place = getPlaceByColumId(getColumnName(col),petriNet);
+        return getDomainModel().getPetriNet().getInitialMarking().get(place);
     }
 
     @Override
     public String getColumnName(int col) {
+        HashMap<Integer, Place> placeMap = getDomainModel().getPetriNet().getPlaceMap();
+        String id = "P";
+        do{
+            if(placeMap.get(col) != null){
+                id += placeMap.get(col).getIdPlace() + 1;
+            }
+            col++;
+        }while(placeMap.get(col-1) == null && col-1<placeMap.size());
 
-        return "P" + (getDomainModel().getPetriNet().getPlaceMap().get(col).getIdPlace()+1);
+        return id ;
     }
 
     @Override
@@ -49,16 +62,17 @@ public class MarkingTableModel extends AbstractTableModel {
     public void setValueAt(Object value, int row, int col) {
         try {
             PetriNet petriNet = getDomainModel().getPetriNet();
-
+            Place place = getPlaceByColumId(getColumnName(col), petriNet);
             if (value instanceof String) {
-                petriNet.setInitialMarking(col, Integer.parseInt((String) value));
+
+                petriNet.setInitialMarking(place, Integer.parseInt((String) value));
             } else if (!(value instanceof Integer))
                 return;
             else {
                 Integer intval = (Integer) value;
                 if (intval < 0)
                     return;
-                petriNet.setInitialMarking(col, (Integer) value);
+                petriNet.setInitialMarking(place, (Integer) value);
             }
             fireTableCellUpdated(row, col);
 
@@ -67,16 +81,25 @@ public class MarkingTableModel extends AbstractTableModel {
         }
     }
 
-    public void addNewMarking(int id, int marking){
-        domainModel.getPetriNet().getInitialMarking().add(id,marking);
+    public void addNewMarking(Place place, int marking){
+        domainModel.getPetriNet().getInitialMarking().put(place,marking);
         fireTableStructureChanged();
     }
-
+    public void removeMarking(Place place){
+        domainModel.getPetriNet().getInitialMarking().remove(place);
+        fireTableStructureChanged();
+    }
     public DomainModel getDomainModel() {
         return domainModel;
     }
 
     public void setDomainModel(DomainModel domainModel) {
         this.domainModel = domainModel;
+    }
+
+    private Place getPlaceByColumId(String name, PetriNet petriNet){
+        Integer id = new Integer(name.substring(1));
+        Place place = petriNet.getPlaceMap().get(id-1);
+        return place;
     }
 }

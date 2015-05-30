@@ -5,12 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface PetriNet {
-    public void setInitialMarking(List<Integer> marking);
-
     //markings
-    public List<Integer> getInitialMarking();
-    public int getInitialMarking(int place);
-    public void setInitialMarking(int place, int marking);
+    public void setInitialMarking(HashMap<Place,Integer> marking);
+    public HashMap<Place,Integer> getInitialMarking();
+    public Integer getInitialMarking(Place place);
+    public void setInitialMarking(Place place, int marking);
 
     public int getTransitionsCount();
     public int getPlacesCount();

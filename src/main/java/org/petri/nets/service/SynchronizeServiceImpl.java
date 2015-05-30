@@ -23,7 +23,7 @@ public class SynchronizeServiceImpl implements SynchronizeService{
     @Override
     public void addPlace(int idPlace, Place place) {
         model.getPetriNet().getPlaceMap().put(idPlace, place);
-        synchronizePanel.getInitialMarkingPanel().addNewMarking(idPlace, 0);
+        synchronizePanel.getInitialMarkingPanel().addNewMarking(place, 0);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class SynchronizeServiceImpl implements SynchronizeService{
 
     @Override
     public void removePlace(Place place) {
-        model.getPetriNet().getInitialMarking().remove(place.getIdPlace());
+        //model.getPetriNet().getInitialMarking().remove(place.getIdPlace());
         model.getPetriNet().getPlaceMap().remove(place.getIdPlace());
         for(Transition transit : place.getTransitionFrom().keySet()){
             model.getPetriNet().getTransitionMap().get(transit.getIdTransition()).getPlaceTo().remove(place);
@@ -78,6 +78,7 @@ public class SynchronizeServiceImpl implements SynchronizeService{
         for(Transition transit : place.getTransitionTo().keySet()){
             model.getPetriNet().getTransitionMap().get(transit.getIdTransition()).getPlaceFrom().remove(place);
         }
+        synchronizePanel.getInitialMarkingPanel().removeMarking(place);
     }
 
     @Override

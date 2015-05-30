@@ -1,6 +1,7 @@
 package org.petri.nets.gui.panel;
 
 import org.petri.nets.model.DomainModel;
+import org.petri.nets.model.Place;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -44,9 +45,14 @@ public class InitialMarkingPanel extends JPanel {
         this.tableModel = tableModel;
     }
 
-    public void addNewMarking(int idPlace, int i) {
-        tableModel.addNewMarking(idPlace, i);
+    public void addNewMarking(Place place, int i) {
+        tableModel.addNewMarking(place, i);
     }
+
+    public void removeMarking(Place place) {
+        tableModel.removeMarking(place);
+    }
+
 
     public class InitialMarkingTable extends JTable {
 
