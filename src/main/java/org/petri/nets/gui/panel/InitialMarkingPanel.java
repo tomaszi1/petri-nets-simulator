@@ -3,15 +3,19 @@ package org.petri.nets.gui.panel;
 import org.petri.nets.model.DomainModel;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Enumeration;
 
 public class InitialMarkingPanel extends JPanel {
     public static final String PANEL_TITLE = "Znakowanie początkowe";
     public static final int PANEL_HEIGHT = 80;
-    private JTable table;
+    private InitialMarkingTable table;
     private MarkingTableModel tableModel;
     private final DomainModel domainModel;
 
@@ -22,26 +26,12 @@ public class InitialMarkingPanel extends JPanel {
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
         setLayout(new BorderLayout());
         initMarkingTable();
+
     }
 
     private void initMarkingTable() {
         setTableModel(new MarkingTableModel(domainModel));
-        table = new JTable(getTableModel());
-        table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        table.getTableHeader().setReorderingAllowed(false);
-        table.setFont(new Font("Dialog", Font.PLAIN, 15));
-        table.setRowHeight(0, 21);
-        table.setRowSelectionAllowed(false);
-        table.setCellSelectionEnabled(true);
-        Enumeration<TableColumn> columns = table.getColumnModel().getColumns();
-
-        while (columns.hasMoreElements()) {
-            TableColumn tableColumn = columns.nextElement();
-            DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer();
-            defaultTableCellRenderer.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
-            tableColumn.setCellRenderer(defaultTableCellRenderer);
-            tableColumn.setMaxWidth(35);
-        }
+        table = new InitialMarkingTable(getTableModel());
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -55,5 +45,36 @@ public class InitialMarkingPanel extends JPanel {
 
     public void setTableModel(MarkingTableModel tableModel) {
         this.tableModel = tableModel;
+    }
+
+    public class InitialMarkingTable extends JTable{
+
+        private final DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer();
+        private final Font FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
+
+        public InitialMarkingTable(MarkingTableModel tableModel) {
+            super(tableModel);
+
+            setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+            getTableHeader().setReorderingAllowed(false);
+            setFont(FONT);
+            getTableHeader().setFont(FONT);
+            setRowHeight(0, 21);
+            setRowSelectionAllowed(false);
+            setCellSelectionEnabled(true);
+            defaultTableCellRenderer.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+        }
+
+        @Override
+        public void tableChanged(TableModelEvent e) {
+            super.tableChanged(e);
+
+            Enumeration<TableColumn> columns = getColumnModel().getColumns();
+            while (columns.hasMoreElements()) {
+                TableColumn tableColumn = columns.nextElement();
+                tableColumn.setCellRenderer(defaultTableCellRenderer);
+                tableColumn.setMaxWidth(35);
+            }
+        }
     }
 }
