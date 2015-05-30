@@ -68,7 +68,7 @@ public class MarkingTableModel extends AbstractTableModel {
 
     public void addNewMarking(int id, int marking){
         domainModel.getPetriNet().getInitialMarking().add(id,marking);
-        fireTableDataChanged();
+        fireTableStructureChanged();
     }
 
     public DomainModel getDomainModel() {
