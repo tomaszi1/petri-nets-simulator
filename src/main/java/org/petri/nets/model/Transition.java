@@ -12,11 +12,13 @@ public class Transition {
     private HashMap<Place, Arc> placeFrom;
     // do ktorych miejsc idzie sie z przejscia
     private HashMap<Place, Arc> placeTo;
+    private int priority;
 
-    public Transition(int idTrans){
+    public Transition(int idTrans, int priority){
         this.idTransition = idTrans;
         placeFrom = new HashMap<Place, Arc>();
         placeTo = new HashMap<Place, Arc>();
+
     }
     public int getIdTransition() {
         return idTransition;
@@ -40,5 +42,13 @@ public class Transition {
 
     public void setPlaceTo(HashMap<Place, Arc> placeTo) {
         this.placeTo = placeTo;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
     }
 }

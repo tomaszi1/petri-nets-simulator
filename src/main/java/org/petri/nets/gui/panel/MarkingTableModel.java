@@ -5,6 +5,7 @@ import org.petri.nets.model.PetriNet;
 
 import javax.swing.table.AbstractTableModel;
 
+
 /**
  * Created by Asia on 2015-05-24.
  */

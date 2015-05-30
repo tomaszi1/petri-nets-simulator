@@ -21,7 +21,7 @@ public class InitialMarkingPanel extends JPanel {
 
     public InitialMarkingPanel(DomainModel domainModel) {
         this.domainModel = domainModel;
-        //this.tableModel = new MarkingTableModel(domainModel);
+        this.tableModel = new MarkingTableModel(domainModel);
         setPreferredSize(new Dimension(100 /*ignored*/, PANEL_HEIGHT));
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
         setLayout(new BorderLayout());
@@ -31,7 +31,7 @@ public class InitialMarkingPanel extends JPanel {
 
     private void initMarkingTable() {
         setTableModel(new MarkingTableModel(domainModel));
-        table = new InitialMarkingTable(getTableModel());
+        table = new InitialMarkingTable(tableModel);
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -39,15 +39,16 @@ public class InitialMarkingPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-    public MarkingTableModel getTableModel() {
-        return tableModel;
-    }
 
     public void setTableModel(MarkingTableModel tableModel) {
         this.tableModel = tableModel;
     }
 
-    public class InitialMarkingTable extends JTable{
+    public void addNewMarking(int idPlace, int i) {
+        tableModel.addNewMarking(idPlace, i);
+    }
+
+    public class InitialMarkingTable extends JTable {
 
         private final DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer();
         private final Font FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
