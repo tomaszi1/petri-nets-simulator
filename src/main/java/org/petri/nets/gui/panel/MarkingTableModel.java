@@ -4,8 +4,7 @@ import org.petri.nets.model.DomainModel;
 import org.petri.nets.model.PetriNet;
 
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableColumn;
-import java.util.Enumeration;
+
 
 /**
  * Created by Asia on 2015-05-24.
