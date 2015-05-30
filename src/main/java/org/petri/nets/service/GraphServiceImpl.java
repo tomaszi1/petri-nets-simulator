@@ -101,7 +101,7 @@ public class GraphServiceImpl implements GraphService {
                 transitionIdCounter,
                 position);
         model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
-        Transition transition = new Transition(transitionIdCounter-1);
+        Transition transition = new Transition(transitionIdCounter-1,0);
         syncService.addTransition(transitionIdCounter - 1, transition);
         transitonGUI.put(cell, transition);
         return cell;
@@ -120,10 +120,10 @@ public class GraphServiceImpl implements GraphService {
 
         if(isPlace(start.getUserObject().toString())){
             //place is start
-            syncService.addArc(placeGUI.get(start), transitonGUI.get(end), 0,0,true);
+            syncService.addArc(placeGUI.get(start), transitonGUI.get(end), 0, true);
         }else{
             //transit is start
-            syncService.addArc(placeGUI.get(end), transitonGUI.get(start), 0,0,false);
+            syncService.addArc(placeGUI.get(end), transitonGUI.get(start), 0, false);
         }
 
     }

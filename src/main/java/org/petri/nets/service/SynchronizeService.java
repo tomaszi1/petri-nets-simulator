@@ -8,7 +8,7 @@ import org.petri.nets.model.Transition;
 public interface SynchronizeService {
     public void addPlace(int idPlace, Place place);
     public void addTransition(int idTransition, Transition transition);
-    public void addArc(Place place, Transition transition,int value,int priority, boolean isPlaceStart );
+    public void addArc(Place place, Transition transition,int value, boolean isPlaceStart );
     public void removePlace(Place place);
     public void removeTransition(Transition transition);
     public void removeArc(Transition transition, Place place, boolean isPlaceStart);

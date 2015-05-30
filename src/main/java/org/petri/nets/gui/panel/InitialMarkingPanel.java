@@ -25,12 +25,12 @@ public class InitialMarkingPanel extends JPanel {
     }
 
     private void initMarkingTable() {
-        setTableModel(new MarkingTableModel(domainModel));
         table = new JTable(getTableModel());
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table.getTableHeader().setReorderingAllowed(false);
         table.setFont(new Font("Dialog", Font.PLAIN, 15));
         table.setRowHeight(0, 21);
+        //table.wid
         table.setRowSelectionAllowed(false);
         table.setCellSelectionEnabled(true);
         Enumeration<TableColumn> columns = table.getColumnModel().getColumns();
@@ -39,20 +39,38 @@ public class InitialMarkingPanel extends JPanel {
             TableColumn tableColumn = columns.nextElement();
             DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer();
             defaultTableCellRenderer.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+            defaultTableCellRenderer.setMaximumSize(new Dimension(10,10));
             tableColumn.setCellRenderer(defaultTableCellRenderer);
-            tableColumn.setMaxWidth(35);
+            tableColumn.setMaxWidth(10);
         }
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         add(scrollPane, BorderLayout.CENTER);
+        setTableModel(new MarkingTableModel(domainModel));
     }
 
     public MarkingTableModel getTableModel() {
+        //przy dodawaniu ustaw rozmiar, nie przy inicie, bo on nic nie inicjuje!
         return tableModel;
     }
+    public void addNewMarking(int id, int marking){
+        tableModel.addNewMarking(id, marking);
+        Enumeration<TableColumn> columns = table.getColumnModel().getColumns();
 
+        while (columns.hasMoreElements()) {
+            TableColumn tableColumn = columns.nextElement();
+            DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer();
+            defaultTableCellRenderer.setHorizontalAlignment(DefaultTableCellRenderer.CENTER);
+            defaultTableCellRenderer.setMaximumSize(new Dimension(10, 21));
+            tableColumn.setCellRenderer(defaultTableCellRenderer);
+            tableColumn.setMaxWidth(10);
+        }
+
+        tableModel.refreshTableModel();
+
+    }
     public void setTableModel(MarkingTableModel tableModel) {
         this.tableModel = tableModel;
     }

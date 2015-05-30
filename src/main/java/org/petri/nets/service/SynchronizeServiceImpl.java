@@ -23,7 +23,7 @@ public class SynchronizeServiceImpl implements SynchronizeService{
     @Override
     public void addPlace(int idPlace, Place place) {
         model.getPetriNet().getPlaceMap().put(idPlace, place);
-        synchronizePanel.getInitialMarkingPanel().getTableModel().addNewMarking(idPlace, 0);
+        synchronizePanel.getInitialMarkingPanel().addNewMarking(idPlace, 0);
     }
 
     @Override
@@ -32,8 +32,8 @@ public class SynchronizeServiceImpl implements SynchronizeService{
     }
 
     @Override
-    public void addArc(Place place, Transition transition, int value, int priority, boolean isPlaceStart) {
-        Arc arc = new Arc(value,priority);
+    public void addArc(Place place, Transition transition, int value, boolean isPlaceStart) {
+        Arc arc = new Arc(value);
         //dodajemy przejscie do listy przejsc w Place
         addTransitToTransitListInPlace(place, transition, arc,isPlaceStart);
 

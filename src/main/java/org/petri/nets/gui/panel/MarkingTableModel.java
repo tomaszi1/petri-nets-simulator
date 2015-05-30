@@ -4,6 +4,8 @@ import org.petri.nets.model.DomainModel;
 import org.petri.nets.model.PetriNet;
 
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableColumn;
+import java.util.Enumeration;
 
 /**
  * Created by Asia on 2015-05-24.
@@ -68,7 +70,10 @@ public class MarkingTableModel extends AbstractTableModel {
 
     public void addNewMarking(int id, int marking){
         domainModel.getPetriNet().getInitialMarking().add(id,marking);
-        fireTableDataChanged();
+    }
+
+    public void refreshTableModel(){
+        fireTableStructureChanged();
     }
 
     public DomainModel getDomainModel() {
