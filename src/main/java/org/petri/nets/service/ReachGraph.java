@@ -46,9 +46,7 @@ public class ReachGraph {
         List<HashMap<Integer,Integer>>newMarkingList=new ArrayList<>();
         //TODO: uporzadkowac liste wedlug priorytetow przejsc
         for(int i=0;possibleTransitions.size()>i; i++){ //iterujemy sie po mozliwych do wykonania przejsciach
-            //stworzyc nowe przejscie bo sie wykrzacza?
-            Transition possibleTransition=new Transition(-1,0);
-            possibleTransition=possibleTransitions.get(i); //pobieramy przejscie
+            Transition possibleTransition=(possibleTransitions.get(i)).copy(); //pobieramy przejscie
             HashMap<Integer,Integer> newMarking = new HashMap<>(); //inicjalizujemy nowe znakowanie
             newMarking.putAll(DoTransition(possibleTransition)); //wykonujemy przejscie, pobieramy nowe znakowanie po jego wykonaniu
             reachGraph.addVertex(newMarking); //dodajemy nowy wierzcholek
