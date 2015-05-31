@@ -43,7 +43,7 @@ public class ReachGraph {
                 possibleTransitions.add(transition); //dodajemy do listy mozliwych przejsc
             }
         }
-
+        List<HashMap<Integer,Integer>>newMarkingList=new ArrayList<>();
         //TODO: uporzadkowac liste wedlug priorytetow przejsc
         for(int i=0;possibleTransitions.size()>i; i++){ //iterujemy sie po mozliwych do wykonania przejsciach
             //stworzyc nowe przejscie bo sie wykrzacza?
@@ -53,7 +53,10 @@ public class ReachGraph {
             newMarking.putAll(DoTransition(possibleTransition)); //wykonujemy przejscie, pobieramy nowe znakowanie po jego wykonaniu
             reachGraph.addVertex(newMarking); //dodajemy nowy wierzcholek
             reachGraph.addEdge(possibleTransition, prevMarking, newMarking); //dodajemy nowa krakwedz
-            GenerateGraph(newMarking); //wywolujemy funkcje dla nowego znakowania
+            newMarkingList.add(newMarking);
+        }
+        for(int i=0;newMarkingList.size()>i;i++) {
+            GenerateGraph(newMarkingList.get(i)); //wywolujemy funkcje dla nowego znakowania
         }
     }
 
@@ -89,6 +92,8 @@ public class ReachGraph {
 
     //jesli wybralismy juz przejscie o najwyzszym priorytecie
     public HashMap<Integer,Integer> DoTransition(Transition transition) {
+        HashMap<Integer,Integer> marking = new HashMap<>();
+        marking.putAll(petriNet.getInitialMarking());
         HashMap<Place, Arc> startingPlaces = new HashMap<>();
         startingPlaces.putAll(transition.getPlaceFrom());
         //zabieramy znaczniki z miejsc wejsciowych w zaleznosci od wartosci lukow z nich wychodzacych
@@ -98,8 +103,10 @@ public class ReachGraph {
             Arc arcLeavingStartPlace = startingPlacesSet.getValue();
             takenMarkingCount += arcLeavingStartPlace.getValue();
             int newMarkingForStartPlace=startPlace.getMarking() - arcLeavingStartPlace.getValue();   //odejmujemy znaczniki z miejsca startowego (tyle ile wartość łuku wychodzacego)
-            petriNet.setInitialMarking(startPlace.getIdPlace(),newMarkingForStartPlace);
-            startPlace.setMarking(newMarkingForStartPlace);
+            marking.replace(startPlace.getIdPlace(), startPlace.getMarking(), newMarkingForStartPlace);
+
+            //petriNet.setInitialMarking(startPlace.getIdPlace(),newMarkingForStartPlace);
+            //startPlace.setMarking(newMarkingForStartPlace);
         }
         for (Map.Entry<Place, Arc> endPlaceSet : transition.getPlaceTo().entrySet()) //iterujemy sie po miejscach, do ktorych prowadzi przejscie
         {
@@ -109,10 +116,12 @@ public class ReachGraph {
             if (takenMarkingCount >= arcEnteringEndPlace.getValue())     //jesli nie, przejscia nie mozna wykonac - chyba wtedy jest niezywotne
             {
                 int newMarkingForEndPlace=endPlace.getMarking() + arcEnteringEndPlace.getValue(); //dodajemy znaczniki do miejsca koncowego (tyle ile wartość łuku wchodzacego)
-                petriNet.setInitialMarking(endPlace.getIdPlace(),newMarkingForEndPlace);
-                endPlace.setMarking(newMarkingForEndPlace);
+                marking.replace(endPlace.getIdPlace(),endPlace.getMarking(),newMarkingForEndPlace);
+
+                //petriNet.setInitialMarking(endPlace.getIdPlace(),newMarkingForEndPlace);
+                //endPlace.setMarking(newMarkingForEndPlace);
             }
         }
-        return petriNet.getInitialMarking();
+        return marking;
     }
 }

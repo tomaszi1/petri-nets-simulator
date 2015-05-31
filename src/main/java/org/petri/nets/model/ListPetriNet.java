@@ -3,6 +3,7 @@ package org.petri.nets.model;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class ListPetriNet implements PetriNet {
@@ -35,6 +36,9 @@ public class ListPetriNet implements PetriNet {
 
     @Override
     public void setInitialMarking(HashMap<Integer,Integer> marking) {
+        for(Map.Entry<Integer,Integer>markingEntry:marking.entrySet()){
+            placeMap.get(markingEntry.getKey()).setMarking(markingEntry.getValue());
+        }
         this.initialMarking = marking;
     }
 
