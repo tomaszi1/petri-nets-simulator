@@ -1,12 +1,12 @@
 package org.petri.nets.model;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Created by Asia on 2015-05-17.
  */
-public class Transition {
+public class Transition implements Serializable {
     private int idTransition;
     //z ktorych miejsc wchodzi sie do przejscia
     private HashMap<Place, Arc> placeFrom;
@@ -14,7 +14,7 @@ public class Transition {
     private HashMap<Place, Arc> placeTo;
     private int priority;
 
-    public Transition(int idTrans, int priority){
+    public Transition(int idTrans){
         this.idTransition = idTrans;
         placeFrom = new HashMap<Place, Arc>();
         placeTo = new HashMap<Place, Arc>();

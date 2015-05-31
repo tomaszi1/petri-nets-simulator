@@ -1,16 +1,17 @@
 package org.petri.nets.model;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
 
 
-public class ListPetriNet implements PetriNet {
+public class ListPetriNet implements PetriNet, Serializable {
 
     private HashMap<Integer,Integer> initialMarking;
 
     private HashMap<Integer,Place> placeMap;
     private HashMap<Integer,Transition> transitionMap;
+    private int placeIdCounter = 0;
+    private int transitionIdCounter = 0;
 
 /*//to bedzie domyslnie uzywany konstruktor - nie usuwac
     public ListPetriNet() {
@@ -91,6 +92,22 @@ public class ListPetriNet implements PetriNet {
     @Override
     public int getPlacesCount() {
         return placeMap.size();
+    }
+    @Override
+    public int getPlaceIdCounter() {
+        return placeIdCounter;
+    }
+    @Override
+    public void setPlaceIdCounter(int placeIdCounter) {
+        this.placeIdCounter = placeIdCounter;
+    }
+    @Override
+    public int getTransitionIdCounter() {
+        return transitionIdCounter;
+    }
+    @Override
+    public void setTransitionIdCounter(int transitionIdCounter) {
+        this.transitionIdCounter = transitionIdCounter;
     }
 
 
