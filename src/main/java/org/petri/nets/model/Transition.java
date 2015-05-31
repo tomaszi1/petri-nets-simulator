@@ -14,11 +14,28 @@ public class Transition {
     private HashMap<Place, Arc> placeTo;
     private int priority;
 
+    public Transition copy()
+    {
+        Transition transition = new Transition();
+        transition.idTransition = this.idTransition;
+        transition.priority=this.priority;
+        transition.placeFrom=this.placeFrom;
+        transition.placeTo=this.placeTo;
+        return transition;
+    }
+
+    public Transition(){
+        this.idTransition = -1;
+        placeFrom = new HashMap<Place, Arc>();
+        placeTo = new HashMap<Place, Arc>();
+        this.priority=-1;
+    }
+
     public Transition(int idTrans, int priority){
         this.idTransition = idTrans;
         placeFrom = new HashMap<Place, Arc>();
         placeTo = new HashMap<Place, Arc>();
-
+        this.priority=priority;
     }
     public int getIdTransition() {
         return idTransition;
