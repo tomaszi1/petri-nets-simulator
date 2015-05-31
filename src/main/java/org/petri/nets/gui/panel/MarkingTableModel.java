@@ -62,17 +62,18 @@ public class MarkingTableModel extends AbstractTableModel {
     public void setValueAt(Object value, int row, int col) {
         try {
             PetriNet petriNet = getDomainModel().getPetriNet();
-            Place place = getPlaceByColumId(getColumnName(col), petriNet);
+            //Place place = getPlaceByColumId(getColumnName(col), petriNet);
+            Integer placeId = getPlaceId(getColumnName(col),petriNet);
             if (value instanceof String) {
 
-                petriNet.setInitialMarking(place, Integer.parseInt((String) value));
+                petriNet.setInitialMarking(placeId, Integer.parseInt((String) value));
             } else if (!(value instanceof Integer))
                 return;
             else {
                 Integer intval = (Integer) value;
                 if (intval < 0)
                     return;
-                petriNet.setInitialMarking(place, (Integer) value);
+                petriNet.setInitialMarking(placeId, (Integer) value);
             }
             fireTableCellUpdated(row, col);
 
@@ -82,11 +83,11 @@ public class MarkingTableModel extends AbstractTableModel {
     }
 
     public void addNewMarking(Place place, int marking){
-        domainModel.getPetriNet().getInitialMarking().put(place,marking);
+        domainModel.getPetriNet().getInitialMarking().put(place.getIdPlace(),marking);
         fireTableStructureChanged();
     }
     public void removeMarking(Place place){
-        domainModel.getPetriNet().getInitialMarking().remove(place);
+        domainModel.getPetriNet().getInitialMarking().remove(place.getIdPlace());
         fireTableStructureChanged();
     }
     public DomainModel getDomainModel() {
@@ -96,7 +97,10 @@ public class MarkingTableModel extends AbstractTableModel {
     public void setDomainModel(DomainModel domainModel) {
         this.domainModel = domainModel;
     }
-
+    private Integer getPlaceId(String name, PetriNet petriNet){
+        Integer id = new Integer(name.substring(1));
+        return id - 1;
+    }
     private Place getPlaceByColumId(String name, PetriNet petriNet){
         Integer id = new Integer(name.substring(1));
         Place place = petriNet.getPlaceMap().get(id-1);

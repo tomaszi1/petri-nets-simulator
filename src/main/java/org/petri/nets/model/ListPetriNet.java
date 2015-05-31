@@ -7,7 +7,7 @@ import java.util.List;
 
 public class ListPetriNet implements PetriNet {
 
-    private HashMap<Place,Integer> initialMarking;
+    private HashMap<Integer,Integer> initialMarking;
 
     private HashMap<Integer,Place> placeMap;
     private HashMap<Integer,Transition> transitionMap;
@@ -23,7 +23,7 @@ public class ListPetriNet implements PetriNet {
     }*/
 //konstruktor do obecnego poczatkowego stanu aplikacji
     public ListPetriNet() {
-        initialMarking = new HashMap<Place,Integer>();
+        initialMarking = new HashMap<Integer,Integer>();
         setPlaceMap(new HashMap<Integer, Place>());
         setTransitionMap(new HashMap<Integer, Transition>());
     }
@@ -34,24 +34,24 @@ public class ListPetriNet implements PetriNet {
 
 
     @Override
-    public void setInitialMarking(HashMap<Place,Integer> marking) {
+    public void setInitialMarking(HashMap<Integer,Integer> marking) {
         this.initialMarking = marking;
     }
 
     @Override
-    public void setInitialMarking(Place place, int marking) {
-       initialMarking.put(place,marking);
-        place.setMarking(marking);
+    public void setInitialMarking(Integer placeId, int marking) {
+       initialMarking.put(placeId,marking);
+        placeMap.get(placeId).setMarking(marking);
     }
 
     @Override
-    public HashMap<Place, Integer> getInitialMarking() {
+    public HashMap<Integer, Integer> getInitialMarking() {
         return initialMarking;
     }
 
     @Override
-    public Integer getInitialMarking(Place place) {
-        return initialMarking.get(place);
+    public Integer getInitialMarking(Integer placeId) {
+        return initialMarking.get(placeId);
     }
 
     //////////////////
