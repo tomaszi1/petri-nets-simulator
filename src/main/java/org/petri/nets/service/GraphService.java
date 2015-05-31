@@ -29,4 +29,5 @@ public interface GraphService {
     boolean isTransition(Object cell);
 
     boolean isPlace(Object cell);
+    public void saveGraphAsFile();
 }

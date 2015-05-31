@@ -27,7 +27,7 @@ public class MainFrame extends JFrame {
     }
 
     private void initComponents(DomainModel domainModel) {
-        sideMenuWrapper = new SideMenuWrapper();
+        sideMenuWrapper = new SideMenuWrapper(domainModel);
 
         PetriNetWrapperPanel petriNetWrapperPanel = new PetriNetWrapperPanel(domainModel);
         ReachabilityGraphPanel reachGraphPanel = new ReachabilityGraphPanel(domainModel);

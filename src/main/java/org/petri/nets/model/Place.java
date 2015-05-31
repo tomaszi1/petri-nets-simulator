@@ -1,11 +1,12 @@
 package org.petri.nets.model;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Created by Asia on 2015-05-17.
  */
-public class Place {
+public class Place implements Serializable{
     private int idPlace;
     //z ktorych przejsc wchodzi sie do miejsca
     private HashMap<Transition, Arc> transitionFrom;

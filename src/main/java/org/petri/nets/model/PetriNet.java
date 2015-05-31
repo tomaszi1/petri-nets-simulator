@@ -22,6 +22,13 @@ public interface PetriNet {
     public HashMap<Integer,Transition> getTransitionMap();
     public void setTransitionMap(HashMap<Integer, Transition> transitionList);
 
+    //Id transition + place
+    public int getPlaceIdCounter();
+    public void setPlaceIdCounter(int placeIdCounter);
+    public int getTransitionIdCounter();
+    public void setTransitionIdCounter(int transitionIdCounter);
+
+
 /*    List<Arc> getIngoingArcsForPlace(int place);
 
     List<Arc> getOutgoingArcsForPlace(int place);

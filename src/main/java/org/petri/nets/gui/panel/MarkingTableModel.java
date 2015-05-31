@@ -1,6 +1,7 @@
 package org.petri.nets.gui.panel;
 
 import org.petri.nets.model.DomainModel;
+import org.petri.nets.model.InitialMarkingList;
 import org.petri.nets.model.PetriNet;
 import org.petri.nets.model.Place;
 
@@ -13,9 +14,10 @@ import java.util.ArrayList;
  */
 public class MarkingTableModel extends AbstractTableModel {
     private DomainModel domainModel ;
-    private ArrayList<Integer[]> initialMarkingListGUI = new ArrayList<Integer[]>();
+    private InitialMarkingList markingList;
     public MarkingTableModel (DomainModel domainModel){
         this.domainModel = domainModel;
+        this.markingList = domainModel.getSyncModel().getInitialMarkingList();
     }
 
     @Override
@@ -33,7 +35,7 @@ public class MarkingTableModel extends AbstractTableModel {
         //PetriNet petriNet = getDomainModel().getPetriNet();
 
         //Place place = getPlaceByColumId(getColumnName(col),petriNet);
-        int marking = initialMarkingListGUI.get(col)[1];
+        int marking = markingList.getMarkingList().get(col)[1];
         return marking;
     }
 
@@ -41,7 +43,7 @@ public class MarkingTableModel extends AbstractTableModel {
     public String getColumnName(int col) {
         //HashMap<Integer, Place> placeMap = getDomainModel().getPetriNet().getPlaceMap();
         String sufix = "P";
-        int idPlace = initialMarkingListGUI.get(col)[0] + 1;
+        int idPlace =  markingList.getMarkingList().get(col)[0] + 1;
         return sufix + idPlace ;
     }
 
@@ -60,10 +62,10 @@ public class MarkingTableModel extends AbstractTableModel {
         try {
             PetriNet petriNet = getDomainModel().getPetriNet();
             //Place place = getPlaceByColumId(getColumnName(col), petriNet);
-            Integer placeId = initialMarkingListGUI.get(col)[0];
+            Integer placeId =  markingList.getMarkingList().get(col)[0];
             if (value instanceof String) {
                 petriNet.setInitialMarking(placeId, Integer.parseInt((String) value));
-                initialMarkingListGUI.get(col)[1]= Integer.parseInt((String) value);
+                markingList.getMarkingList().get(col)[1]= Integer.parseInt((String) value);
             } else if (!(value instanceof Integer))
                 return;
             else {
@@ -71,7 +73,7 @@ public class MarkingTableModel extends AbstractTableModel {
                 if (intval < 0)
                     return;
                 petriNet.setInitialMarking(placeId, (Integer) value);
-                initialMarkingListGUI.get(col)[1]= (Integer) value;
+                markingList.getMarkingList().get(col)[1]= (Integer) value;
             }
             fireTableCellUpdated(row, col);
 
@@ -82,8 +84,8 @@ public class MarkingTableModel extends AbstractTableModel {
 
     public void addNewMarking(Place place, int marking){
         domainModel.getPetriNet().getInitialMarking().put(place.getIdPlace(),marking);
-        Integer[] markingList = {place.getIdPlace(),marking};
-        initialMarkingListGUI.add(markingList);
+        Integer[] smallMarkingList = {place.getIdPlace(),marking};
+        markingList.getMarkingList().add(smallMarkingList);
         //idPlace.add(place.getIdPlace());
         fireTableStructureChanged();
     }
@@ -110,17 +112,11 @@ public class MarkingTableModel extends AbstractTableModel {
         return place;
     }
 
-    public ArrayList<Integer[]> getInitialMarkingListGUI() {
-        return initialMarkingListGUI;
-    }
 
-    public void setInitialMarkingListGUI(ArrayList<Integer[]> initialMarkingListGUI) {
-        this.initialMarkingListGUI = initialMarkingListGUI;
-    }
     private void removeFromlistGUI(int idPlace){
-        for(int i= 0; i< initialMarkingListGUI.size(); i++){
-            if(initialMarkingListGUI.get(i)[0]==idPlace){
-                initialMarkingListGUI.remove(i);
+        for(int i= 0; i<  markingList.getMarkingList().size(); i++){
+            if( markingList.getMarkingList().get(i)[0]==idPlace){
+                markingList.getMarkingList().remove(i);
                 return;
             }
         }

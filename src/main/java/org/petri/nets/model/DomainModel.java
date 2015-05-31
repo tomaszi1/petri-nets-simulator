@@ -1,9 +1,14 @@
 package org.petri.nets.model;
 
+import com.google.common.collect.BiMap;
 import org.jgraph.JGraph;
 import org.jgraph.graph.GraphLayoutCache;
+import org.petri.nets.gui.graph.PlaceGraphCell;
+import org.petri.nets.gui.graph.TransitionGraphCell;
 
-public class DomainModel {
+import java.io.Serializable;
+
+public class DomainModel implements Serializable {
     private JGraph petriNetGraph;
     private JGraph reachabilityGraph;
 
@@ -23,13 +28,24 @@ public class DomainModel {
         this.reachabilityGraph = reachabilityGraph;
     }
 
-    private PetriNet petriNet;
 
+/////////////////////////
+
+    private PetriNet petriNet;
+    private SyncModelGUI syncModel = new SyncModelGUI();
     public PetriNet getPetriNet() {
         return petriNet;
     }
 
     public void setPetriNet(PetriNet petriNet) {
         this.petriNet = petriNet;
+    }
+
+    public SyncModelGUI getSyncModel() {
+        return syncModel;
+    }
+
+    public void setSyncModel(SyncModelGUI syncModel) {
+        this.syncModel = syncModel;
     }
 }

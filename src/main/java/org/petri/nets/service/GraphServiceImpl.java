@@ -17,16 +17,17 @@ import java.util.stream.Collectors;
 public class GraphServiceImpl implements GraphService {
     private final DomainModel model;
     private SynchronizeService syncService;
-    private int placeIdCounter = 0;
-    private int transitionIdCounter = 0;
-    BiMap<PlaceGraphCell, Place> placeGUI;
-    BiMap<TransitionGraphCell, Transition> transitonGUI;
+    SaveGraphAsFile saveGraphAsFile ;
+    private BiMap<PlaceGraphCell, Place> placeGUI;
+    private BiMap<TransitionGraphCell, Transition> transitonGUI;
 
     public GraphServiceImpl(DomainModel model, SynchronizePanel synchronizePanel) {
         this.model = model;
         this.syncService =  new SynchronizeServiceImpl(model, synchronizePanel);
-        this.placeGUI =  HashBiMap.create();
-        this.transitonGUI =  HashBiMap.create();
+        saveGraphAsFile = new SaveGraphAsFile(model);
+        this.placeGUI = this.model.getSyncModel().getPlaceGUI();
+        this.transitonGUI = this.model.getSyncModel().getTransitonGUI();
+
     }
 
     public void cascadeRemoveEdges(PetriNetGraphCell cell) {
@@ -83,26 +84,30 @@ public class GraphServiceImpl implements GraphService {
     }
     @Override
     public PlaceGraphCell addPlace(Point position) {
-        placeIdCounter++;
+        int counter = model.getPetriNet().getPlaceIdCounter();
+        counter++;
+        model.getPetriNet().setPlaceIdCounter(counter);
         PlaceGraphCell cell = new PlaceGraphCell(
-                placeIdCounter,
+                counter,
                 position);
         model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
-        Place place = new Place(placeIdCounter-1);
-        syncService.addPlace(placeIdCounter-1,place);
+        Place place = new Place(counter-1);
+        syncService.addPlace(counter-1,place);
         placeGUI.put(cell,place);
         return cell;
     }
 
     @Override
     public TransitionGraphCell addTransition(Point position) {
-        transitionIdCounter++;
+        int counter = model.getPetriNet().getTransitionIdCounter();
+        counter++;
+        model.getPetriNet().setTransitionIdCounter(counter);
         TransitionGraphCell cell = new TransitionGraphCell(
-                transitionIdCounter,
+                counter,
                 position);
         model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
-        Transition transition = new Transition(transitionIdCounter-1,0);
-        syncService.addTransition(transitionIdCounter - 1, transition);
+        Transition transition = new Transition(counter-1);
+        syncService.addTransition(counter - 1, transition);
         transitonGUI.put(cell, transition);
         return cell;
     }
@@ -166,6 +171,10 @@ public class GraphServiceImpl implements GraphService {
                 .map(c -> (PetriNetGraphCell) c)
                 .collect(Collectors.toList());
         return collect.toArray(new PetriNetGraphCell[collect.size()]);
+    }
+    @Override
+    public void saveGraphAsFile(){
+        saveGraphAsFile.saveGaph();
     }
 
     private int getId(String stringId){

@@ -1,6 +1,8 @@
 package org.petri.nets.model;
 
-public class Arc {
+import java.io.Serializable;
+
+public class Arc implements Serializable{
     private int value;
 
 
