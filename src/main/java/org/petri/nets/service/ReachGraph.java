@@ -14,6 +14,7 @@ public class ReachGraph {
 
     private Graph<HashMap<Integer,Integer>, Transition> reachGraph;
     private PetriNet petriNet;
+    private List<HashMap<Integer,Integer>> graphVertexList;
 
     public ReachGraph(PetriNet pN) {
         petriNet = new ListPetriNet();
@@ -23,6 +24,7 @@ public class ReachGraph {
             petriNet.setInitialMarking(pN.getInitialMarking());
         }
         reachGraph = new SparseMultigraph<>();
+        graphVertexList=new ArrayList<>();
     }
 
     public void RunReachGraph() {
@@ -46,33 +48,30 @@ public class ReachGraph {
             }
         }
         List<HashMap<Integer,Integer>>newMarkingList=new ArrayList<>();
-        //TODO: uporzadkowac liste wedlug priorytetow przejsc
         for(int i=0;possibleTransitions.size()>i; i++){ //iterujemy sie po mozliwych do wykonania przejsciach
             Transition possibleTransition=(possibleTransitions.get(i)).copy(); //pobieramy przejscie
             HashMap<Integer,Integer> newMarking = new HashMap<>(); //inicjalizujemy nowe znakowanie
             newMarking.putAll(DoTransition(possibleTransition)); //wykonujemy przejscie, pobieramy nowe znakowanie po jego wykonaniu
-            reachGraph.addVertex(newMarking); //dodajemy nowy wierzcholek
-            reachGraph.addEdge(possibleTransition, prevMarking, newMarking); //dodajemy nowa krakwedz
-            newMarkingList.add(newMarking);
+            //jesli taki wierzcholek juz istnieje, dodajemy krawedz pomiedzy poprzednim znakowaniem, a tym wyszukanym istniejacym w grafie
+            HashMap<Integer,Integer> existingMarking=IsMarkingNew(newMarking);// sprawdzamy czy takie znakowanie juz istnieje w grafie
+            if(existingMarking==null){//jesli znakowanie nie istnieje w grafie, dodajemy nowe znakowanie do grafu
+                reachGraph.addVertex(newMarking); //dodajemy nowy wierzcholek
+                reachGraph.addEdge(possibleTransition, prevMarking, newMarking); //dodajemy nowa krakwedz
+                newMarkingList.add(newMarking);
+                graphVertexList.add(newMarking);
+            }
+            else reachGraph.addEdge(possibleTransition, prevMarking, existingMarking);//jesli takie znakowanie juz istnieje, dodajemy krawedz od poprzedniego znakowania do istniejacego juz w grafie
         }
         for(int i=0;newMarkingList.size()>i;i++) {
             GenerateGraph(newMarkingList.get(i)); //wywolujemy funkcje dla nowego znakowania
         }
     }
 
-    public Transition ChooseHighestPriorityTransition(HashMap<Integer,Transition> transitionMap){
-        //wez wszystkie miejsca, znajdz to, ktorego luk wychodzacy ma najwyzszy priorytet
-        //sprawdz
-        Transition highestPriorityTransition=null;
-        int priority=-1;
-        for(Map.Entry<Integer,Transition> transitionEntry:transitionMap.entrySet()){
-            Transition transition=transitionEntry.getValue();
-            if(priority< transition.getPriority()){
-                priority=transition.getPriority();
-                highestPriorityTransition=transition;
-            }
+    private HashMap<Integer,Integer> IsMarkingNew(HashMap<Integer,Integer> marking){
+        for(int i=0;graphVertexList.size()>i;i++){
+            if(marking.equals(graphVertexList.get(i)))return graphVertexList.get(i);
         }
-        return highestPriorityTransition;
+        return null;
     }
 
     //jesli we wszystkich miejscach, ktore wchodza do przejscia jest wystarczajaco duzo znacznikow
