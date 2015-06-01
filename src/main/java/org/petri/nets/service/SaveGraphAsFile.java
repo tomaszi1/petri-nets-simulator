@@ -45,14 +45,14 @@ public class SaveGraphAsFile {
             // read and print an object and cast it as string
             DomainModel domainModel = (DomainModel) ois.readObject();
 
-            /*try {
+            try {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (ClassNotFoundException |
                     InstantiationException |
                     UnsupportedLookAndFeelException |
                     IllegalAccessException e) {
                 e.printStackTrace();
-            }*/
+            }
             SynchronizePanel synchronizePanel = new SynchronizePanel();
 
             GraphService graphService = new GraphServiceImpl(domainModel, synchronizePanel);
