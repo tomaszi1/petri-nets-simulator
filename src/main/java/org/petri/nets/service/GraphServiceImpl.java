@@ -106,7 +106,7 @@ public class GraphServiceImpl implements GraphService {
                 counter,
                 position);
         model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
-        Transition transition = new Transition(counter-1);
+        Transition transition = new Transition(counter-1,1);
         syncService.addTransition(counter - 1, transition);
         transitonGUI.put(cell, transition);
         return cell;
