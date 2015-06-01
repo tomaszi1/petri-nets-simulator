@@ -10,7 +10,9 @@ import java.util.*;
  * Created by Małgorzata on 2015-05-24.
  */
 public class ReachGraph {
-    public Graph<HashMap<Integer,Integer>, Transition> reachGraph;
+
+
+    private Graph<HashMap<Integer,Integer>, Transition> reachGraph;
     private PetriNet petriNet;
 
     public ReachGraph(PetriNet pN) {
@@ -121,5 +123,9 @@ public class ReachGraph {
             }
         }
         return marking;
+    }
+
+    public Graph<HashMap<Integer, Integer>, Transition> getReachGraph() {
+        return reachGraph;
     }
 }

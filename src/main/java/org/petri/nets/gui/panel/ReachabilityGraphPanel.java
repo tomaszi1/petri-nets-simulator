@@ -11,13 +11,9 @@ public class ReachabilityGraphPanel extends JScrollPane {
     private static final String PANEL_TITLE = "Graf osiągalności";
 
     private final DomainModel domainModel;
-    private final JGraph graph;
 
     public ReachabilityGraphPanel(DomainModel domainModel) {
         this.domainModel = domainModel;
-        graph = domainModel.getReachabilityGraph();
-
-        setViewportView(graph);
 
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
     }

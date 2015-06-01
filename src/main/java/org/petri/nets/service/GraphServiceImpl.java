@@ -1,7 +1,7 @@
 package org.petri.nets.service;
 
 import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
+import edu.uci.ics.jung.graph.Graph;
 import org.jgraph.graph.*;
 import org.petri.nets.gui.graph.*;
 import org.petri.nets.model.DomainModel;
@@ -17,7 +17,8 @@ import java.util.stream.Collectors;
 public class GraphServiceImpl implements GraphService {
     private final DomainModel model;
     private SynchronizeService syncService;
-    SaveGraphAsFile saveGraphAsFile ;
+    private SaveGraphAsFile saveGraphAsFile ;
+    private ReachGraph reachGraph;
     private BiMap<PlaceGraphCell, Place> placeGUI;
     private BiMap<TransitionGraphCell, Transition> transitonGUI;
 
@@ -27,20 +28,6 @@ public class GraphServiceImpl implements GraphService {
         saveGraphAsFile = new SaveGraphAsFile(model);
         this.placeGUI = this.model.getSyncModel().getPlaceGUI();
         this.transitonGUI = this.model.getSyncModel().getTransitonGUI();
-
-    }
-
-    public void cascadeRemoveEdges(PetriNetGraphCell cell) {
-        for (Object o : cell.getChildren()) {
-            Port port = CustomCellViewFactory.tryCastToPort(o);
-            if (port!=null) {
-                Iterator edges = port.edges();
-                while(edges.hasNext()){
-                    Edge edge = (Edge) edges.next();
-                    removeFromGraph(edge);
-                }
-            }
-        }
     }
 
     @Override
@@ -196,5 +183,10 @@ public class GraphServiceImpl implements GraphService {
         }
     }
 
-
+    private void invalidateReachabilityGraph(){
+        reachGraph = new ReachGraph(model.getPetriNet());
+        reachGraph.RunReachGraph();
+        Graph<HashMap<Integer, Integer>, Transition> reachGraph = this.reachGraph.getReachGraph();
+        model.setReachabilityGraph(reachGraph);
+    }
 }
