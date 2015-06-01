@@ -1,6 +1,7 @@
 package org.petri.nets.gui.panel;
 
 import org.petri.nets.model.DomainModel;
+import org.petri.nets.service.GraphService;
 import org.petri.nets.service.SaveGraphAsFile;
 
 import javax.swing.*;
@@ -10,8 +11,9 @@ import java.awt.event.ActionEvent;
 public class SideMenuPanel extends JPanel {
     private SaveGraphAsFile saveGraphAsFile;
     private DomainModel domainModel;
-    public SideMenuPanel( DomainModel domainModel) {
-        this.setSaveGraphAsFile(new SaveGraphAsFile(domainModel));
+    public SideMenuPanel(GraphService graphService) {
+        this.domainModel = graphService.getDomainModel();
+        this.setSaveGraphAsFile(new SaveGraphAsFile(graphService.getDomainModel()));
         setLayout(new FlowLayout());
         add(new JLabel("Menu"));
         //add(new JButton("Zapisz graf w pliku"));

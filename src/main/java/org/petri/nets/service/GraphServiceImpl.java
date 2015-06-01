@@ -2,9 +2,11 @@ package org.petri.nets.service;
 
 import com.google.common.collect.BiMap;
 import edu.uci.ics.jung.graph.Graph;
+import org.jgraph.JGraph;
 import org.jgraph.graph.*;
 import org.petri.nets.gui.graph.*;
 import org.petri.nets.model.DomainModel;
+import org.petri.nets.model.PetriNet;
 import org.petri.nets.model.Place;
 import org.petri.nets.model.Transition;
 import org.petri.nets.synhronize.SynchronizePanel;
@@ -17,14 +19,14 @@ import java.util.stream.Collectors;
 public class GraphServiceImpl implements GraphService {
     private final DomainModel model;
     private SynchronizeService syncService;
-    private SaveGraphAsFile saveGraphAsFile ;
+    private SaveGraphAsFile saveGraphAsFile;
     private ReachGraph reachGraph;
     private BiMap<PlaceGraphCell, Place> placeGUI;
     private BiMap<TransitionGraphCell, Transition> transitonGUI;
 
     public GraphServiceImpl(DomainModel model, SynchronizePanel synchronizePanel) {
         this.model = model;
-        this.syncService =  new SynchronizeServiceImpl(model, synchronizePanel);
+        this.syncService = new SynchronizeServiceImpl(model, synchronizePanel);
         saveGraphAsFile = new SaveGraphAsFile(model);
         this.placeGUI = this.model.getSyncModel().getPlaceGUI();
         this.transitonGUI = this.model.getSyncModel().getTransitonGUI();
@@ -33,7 +35,7 @@ public class GraphServiceImpl implements GraphService {
     @Override
     public void removeFromGraph(Object cell) {
         if (cell instanceof Object[])
-            removeFromGraph((Object[])cell);
+            removeFromGraph((Object[]) cell);
         else if (cell instanceof CellView) {
             CellView cellView = (CellView) cell;
             removeFromGraph(new Object[]{cellView.getCell()});
@@ -42,7 +44,7 @@ public class GraphServiceImpl implements GraphService {
         }
     }
 
-    public void removeFromGraph(Object[] cells){
+    public void removeFromGraph(Object[] cells) {
         for (Object cell : cells) {
             DefaultGraphCell graphCell = CustomCellViewFactory.tryCastToCell(cell);
             if (graphCell != null) {
@@ -59,42 +61,36 @@ public class GraphServiceImpl implements GraphService {
         invalidateReachabilityGraph();
     }
 
-    private void synhronizeRemoveFromGraph(Object cell){
-        if(isPlace(cell)){
+    private void synhronizeRemoveFromGraph(Object cell) {
+        if (isPlace(cell)) {
             syncService.removePlace(placeGUI.get(cell));
-        }else if(isTransition(cell)){
+        } else if (isTransition(cell)) {
             syncService.removeTransition(transitonGUI.get(cell));
-        }else{
-            removeArc((ArcGraphCell)cell);
+        } else {
+            removeArc((ArcGraphCell) cell);
         }
     }
+
     @Override
     public PlaceGraphCell addPlace(Point position) {
-        int counter = model.getPetriNet().getPlaceIdCounter();
-        counter++;
-        model.getPetriNet().setPlaceIdCounter(counter);
+        Place place = model.getPetriNet().addPlace();
         PlaceGraphCell cell = new PlaceGraphCell(
-                counter,
+                place.getIdPlace(),
                 position);
         model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
-        Place place = new Place(counter-1);
-        syncService.addPlace(counter-1,place);
-        placeGUI.put(cell,place);
+        syncService.addPlace();
+        placeGUI.put(cell, place);
         invalidateReachabilityGraph();
         return cell;
     }
 
     @Override
     public TransitionGraphCell addTransition(Point position) {
-        int counter = model.getPetriNet().getTransitionIdCounter();
-        counter++;
-        model.getPetriNet().setTransitionIdCounter(counter);
+        Transition transition = model.getPetriNet().addTransition();
         TransitionGraphCell cell = new TransitionGraphCell(
-                counter,
+                transition.getId(),
                 position);
         model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
-        Transition transition = new Transition(counter-1,1);
-        syncService.addTransition(counter - 1, transition);
         transitonGUI.put(cell, transition);
         invalidateReachabilityGraph();
         return cell;
@@ -111,10 +107,10 @@ public class GraphServiceImpl implements GraphService {
         edge.setValue(0);
         model.getPetriNetGraph().getGraphLayoutCache().insert(edge);
 
-        if(isPlace(start.getUserObject().toString())){
+        if (isPlace(start.getUserObject().toString())) {
             //place is start
             syncService.addArc(placeGUI.get(start), transitonGUI.get(end), 0, true);
-        }else{
+        } else {
             //transit is start
             syncService.addArc(placeGUI.get(end), transitonGUI.get(start), 0, false);
         }
@@ -160,35 +156,73 @@ public class GraphServiceImpl implements GraphService {
                 .collect(Collectors.toList());
         return collect.toArray(new PetriNetGraphCell[collect.size()]);
     }
+
     @Override
-    public void saveGraphAsFile(){
+    public void saveGraphAsFile() {
         saveGraphAsFile.saveGaph();
     }
 
-    private int getId(String stringId){
+    private int getId(String stringId) {
         int id = Integer.valueOf(stringId.substring(1));
-        return id-1;
+        return id - 1;
     }
 
-    private boolean isPlace(String stringId){
-        if(stringId.substring(0,1).equals("P")){
+    private boolean isPlace(String stringId) {
+        if (stringId.substring(0, 1).equals("P")) {
             return true;
         }
         return false;
     }
-    private void removeArc(ArcGraphCell arc){
-        if(isPlace(arc.getStart())){
+
+    private void removeArc(ArcGraphCell arc) {
+        if (isPlace(arc.getStart())) {
             syncService.removeArc(transitonGUI.get(arc.getEnd()), placeGUI.get(arc.getStart()), true);
-        }else{
+        } else {
             syncService.removeArc(transitonGUI.get(arc.getStart()), placeGUI.get(arc.getEnd()), false);
         }
     }
 
-    private void invalidateReachabilityGraph(){
+    @Override
+    public void setInitialMarking(int placeId, int marking) {
+        model.getPetriNet().setInitialMarking(placeId, marking);
+        invalidateReachabilityGraph();
+    }
+
+    @Override
+    public HashMap<Integer, Integer> getInitialMarking() {
+        return model.getPetriNet().getInitialMarking();
+    }
+
+    @Override
+    public int getInitialMarking(int placeId) {
+        return model.getPetriNet().getInitialMarking(placeId);
+    }
+
+    private void invalidateReachabilityGraph() {
         reachGraph = new ReachGraph(model.getPetriNet());
         reachGraph.RunReachGraph();
         Graph<HashMap<Integer, Integer>, Transition> reachGraph = this.reachGraph.getReachGraph();
         model.setReachabilityGraph(reachGraph);
         syncService.updateReachabilityGraph();
+    }
+
+    @Override
+    public JGraph getPetriNetGraph() {
+        return model.getPetriNetGraph();
+    }
+
+    @Override
+    public DomainModel getDomainModel() {
+        return model;
+    }
+
+    @Override
+    public Graph<HashMap<Integer, Integer>, Transition> getReachabilityGraph() {
+        return model.getReachabilityGraph();
+    }
+
+    @Override
+    public SynchronizeService getSynchronizeService() {
+        return syncService;
     }
 }

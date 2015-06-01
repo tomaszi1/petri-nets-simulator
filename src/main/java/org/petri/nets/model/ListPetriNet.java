@@ -2,17 +2,17 @@ package org.petri.nets.model;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ListPetriNet implements PetriNet, Serializable {
 
-    private HashMap<Integer,Integer> initialMarking;
+    private LinkedHashMap<Integer,Integer> initialMarking;
 
     private HashMap<Integer,Place> placeMap;
     private HashMap<Integer,Transition> transitionMap;
-    private int placeIdCounter = 0;
-    private int transitionIdCounter = 0;
+    private int placeIdCounter = 1;
+    private int transitionIdCounter = 1;
 
 /*//to bedzie domyslnie uzywany konstruktor - nie usuwac
     public ListPetriNet() {
@@ -25,7 +25,7 @@ public class ListPetriNet implements PetriNet, Serializable {
     }*/
 //konstruktor do obecnego poczatkowego stanu aplikacji
     public ListPetriNet() {
-        initialMarking = new HashMap<Integer,Integer>();
+        initialMarking = new LinkedHashMap<Integer,Integer>();
         setPlaceMap(new HashMap<Integer, Place>());
         setTransitionMap(new HashMap<Integer, Transition>());
     }
@@ -36,7 +36,7 @@ public class ListPetriNet implements PetriNet, Serializable {
 
 
     @Override
-    public void setInitialMarking(HashMap<Integer,Integer> marking) {
+    public void setInitialMarking(LinkedHashMap<Integer,Integer> marking) {
         for(Map.Entry<Integer,Integer>markingEntry:marking.entrySet()){
             placeMap.get(markingEntry.getKey()).setMarking(markingEntry.getValue());
         }
@@ -50,7 +50,7 @@ public class ListPetriNet implements PetriNet, Serializable {
     }
 
     @Override
-    public HashMap<Integer, Integer> getInitialMarking() {
+    public LinkedHashMap<Integer, Integer> getInitialMarking() {
         return initialMarking;
     }
 
@@ -114,8 +114,24 @@ public class ListPetriNet implements PetriNet, Serializable {
         this.transitionIdCounter = transitionIdCounter;
     }
 
+    @Override
+    public Place addPlace() {
+        Place place = new Place(placeIdCounter);
+        initialMarking.put(placeIdCounter, 0);
+        placeMap.put(placeIdCounter, place);
+        placeIdCounter++;
+        return place;
+    }
 
-//chyba nie sa nam potrzbne te metody w nowej reprezentacji sieci
+    @Override
+    public Transition addTransition() {
+        Transition transition = new Transition(transitionIdCounter, 1);
+        transitionMap.put(transitionIdCounter, transition);
+        transitionIdCounter++;
+        return transition;
+    }
+
+    //chyba nie sa nam potrzbne te metody w nowej reprezentacji sieci
 /*    @Override
    public List<Arc> getIngoingArcsForPlace(Place place) {
         ArrayList<Arc> ingoingArc= new ArrayList<Arc>();

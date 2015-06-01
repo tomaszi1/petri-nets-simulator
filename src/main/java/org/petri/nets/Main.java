@@ -7,6 +7,9 @@ import org.petri.nets.gui.graph.PlaceGraphCell;
 import org.petri.nets.gui.graph.TransitionGraphCell;
 import org.petri.nets.model.ListPetriNet;
 import org.petri.nets.model.DomainModel;
+import org.petri.nets.service.GraphService;
+import org.petri.nets.service.GraphServiceImpl;
+import org.petri.nets.synhronize.SynchronizePanel;
 
 import javax.swing.*;
 
@@ -18,6 +21,10 @@ public class Main {
 
         domainModel.setPetriNetGraph(graph);
 
+        SynchronizePanel synchronizePanel = new SynchronizePanel();
+
+        GraphService graphService = new GraphServiceImpl(domainModel, synchronizePanel);
+
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException |
@@ -27,7 +34,7 @@ public class Main {
             e.printStackTrace();
         }
 
-        SwingUtilities.invokeLater(() -> new MainFrame(domainModel));
+        SwingUtilities.invokeLater(() -> new MainFrame(graphService));
 
     }
 
