@@ -2,15 +2,13 @@ package org.petri.nets.gui.panel;
 
 import edu.uci.ics.jung.algorithms.layout.*;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
-import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.renderers.VertexLabelAsShapeRenderer;
-import org.apache.commons.collections15.Transformer;
-import org.petri.nets.model.DomainModel;
 import org.petri.nets.model.Transition;
+import org.petri.nets.service.GraphService;
 import org.petri.nets.utils.AbstractResizeComponentListener;
 
 import javax.swing.*;
@@ -25,15 +23,14 @@ public class ReachabilityGraphPanel extends JPanel {
     public static final Color GRAPH_BACKGROUND = Color.WHITE;
     public static final Font FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 20);
 
+    private GraphService graphService;
 
-    private DomainModel domainModel;
+
     private VisualizationViewer<HashMap<Integer, Integer>, Transition> visualizationViewer;
 
-    public ReachabilityGraphPanel(DomainModel domainModel) {
+    public ReachabilityGraphPanel(GraphService graphService) {
+        this.graphService = graphService;
         setLayout(new BorderLayout());
-        this.domainModel = domainModel;
-
-//        setViewportView(graph);
 
         add(createGraphComponent(), BorderLayout.CENTER);
 
@@ -43,7 +40,7 @@ public class ReachabilityGraphPanel extends JPanel {
     private JComponent createGraphComponent() {
         DirectedSparseGraph<HashMap<Integer, Integer>, Transition> graph = new DirectedSparseGraph<>();
 
-        Layout<HashMap<Integer, Integer>, Transition> layout = new DAGLayout<>(graph);
+        Layout<HashMap<Integer, Integer>, Transition> layout = new KKLayout<>(graph);
 
         visualizationViewer = new VisualizationViewer<>(layout);
         DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
@@ -58,7 +55,7 @@ public class ReachabilityGraphPanel extends JPanel {
             for (Integer marking : map.values()) {
                 sb.append(marking).append(",");
             }
-            sb.setLength(sb.length() - 1);
+            if (sb.length() > 0) sb.setLength(sb.length() - 1);
             return sb.toString();
         });
         visualizationViewer.getRenderContext().setVertexShapeTransformer(vertexRenderer);
@@ -67,7 +64,7 @@ public class ReachabilityGraphPanel extends JPanel {
         visualizationViewer.getRenderer().setVertexLabelRenderer(vertexRenderer);
 
         // edges
-        visualizationViewer.getRenderContext().setEdgeLabelTransformer(transition -> "T" + transition.getIdTransition());
+        visualizationViewer.getRenderContext().setEdgeLabelTransformer(transition -> "T" + transition.getId());
         visualizationViewer.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<>());
         visualizationViewer.getRenderContext().getEdgeLabelRenderer().setRotateEdgeLabels(false);
         visualizationViewer.getRenderContext().setEdgeFontTransformer(s -> FONT);
@@ -90,7 +87,7 @@ public class ReachabilityGraphPanel extends JPanel {
 
     public void updateGraph() {
         Layout<HashMap<Integer, Integer>, Transition> graphLayout = visualizationViewer.getGraphLayout();
-        graphLayout.setGraph(domainModel.getReachabilityGraph());
+        graphLayout.setGraph(graphService.getReachabilityGraph());
         graphLayout.reset();
     }
 

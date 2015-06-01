@@ -26,4 +26,8 @@ public class SynchronizePanel {
     public void setPetriNetWrapperPanel(PetriNetWrapperPanel petriNetWrapperPanel) {
         this.petriNetWrapperPanel = petriNetWrapperPanel;
     }
+
+    public void updateMarking() {
+        getInitialMarkingPanel().updateMarking();
+    }
 }

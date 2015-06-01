@@ -33,7 +33,7 @@ public class ReachGraph {
         GenerateGraph(petriNet.getInitialMarking());
     }
 
-    private void GenerateGraph(HashMap<Integer,Integer> marking) {
+    public void GenerateGraph(LinkedHashMap<Integer,Integer> marking) {
         petriNet.setInitialMarking(marking);
         HashMap<Integer,Integer> prevMarking = new HashMap<>();
         prevMarking.putAll(marking);
@@ -50,10 +50,10 @@ public class ReachGraph {
                 possibleTransitions.add(transition); //dodajemy do listy mozliwych przejsc
             }
         }
-        List<HashMap<Integer,Integer>>newMarkingList=new ArrayList<>();
+        List<LinkedHashMap<Integer,Integer>>newMarkingList=new ArrayList<>();
         for(int i=0;possibleTransitions.size()>i; i++){ //iterujemy sie po mozliwych do wykonania przejsciach
             Transition possibleTransition=(possibleTransitions.get(i)).copy(); //pobieramy przejscie
-            HashMap<Integer,Integer> newMarking = new HashMap<>(); //inicjalizujemy nowe znakowanie
+            LinkedHashMap<Integer,Integer> newMarking = new LinkedHashMap<>(); //inicjalizujemy nowe znakowanie
             newMarking.putAll(DoTransition(possibleTransition)); //wykonujemy przejscie, pobieramy nowe znakowanie po jego wykonaniu
             //jesli taki wierzcholek juz istnieje, dodajemy krawedz pomiedzy poprzednim znakowaniem, a tym wyszukanym istniejacym w grafie
             HashMap<Integer,Integer> existingMarking=IsMarkingNew(newMarking);// sprawdzamy czy takie znakowanie juz istnieje w grafie

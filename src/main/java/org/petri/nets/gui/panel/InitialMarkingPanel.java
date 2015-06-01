@@ -2,6 +2,7 @@ package org.petri.nets.gui.panel;
 
 import org.petri.nets.model.DomainModel;
 import org.petri.nets.model.Place;
+import org.petri.nets.service.GraphService;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
@@ -16,13 +17,12 @@ import java.util.Enumeration;
 public class InitialMarkingPanel extends JPanel {
     public static final String PANEL_TITLE = "Znakowanie początkowe";
     public static final int PANEL_HEIGHT = 80;
+
     private InitialMarkingTable table;
     private MarkingTableModel tableModel;
-    private final DomainModel domainModel;
 
-    public InitialMarkingPanel(DomainModel domainModel) {
-        this.domainModel = domainModel;
-        this.tableModel = new MarkingTableModel(domainModel);
+    public InitialMarkingPanel(GraphService graphService) {
+        this.tableModel = new MarkingTableModel(graphService);
         setPreferredSize(new Dimension(100 /*ignored*/, PANEL_HEIGHT));
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
         setLayout(new BorderLayout());
@@ -30,7 +30,6 @@ public class InitialMarkingPanel extends JPanel {
     }
 
     private void initMarkingTable() {
-        setTableModel(new MarkingTableModel(domainModel));
         table = new InitialMarkingTable(tableModel);
 
         JScrollPane scrollPane = new JScrollPane(table);
@@ -39,19 +38,9 @@ public class InitialMarkingPanel extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
     }
 
-
-    public void setTableModel(MarkingTableModel tableModel) {
-        this.tableModel = tableModel;
+    public void updateMarking() {
+        tableModel.fireTableStructureChanged();
     }
-
-    public void addNewMarking(Place place, int i) {
-        tableModel.addNewMarking(place, i);
-    }
-
-    public void removeMarking(Place place) {
-        tableModel.removeMarking(place);
-    }
-
 
     public class InitialMarkingTable extends JTable {
 

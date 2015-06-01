@@ -3,7 +3,7 @@ package org.petri.nets.gui;
 import org.petri.nets.gui.panel.PetriNetWrapperPanel;
 import org.petri.nets.gui.panel.ReachabilityGraphPanel;
 import org.petri.nets.gui.panel.SideMenuWrapper;
-import org.petri.nets.model.DomainModel;
+import org.petri.nets.service.GraphService;
 import org.petri.nets.synhronize.SynchronizePanel;
 
 import javax.swing.*;
@@ -16,26 +16,25 @@ public class MainFrame extends JFrame {
 
     private SideMenuWrapper sideMenuWrapper;
     private JSplitPane graphsWrapper;
-    private SynchronizePanel synchronizePanel;
 
-    public MainFrame(DomainModel domainModel) {
+    public MainFrame(GraphService graphService) {
         super(FRAME_TITLE);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setSize(FRAME_WIDTH, FRAME_HEIGHT);
         setLocationRelativeTo(null);
         setVisible(true);
 
-        initComponents(domainModel);
+        initComponents(graphService);
     }
 
-    private void initComponents(DomainModel domainModel) {
-        sideMenuWrapper = new SideMenuWrapper(domainModel);
+    private void initComponents(GraphService graphService) {
+        sideMenuWrapper = new SideMenuWrapper(graphService);
 
-        synchronizePanel = new SynchronizePanel();
-        PetriNetWrapperPanel petriNetWrapperPanel = new PetriNetWrapperPanel(domainModel, synchronizePanel);
+        SynchronizePanel synchronizePanel = graphService.getSynchronizeService().getSynchronizePanel();
+        PetriNetWrapperPanel petriNetWrapperPanel = new PetriNetWrapperPanel(graphService, synchronizePanel);
         synchronizePanel.setPetriNetWrapperPanel(petriNetWrapperPanel);
 
-        ReachabilityGraphPanel reachGraphPanel = new ReachabilityGraphPanel(domainModel);
+        ReachabilityGraphPanel reachGraphPanel = new ReachabilityGraphPanel(graphService);
         synchronizePanel.setReachabilityGraphPanel(reachGraphPanel);
 
         setGraphsWrapper(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,

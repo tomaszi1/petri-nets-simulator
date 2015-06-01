@@ -37,7 +37,7 @@ public class Transition implements Serializable {
         placeTo = new HashMap<Place, Arc>();
         this.priority=priority;
     }
-    public int getIdTransition() {
+    public int getId() {
         return idTransition;
     }
 

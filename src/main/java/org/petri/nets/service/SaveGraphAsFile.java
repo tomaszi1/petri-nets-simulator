@@ -55,7 +55,7 @@ public class SaveGraphAsFile {
                 e.printStackTrace();
             }
 
-            SwingUtilities.invokeLater(() -> new MainFrame(domainModel));
+            SwingUtilities.invokeLater(() -> new MainFrame(null));
 
         }catch(Exception e){
             e.printStackTrace();

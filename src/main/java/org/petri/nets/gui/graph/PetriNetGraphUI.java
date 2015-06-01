@@ -25,8 +25,8 @@ public class PetriNetGraphUI extends BasicGraphUI {
     private MultipleSelectionsPopupMenu multipleSelectionsPopupMenu;
     private final GraphService graphService;
 
-    public PetriNetGraphUI(DomainModel model, SynchronizePanel synchronizePanel) { // maybe graphService
-        graphService = new GraphServiceImpl(model, synchronizePanel);
+    public PetriNetGraphUI(GraphService graphService, SynchronizePanel synchronizePanel) { // maybe graphService
+        this.graphService = new GraphServiceImpl(graphService.getDomainModel(),synchronizePanel);
         backgroundPopupMenu = new BackgroundPopupMenu(graphService);
         placePopupMenu = new PlacePopupMenu(graphService);
         multipleSelectionsPopupMenu = new MultipleSelectionsPopupMenu(graphService);

@@ -13,18 +13,9 @@ import java.io.Serializable;
 public class SyncModelGUI implements Serializable{
     private BiMap<PlaceGraphCell, Place> placeGUI;
     private BiMap<TransitionGraphCell, Transition> transitonGUI;
-    private InitialMarkingList initialMarkingList;
     public SyncModelGUI(){
         placeGUI = HashBiMap.create();
         transitonGUI = HashBiMap.create();
-        initialMarkingList = new InitialMarkingList();
-    }
-    public InitialMarkingList getInitialMarkingList() {
-        return initialMarkingList;
-    }
-
-    public void setInitialMarkingList(InitialMarkingList initialMarkingList) {
-        this.initialMarkingList = initialMarkingList;
     }
 
     public BiMap<PlaceGraphCell, Place> getPlaceGUI() {

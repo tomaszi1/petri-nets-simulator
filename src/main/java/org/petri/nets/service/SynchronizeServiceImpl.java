@@ -1,6 +1,5 @@
 package org.petri.nets.service;
 
-import org.petri.nets.model.Arc;
 import org.petri.nets.model.DomainModel;
 import org.petri.nets.model.Place;
 import org.petri.nets.model.Transition;
@@ -20,69 +19,27 @@ public class SynchronizeServiceImpl implements SynchronizeService{
     }
 
     @Override
-    public void addPlace(int idPlace, Place place) {
-        model.getPetriNet().getPlaceMap().put(idPlace, place);
-        synchronizePanel.getInitialMarkingPanel().addNewMarking(place, 0);
+    public void addPlace() {
+        synchronizePanel.updateMarking();
     }
 
-    @Override
-    public void addTransition(int idTransition,  Transition transition) {
-        model.getPetriNet().getTransitionMap().put(idTransition, transition);
-    }
-
-    @Override
-    public void addArc(Place place, Transition transition, int value, boolean isPlaceStart) {
-        Arc arc = new Arc(value);
-        //dodajemy przejscie do listy przejsc w Place
-        addTransitToTransitListInPlace(place, transition, arc,isPlaceStart);
-
-        //dodajemy miejse do listy miejsc w Transition
-        addPlaceToPlaceListInTransit(place, transition,arc, isPlaceStart);
-
-    }
-    /**
-     * dodajemy przejscie do listy przejscw w Place
-     * jesli true to dodajemy do transitionFrom;
-     * false -> transitionTo;
-     **/
-    private void addTransitToTransitListInPlace(Place place, Transition transition, Arc arc,boolean isPlaceStart){
-
-        if(isPlaceStart){
-            model.getPetriNet().getPlaceMap().get(place.getIdPlace()).getTransitionTo().put(transition,arc);
-        }else{
-            model.getPetriNet().getPlaceMap().get(place.getIdPlace()).getTransitionFrom().put(transition,arc);
-        }
-    }
-    /**
-     * ostatni paramter pyta jakie miejsce dodajemy. Czy można z miejsca dojsc do przejscia
-     * jesli true to dodajemy do placeFrom;
-     * false -> placeTo;
-     **/
-    private void addPlaceToPlaceListInTransit(Place place, Transition transition, Arc arc,boolean isPlaceStart){
-
-        if(isPlaceStart){
-            model.getPetriNet().getTransitionMap().get(transition.getIdTransition()).getPlaceFrom().put(place,arc);
-        }else{
-            model.getPetriNet().getTransitionMap().get(transition.getIdTransition()).getPlaceTo().put(place,arc);
-        }
-    }
 
     @Override
     public void removePlace(Place place) {
         //model.getPetriNet().getInitialMarking().remove(place.getIdPlace());
         model.getPetriNet().getPlaceMap().remove(place.getIdPlace());
         for(Transition transit : place.getTransitionFrom().keySet()){
-            model.getPetriNet().getTransitionMap().get(transit.getIdTransition()).getPlaceTo().remove(place);
+            model.getPetriNet().getTransitionMap().get(transit.getId()).getPlaceTo().remove(place);
         }
         for(Transition transit : place.getTransitionTo().keySet()){
-            model.getPetriNet().getTransitionMap().get(transit.getIdTransition()).getPlaceFrom().remove(place);
+            model.getPetriNet().getTransitionMap().get(transit.getId()).getPlaceFrom().remove(place);
         }
-        synchronizePanel.getInitialMarkingPanel().removeMarking(place);
+        synchronizePanel.updateMarking();
     }
 
     @Override
     public void removeTransition(Transition transition) {
-        model.getPetriNet().getTransitionMap().remove(transition.getIdTransition());
+        model.getPetriNet().getTransitionMap().remove(transition.getId());
         for(Place place : transition.getPlaceFrom().keySet()){
             model.getPetriNet().getPlaceMap().get(place.getIdPlace()).getTransitionTo().remove(transition);
         }
@@ -110,9 +67,9 @@ public class SynchronizeServiceImpl implements SynchronizeService{
 
     private void removeArcFromPlaceListInTransition(Transition transition, Place place, boolean isPlaceStart){
         if(isPlaceStart){
-            model.getPetriNet().getTransitionMap().get(transition.getIdTransition()).getPlaceFrom().remove(place);
+            model.getPetriNet().getTransitionMap().get(transition.getId()).getPlaceFrom().remove(place);
         }else{
-            model.getPetriNet().getTransitionMap().get(transition.getIdTransition()).getPlaceTo().remove(place);
+            model.getPetriNet().getTransitionMap().get(transition.getId()).getPlaceTo().remove(place);
         }
     }
 
@@ -121,7 +78,12 @@ public class SynchronizeServiceImpl implements SynchronizeService{
         synchronizePanel.updateReachabilityGraph();
     }
 
-/*    @Override
+    @Override
+    public SynchronizePanel getSynchronizePanel() {
+        return synchronizePanel;
+    }
+
+    /*    @Override
     public void removeFromGraph(int id) {
 
     }*/

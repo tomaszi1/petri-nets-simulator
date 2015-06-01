@@ -2,31 +2,37 @@ package org.petri.nets.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public interface PetriNet {
     //markings
-    public void setInitialMarking(HashMap<Integer,Integer> marking);
-    public HashMap<Integer,Integer> getInitialMarking();
-    public Integer getInitialMarking(Integer placeId);
-    public void setInitialMarking(Integer placeId, int marking);
+    void setInitialMarking(LinkedHashMap<Integer, Integer> marking);
+    LinkedHashMap<Integer, Integer> getInitialMarking();
+    Integer getInitialMarking(Integer placeId);
+    void setInitialMarking(Integer placeId, int marking);
 
-    public int getTransitionsCount();
-    public int getPlacesCount();
+    int getTransitionsCount();
+    int getPlacesCount();
 
     //place
-    public HashMap<Integer,Place> getPlaceMap();
-    public void setPlaceMap(HashMap<Integer, Place> placeList);
+    HashMap<Integer,Place> getPlaceMap();
+    void setPlaceMap(HashMap<Integer, Place> placeList);
 
     //Transition
-    public HashMap<Integer,Transition> getTransitionMap();
-    public void setTransitionMap(HashMap<Integer, Transition> transitionList);
+    HashMap<Integer,Transition> getTransitionMap();
+    void setTransitionMap(HashMap<Integer, Transition> transitionList);
 
     //Id transition + place
-    public int getPlaceIdCounter();
-    public void setPlaceIdCounter(int placeIdCounter);
-    public int getTransitionIdCounter();
-    public void setTransitionIdCounter(int transitionIdCounter);
+    int getPlaceIdCounter();
+    void setPlaceIdCounter(int placeIdCounter);
+    int getTransitionIdCounter();
+    void setTransitionIdCounter(int transitionIdCounter);
+
+    Place addPlace();
+    Transition addTransition();
+
+    Arc addArc(Place place, Transition transition, int value, boolean startsInPlace);
 
 
 /*    List<Arc> getIngoingArcsForPlace(int place);
