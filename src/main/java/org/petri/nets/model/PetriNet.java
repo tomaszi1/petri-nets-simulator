@@ -32,6 +32,8 @@ public interface PetriNet {
     Place addPlace();
     Transition addTransition();
 
+    Arc addArc(Place place, Transition transition, int value, boolean startsInPlace);
+
 
 /*    List<Arc> getIngoingArcsForPlace(int place);
 

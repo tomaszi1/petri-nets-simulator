@@ -107,13 +107,11 @@ public class GraphServiceImpl implements GraphService {
         edge.setValue(0);
         model.getPetriNetGraph().getGraphLayoutCache().insert(edge);
 
-        if (isPlace(start.getUserObject().toString())) {
-            //place is start
-            syncService.addArc(placeGUI.get(start), transitonGUI.get(end), 0, true);
-        } else {
-            //transit is start
-            syncService.addArc(placeGUI.get(end), transitonGUI.get(start), 0, false);
-        }
+        if (isPlace(start.getUserObject().toString()))
+            model.getPetriNet().addArc(placeGUI.get(start), transitonGUI.get(end), 1, true);
+        else
+            model.getPetriNet().addArc(placeGUI.get(end), transitonGUI.get(start), 1, false);
+
         invalidateReachabilityGraph();
     }
 

@@ -7,25 +7,25 @@ import java.util.Map;
 
 public class ListPetriNet implements PetriNet, Serializable {
 
-    private LinkedHashMap<Integer,Integer> initialMarking;
+    private LinkedHashMap<Integer, Integer> initialMarking;
 
-    private HashMap<Integer,Place> placeMap;
-    private HashMap<Integer,Transition> transitionMap;
+    private HashMap<Integer, Place> placeMap;
+    private HashMap<Integer, Transition> transitionMap;
     private int placeIdCounter = 1;
     private int transitionIdCounter = 1;
 
-/*//to bedzie domyslnie uzywany konstruktor - nie usuwac
-    public ListPetriNet() {
-        setPlaceToTransitionArcs(new ArrayList<List<Arc>>());
-        setTransitionToPlaceArcs(new ArrayList<List<Arc>>());
-        initialMarking = new ArrayList<Integer>();
+    /*//to bedzie domyslnie uzywany konstruktor - nie usuwac
+        public ListPetriNet() {
+            setPlaceToTransitionArcs(new ArrayList<List<Arc>>());
+            setTransitionToPlaceArcs(new ArrayList<List<Arc>>());
+            initialMarking = new ArrayList<Integer>();
 
-        setPlaceMap(new ArrayList<Place>());
-        setTransitionMap(new ArrayList<Transition>());
-    }*/
+            setPlaceMap(new ArrayList<Place>());
+            setTransitionMap(new ArrayList<Transition>());
+        }*/
 //konstruktor do obecnego poczatkowego stanu aplikacji
     public ListPetriNet() {
-        initialMarking = new LinkedHashMap<Integer,Integer>();
+        initialMarking = new LinkedHashMap<Integer, Integer>();
         setPlaceMap(new HashMap<Integer, Place>());
         setTransitionMap(new HashMap<Integer, Transition>());
     }
@@ -36,8 +36,8 @@ public class ListPetriNet implements PetriNet, Serializable {
 
 
     @Override
-    public void setInitialMarking(LinkedHashMap<Integer,Integer> marking) {
-        for(Map.Entry<Integer,Integer>markingEntry:marking.entrySet()){
+    public void setInitialMarking(LinkedHashMap<Integer, Integer> marking) {
+        for (Map.Entry<Integer, Integer> markingEntry : marking.entrySet()) {
             placeMap.get(markingEntry.getKey()).setMarking(markingEntry.getValue());
         }
         this.initialMarking = marking;
@@ -45,7 +45,7 @@ public class ListPetriNet implements PetriNet, Serializable {
 
     @Override
     public void setInitialMarking(Integer placeId, int marking) {
-       initialMarking.put(placeId,marking);
+        initialMarking.put(placeId, marking);
         placeMap.get(placeId).setMarking(marking);
     }
 
@@ -65,7 +65,7 @@ public class ListPetriNet implements PetriNet, Serializable {
 
 
     @Override
-    public HashMap<Integer,Place> getPlaceMap() {
+    public HashMap<Integer, Place> getPlaceMap() {
         return placeMap;
     }
 
@@ -79,7 +79,7 @@ public class ListPetriNet implements PetriNet, Serializable {
     // transition
 
     @Override
-    public HashMap<Integer,Transition> getTransitionMap() {
+    public HashMap<Integer, Transition> getTransitionMap() {
         return transitionMap;
     }
 
@@ -97,18 +97,22 @@ public class ListPetriNet implements PetriNet, Serializable {
     public int getPlacesCount() {
         return placeMap.size();
     }
+
     @Override
     public int getPlaceIdCounter() {
         return placeIdCounter;
     }
+
     @Override
     public void setPlaceIdCounter(int placeIdCounter) {
         this.placeIdCounter = placeIdCounter;
     }
+
     @Override
     public int getTransitionIdCounter() {
         return transitionIdCounter;
     }
+
     @Override
     public void setTransitionIdCounter(int transitionIdCounter) {
         this.transitionIdCounter = transitionIdCounter;
@@ -129,6 +133,20 @@ public class ListPetriNet implements PetriNet, Serializable {
         transitionMap.put(transitionIdCounter, transition);
         transitionIdCounter++;
         return transition;
+    }
+
+    @Override
+    public Arc addArc(Place place, Transition transition, int value, boolean startsInPlace) {
+        Arc arc = new Arc(value);
+        if (startsInPlace) {
+            placeMap.get(place.getIdPlace()).getTransitionTo().put(transition, arc);
+            transitionMap.get(transition.getId()).getPlaceFrom().put(place, arc);
+        } else {
+            placeMap.get(place.getIdPlace()).getTransitionFrom().put(transition, arc);
+            transitionMap.get(transition.getId()).getPlaceTo().put(place, arc);
+        }
+
+        return arc;
     }
 
     //chyba nie sa nam potrzbne te metody w nowej reprezentacji sieci

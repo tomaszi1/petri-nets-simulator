@@ -1,6 +1,5 @@
 package org.petri.nets.service;
 
-import org.petri.nets.model.Arc;
 import org.petri.nets.model.DomainModel;
 import org.petri.nets.model.Place;
 import org.petri.nets.model.Transition;
@@ -24,43 +23,6 @@ public class SynchronizeServiceImpl implements SynchronizeService{
         synchronizePanel.updateMarking();
     }
 
-
-    @Override
-    public void addArc(Place place, Transition transition, int value, boolean isPlaceStart) {
-        Arc arc = new Arc(value);
-        //dodajemy przejscie do listy przejsc w Place
-        addTransitToTransitListInPlace(place, transition, arc,isPlaceStart);
-
-        //dodajemy miejse do listy miejsc w Transition
-        addPlaceToPlaceListInTransit(place, transition,arc, isPlaceStart);
-
-    }
-    /**
-     * dodajemy przejscie do listy przejscw w Place
-     * jesli true to dodajemy do transitionFrom;
-     * false -> transitionTo;
-     **/
-    private void addTransitToTransitListInPlace(Place place, Transition transition, Arc arc,boolean isPlaceStart){
-
-        if(isPlaceStart){
-            model.getPetriNet().getPlaceMap().get(place.getIdPlace()).getTransitionTo().put(transition,arc);
-        }else{
-            model.getPetriNet().getPlaceMap().get(place.getIdPlace()).getTransitionFrom().put(transition,arc);
-        }
-    }
-    /**
-     * ostatni paramter pyta jakie miejsce dodajemy. Czy można z miejsca dojsc do przejscia
-     * jesli true to dodajemy do placeFrom;
-     * false -> placeTo;
-     **/
-    private void addPlaceToPlaceListInTransit(Place place, Transition transition, Arc arc,boolean isPlaceStart){
-
-        if(isPlaceStart){
-            model.getPetriNet().getTransitionMap().get(transition.getId()).getPlaceFrom().put(place,arc);
-        }else{
-            model.getPetriNet().getTransitionMap().get(transition.getId()).getPlaceTo().put(place,arc);
-        }
-    }
 
     @Override
     public void removePlace(Place place) {

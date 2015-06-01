@@ -40,7 +40,7 @@ public class ReachabilityGraphPanel extends JPanel {
     private JComponent createGraphComponent() {
         DirectedSparseGraph<HashMap<Integer, Integer>, Transition> graph = new DirectedSparseGraph<>();
 
-        Layout<HashMap<Integer, Integer>, Transition> layout = new DAGLayout<>(graph);
+        Layout<HashMap<Integer, Integer>, Transition> layout = new KKLayout<>(graph);
 
         visualizationViewer = new VisualizationViewer<>(layout);
         DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
