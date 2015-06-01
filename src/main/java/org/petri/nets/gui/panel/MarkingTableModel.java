@@ -94,6 +94,7 @@ public class MarkingTableModel extends AbstractTableModel {
         removeFromlistGUI(place.getIdPlace());
         fireTableStructureChanged();
     }
+
     public DomainModel getDomainModel() {
         return domainModel;
     }

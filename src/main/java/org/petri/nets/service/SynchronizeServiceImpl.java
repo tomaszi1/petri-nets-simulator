@@ -14,7 +14,6 @@ public class SynchronizeServiceImpl implements SynchronizeService{
     DomainModel model;
     SynchronizePanel synchronizePanel;
 
-
     public SynchronizeServiceImpl(DomainModel model,SynchronizePanel synchronizePanel){
         this.model = model;
         this.synchronizePanel = synchronizePanel;
@@ -115,6 +114,11 @@ public class SynchronizeServiceImpl implements SynchronizeService{
         }else{
             model.getPetriNet().getTransitionMap().get(transition.getIdTransition()).getPlaceTo().remove(place);
         }
+    }
+
+    @Override
+    public void updateReachabilityGraph(){
+        synchronizePanel.updateReachabilityGraph();
     }
 
 /*    @Override

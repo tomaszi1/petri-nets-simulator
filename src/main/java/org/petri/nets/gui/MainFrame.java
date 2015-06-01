@@ -4,6 +4,7 @@ import org.petri.nets.gui.panel.PetriNetWrapperPanel;
 import org.petri.nets.gui.panel.ReachabilityGraphPanel;
 import org.petri.nets.gui.panel.SideMenuWrapper;
 import org.petri.nets.model.DomainModel;
+import org.petri.nets.synhronize.SynchronizePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,6 +16,7 @@ public class MainFrame extends JFrame {
 
     private SideMenuWrapper sideMenuWrapper;
     private JSplitPane graphsWrapper;
+    private SynchronizePanel synchronizePanel;
 
     public MainFrame(DomainModel domainModel) {
         super(FRAME_TITLE);
@@ -29,8 +31,12 @@ public class MainFrame extends JFrame {
     private void initComponents(DomainModel domainModel) {
         sideMenuWrapper = new SideMenuWrapper(domainModel);
 
-        PetriNetWrapperPanel petriNetWrapperPanel = new PetriNetWrapperPanel(domainModel);
+        synchronizePanel = new SynchronizePanel();
+        PetriNetWrapperPanel petriNetWrapperPanel = new PetriNetWrapperPanel(domainModel, synchronizePanel);
+        synchronizePanel.setPetriNetWrapperPanel(petriNetWrapperPanel);
+
         ReachabilityGraphPanel reachGraphPanel = new ReachabilityGraphPanel(domainModel);
+        synchronizePanel.setReachabilityGraphPanel(reachGraphPanel);
 
         setGraphsWrapper(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 petriNetWrapperPanel,

@@ -10,13 +10,11 @@ public class PetriNetWrapperPanel extends JPanel{
 
     private final PetriNetGraphPanel petriNetGraphPanel;
     private final InitialMarkingPanel initialMarkingPanel;
-    private SynchronizePanel synchronizePanel;
 
-    public PetriNetWrapperPanel(DomainModel domainModel) {
+    public PetriNetWrapperPanel(DomainModel domainModel,SynchronizePanel synchronizePanel) {
         setLayout(new BorderLayout());
 
         initialMarkingPanel = new InitialMarkingPanel(domainModel);
-        synchronizePanel = new SynchronizePanel(this);
         petriNetGraphPanel = new PetriNetGraphPanel(domainModel, synchronizePanel);
 
         add(petriNetGraphPanel, BorderLayout.CENTER);

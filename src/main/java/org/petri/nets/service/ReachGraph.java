@@ -84,7 +84,7 @@ public class ReachGraph {
         for (Map.Entry<Place, Arc> startingPlacesSet : startingPlacesMap.entrySet()) {
             int placeMarking = startingPlacesSet.getKey().getMarking();
             int arcValue = startingPlacesSet.getValue().getValue();
-            if (placeMarking < arcValue) return false;
+            if (placeMarking < arcValue || arcValue==0) return false;
             isTransitionDoable = true;
         }
         return isTransitionDoable;

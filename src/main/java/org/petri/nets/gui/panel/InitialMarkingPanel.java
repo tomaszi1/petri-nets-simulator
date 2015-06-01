@@ -27,7 +27,6 @@ public class InitialMarkingPanel extends JPanel {
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
         setLayout(new BorderLayout());
         initMarkingTable();
-
     }
 
     private void initMarkingTable() {

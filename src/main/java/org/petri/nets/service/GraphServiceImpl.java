@@ -40,31 +40,30 @@ public class GraphServiceImpl implements GraphService {
         } else {
             removeFromGraph(new Object[]{cell});
         }
-
     }
 
     public void removeFromGraph(Object[] cells){
         for (Object cell : cells) {
             DefaultGraphCell graphCell = CustomCellViewFactory.tryCastToCell(cell);
-            if(graphCell!=null){
+            if (graphCell != null) {
                 for (Object child : graphCell.getChildren()) {
                     Port port = CustomCellViewFactory.tryCastToPort(child);
-                    if(port!=null){
+                    if (port != null) {
                         port.edges().forEachRemaining(this::removeFromGraph);
                     }
                 }
             }
             model.getPetriNetGraph().getGraphLayoutCache().remove(new Object[]{cell});
             synhronizeRemoveFromGraph(cell);
-
         }
+        invalidateReachabilityGraph();
     }
 
     private void synhronizeRemoveFromGraph(Object cell){
         if(isPlace(cell)){
-            syncService.removePlace(placeGUI.get((PlaceGraphCell)cell));
+            syncService.removePlace(placeGUI.get(cell));
         }else if(isTransition(cell)){
-            syncService.removeTransition(transitonGUI.get((TransitionGraphCell) cell));
+            syncService.removeTransition(transitonGUI.get(cell));
         }else{
             removeArc((ArcGraphCell)cell);
         }
@@ -81,6 +80,7 @@ public class GraphServiceImpl implements GraphService {
         Place place = new Place(counter-1);
         syncService.addPlace(counter-1,place);
         placeGUI.put(cell,place);
+        invalidateReachabilityGraph();
         return cell;
     }
 
@@ -96,6 +96,7 @@ public class GraphServiceImpl implements GraphService {
         Transition transition = new Transition(counter-1,1);
         syncService.addTransition(counter - 1, transition);
         transitonGUI.put(cell, transition);
+        invalidateReachabilityGraph();
         return cell;
     }
 
@@ -117,7 +118,7 @@ public class GraphServiceImpl implements GraphService {
             //transit is start
             syncService.addArc(placeGUI.get(end), transitonGUI.get(start), 0, false);
         }
-
+        invalidateReachabilityGraph();
     }
 
     public DomainModel getModel() {
@@ -188,5 +189,6 @@ public class GraphServiceImpl implements GraphService {
         reachGraph.RunReachGraph();
         Graph<HashMap<Integer, Integer>, Transition> reachGraph = this.reachGraph.getReachGraph();
         model.setReachabilityGraph(reachGraph);
+        syncService.updateReachabilityGraph();
     }
 }
