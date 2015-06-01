@@ -1,18 +1,13 @@
 package org.petri.nets.gui.panel;
 
-import org.petri.nets.model.DomainModel;
-import org.petri.nets.model.Place;
 import org.petri.nets.service.GraphService;
 
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Enumeration;
+import java.util.*;
 
 public class InitialMarkingPanel extends JPanel {
     public static final String PANEL_TITLE = "Znakowanie początkowe";
@@ -23,23 +18,33 @@ public class InitialMarkingPanel extends JPanel {
 
     public InitialMarkingPanel(GraphService graphService) {
         this.tableModel = new MarkingTableModel(graphService);
-        setPreferredSize(new Dimension(100 /*ignored*/, PANEL_HEIGHT));
-        setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
-        setLayout(new BorderLayout());
         initMarkingTable();
+
     }
 
     private void initMarkingTable() {
-        table = new InitialMarkingTable(tableModel);
+        setTable(new InitialMarkingTable(tableModel));
+        setPreferredSize(new Dimension(100 /*ignored*/, PANEL_HEIGHT));
+        setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
+        setLayout(new BorderLayout());
 
-        JScrollPane scrollPane = new JScrollPane(table);
+        JScrollPane scrollPane = new JScrollPane(getTable());
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         add(scrollPane, BorderLayout.CENTER);
+        updateMarking();
     }
 
     public void updateMarking() {
         tableModel.fireTableStructureChanged();
+    }
+
+    public InitialMarkingTable getTable() {
+        return table;
+    }
+
+    public void setTable(InitialMarkingTable table) {
+        this.table = table;
     }
 
     public class InitialMarkingTable extends JTable {
@@ -49,7 +54,6 @@ public class InitialMarkingPanel extends JPanel {
 
         public InitialMarkingTable(MarkingTableModel tableModel) {
             super(tableModel);
-
             setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
             getTableHeader().setReorderingAllowed(false);
             setFont(FONT);

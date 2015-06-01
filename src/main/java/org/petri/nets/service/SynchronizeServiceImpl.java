@@ -34,6 +34,7 @@ public class SynchronizeServiceImpl implements SynchronizeService{
         for(Transition transit : place.getTransitionTo().keySet()){
             model.getPetriNet().getTransitionMap().get(transit.getId()).getPlaceFrom().remove(place);
         }
+        model.getPetriNet().getInitialMarking().remove(place.getIdPlace());
         synchronizePanel.updateMarking();
     }
 
