@@ -197,7 +197,7 @@ public class GraphServiceImpl implements GraphService {
     }
 
     private void invalidateReachabilityGraph() {
-        reachGraph = new ReachGraph(model.getPetriNet());
+        reachGraph = new ReachGraph(model.getPetriNet(), 50);
         reachGraph.RunReachGraph();
         Graph<HashMap<Integer, Integer>, Transition> reachGraph = this.reachGraph.getReachGraph();
         model.setReachabilityGraph(reachGraph);

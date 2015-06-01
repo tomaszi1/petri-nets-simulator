@@ -89,6 +89,7 @@ public class ReachabilityGraphPanel extends JPanel {
         Layout<HashMap<Integer, Integer>, Transition> graphLayout = visualizationViewer.getGraphLayout();
         graphLayout.setGraph(graphService.getReachabilityGraph());
         graphLayout.reset();
+        visualizationViewer.repaint();
     }
 
 }
