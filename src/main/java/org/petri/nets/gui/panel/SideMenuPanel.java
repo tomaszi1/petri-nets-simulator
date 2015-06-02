@@ -7,45 +7,77 @@ import org.petri.nets.service.SaveGraphAsFile;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.io.File;
 
 public class SideMenuPanel extends JPanel {
-    private SaveGraphAsFile saveGraphAsFile;
+    //private SaveGraphAsFile saveGraphAsFile;
+    private GraphService graphService;
     private DomainModel domainModel;
+    JButton openButton, saveButton;
+    JFileChooser fc;
+    public static final String PANEL_TITLE = "Menu";
+
     public SideMenuPanel(GraphService graphService) {
         this.domainModel = graphService.getDomainModel();
-        this.setSaveGraphAsFile(new SaveGraphAsFile(graphService.getDomainModel()));
-        setLayout(new FlowLayout());
-        add(new JLabel("Menu"));
-        //add(new JButton("Zapisz graf w pliku"));
-        //add(new JButton("Odczytaj graf w pliku"));
-        JButton imgbtnSave = new JButton("Zapisz graf w pliku");
-        imgbtnSave.setSize(10, 10);
-        imgbtnSave.setLocation(10, 200);
-        imgbtnSave.addActionListener(this::saveGraph);
-        add(imgbtnSave);
-        //JFileChooser fileChooser = new JFileChooser();
-        JButton imgbtn = new JButton("Odczytaj graf w pliku");
-        imgbtn.setSize(10, 10);
-        imgbtn.setLocation(30, 200);
-        imgbtn.addActionListener(this::openGraph);
-        add(imgbtn);
+        //this.setSaveGraphAsFile(new SaveGraphAsFile(graphService.getDomainModel()));
+        this.graphService = graphService;
+
+        setLayout(new BorderLayout());
+        setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
+        setBackground(Color.white);
+        //add(new "Menu",BorderLayout.CENTER);
+        createSaveButtom();
+
+    }
+
+    private void createSaveButtom(){
+
+        fc = new JFileChooser();
+
+        //Create the open button.
+        openButton = new JButton("Otwórz plik");
+        openButton.addActionListener(this::openGraph);
+
+        //Create the save button.
+        saveButton = new JButton("Zapisz graf");
+        saveButton.addActionListener(this::saveGraph);
+
+        //For layout purposes, put the buttons in a separate panel
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.add(openButton);
+        buttonPanel.add(saveButton);
+
+        //Add the buttons to this panel.
+        add(buttonPanel, BorderLayout.PAGE_END);
 
     }
 
     private void saveGraph(ActionEvent e) {
+        int returnVal = fc.showOpenDialog(SideMenuPanel.this);
 
-        getSaveGraphAsFile().saveGaph();
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            graphService.saveGraphAsFile(file);
+            System.out.println("Save in : " + file.getName() + ".");
+        } else {
+            System.out.println("Open command cancelled by user.");
+        }
+
     }
 
     private void openGraph(ActionEvent e){
-        getSaveGraphAsFile().openGraph();
+        int returnVal = fc.showOpenDialog(SideMenuPanel.this);
+
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            System.out.println("Opening: " + file.getName() + ".");
+            graphService.openGraphfromFile(file);
+        } else {
+            System.out.println("Open command cancelled by user.");
+        }
+
+
     }
 
-    public SaveGraphAsFile getSaveGraphAsFile() {
-        return saveGraphAsFile;
-    }
 
-    public void setSaveGraphAsFile(SaveGraphAsFile saveGraphAsFile) {
-        this.saveGraphAsFile = saveGraphAsFile;
-    }
 }
