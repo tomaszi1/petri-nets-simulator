@@ -13,9 +13,9 @@ import java.util.*;
 
 public class ReachGraph {
 
-    private Graph<HashMap<Integer,Integer>, Transition> reachGraph;
+    private Graph<HashMap<Integer, Integer>, Transition> reachGraph;
     private PetriNet petriNet;
-    private List<HashMap<Integer,Integer>> graphVertexList;
+    private List<HashMap<Integer, Integer>> graphVertexList;
     private final int vertexMaxCount;
 
     public ReachGraph(PetriNet pN, int vertexMaxCount) {
@@ -26,17 +26,17 @@ public class ReachGraph {
             petriNet.setInitialMarking(pN.getInitialMarking());
         }
         reachGraph = new DirectedSparseGraph<>();
-        graphVertexList=new ArrayList<>();
-        this.vertexMaxCount=vertexMaxCount;
+        graphVertexList = new ArrayList<>();
+        this.vertexMaxCount = vertexMaxCount;
     }
 
     public void RunReachGraph() {
         GenerateGraph(petriNet.getInitialMarking());
     }
 
-    public void GenerateGraph(LinkedHashMap<Integer,Integer> marking) {
+    public void GenerateGraph(LinkedHashMap<Integer, Integer> marking) {
         petriNet.setInitialMarking(marking);
-        HashMap<Integer,Integer> prevMarking = new HashMap<>();
+        HashMap<Integer, Integer> prevMarking = new HashMap<>();
         prevMarking.putAll(marking);
         //jesli graf nie ma wierzcholka, dodajemy go
         if (reachGraph.getVertexCount() <= 0) {
@@ -45,40 +45,40 @@ public class ReachGraph {
         }
         //tworzymy liste mozliwych przejsc przy tym znakowaniu
         List<Transition> possibleTransitions = new ArrayList<>(); //inicjacja listy przejsc mozliwych do wykonania przy tym znakowaniu
-        for(Map.Entry<Integer,Transition> allTransitionsEntry:petriNet.getTransitionMap().entrySet()){ //iterujemy sie po wszystkich przejsciach
+        for (Map.Entry<Integer, Transition> allTransitionsEntry : petriNet.getTransitionMap().entrySet()) { //iterujemy sie po wszystkich przejsciach
             Transition transition = allTransitionsEntry.getValue(); //przejscie
-            if(IsTransitionDoable(transition)) { //jesli przejcie jest mozliwe do wykonania przy tym znakowaniu
+            if (IsTransitionDoable(transition)) { //jesli przejcie jest mozliwe do wykonania przy tym znakowaniu
                 possibleTransitions.add(transition); //dodajemy do listy mozliwych przejsc
             }
         }
-        List<LinkedHashMap<Integer,Integer>>newMarkingList=new ArrayList<>();
-        for(int i=0;possibleTransitions.size()>i; i++){ //iterujemy sie po mozliwych do wykonania przejsciach
-            Transition possibleTransition=(possibleTransitions.get(i)).copy(); //pobieramy przejscie
-            LinkedHashMap<Integer,Integer> newMarking = new LinkedHashMap<>(); //inicjalizujemy nowe znakowanie
+        List<LinkedHashMap<Integer, Integer>> newMarkingList = new ArrayList<>();
+        for (int i = 0; possibleTransitions.size() > i; i++) { //iterujemy sie po mozliwych do wykonania przejsciach
+            Transition possibleTransition = (possibleTransitions.get(i)).copy(); //pobieramy przejscie
+            LinkedHashMap<Integer, Integer> newMarking = new LinkedHashMap<>(); //inicjalizujemy nowe znakowanie
             newMarking.putAll(DoTransition(possibleTransition)); //wykonujemy przejscie, pobieramy nowe znakowanie po jego wykonaniu
             //jesli taki wierzcholek juz istnieje, dodajemy krawedz pomiedzy poprzednim znakowaniem, a tym wyszukanym istniejacym w grafie
-            HashMap<Integer,Integer> existingMarking=IsMarkingNew(newMarking);// sprawdzamy czy takie znakowanie juz istnieje w grafie
-                if (existingMarking == null) {//jesli znakowanie nie istnieje w grafie, dodajemy nowe znakowanie do grafu
-                    if(vertexMaxCount>graphVertexList.size()){// jesli nie osiagnelismy maksymalnej liczby wierzcholkow do wygenerowania, to jedziemy dalej
+            HashMap<Integer, Integer> existingMarking = IsMarkingNew(newMarking);// sprawdzamy czy takie znakowanie juz istnieje w grafie
+            if (existingMarking == null) {//jesli znakowanie nie istnieje w grafie, dodajemy nowe znakowanie do grafu
+                if (vertexMaxCount > graphVertexList.size()) {// jesli nie osiagnelismy maksymalnej liczby wierzcholkow do wygenerowania, to jedziemy dalej
                     reachGraph.addVertex(newMarking); //dodajemy nowy wierzcholek
                     reachGraph.addEdge(possibleTransition, prevMarking, newMarking); //dodajemy nowa krakwedz
                     newMarkingList.add(newMarking);
                     graphVertexList.add(newMarking);
-                    }
-                } else
-                    reachGraph.addEdge(possibleTransition, prevMarking, existingMarking);//jesli takie znakowanie juz istnieje, dodajemy krawedz od poprzedniego znakowania do istniejacego juz w grafie
+                }
+            } else
+                reachGraph.addEdge(possibleTransition, prevMarking, existingMarking);//jesli takie znakowanie juz istnieje, dodajemy krawedz od poprzedniego znakowania do istniejacego juz w grafie
 
         }
-        for(int i=0;newMarkingList.size()>i;i++) {
+        for (int i = 0; newMarkingList.size() > i; i++) {
             GenerateGraph(newMarkingList.get(i)); //wywolujemy funkcje dla nowego znakowania
         }
     }
 
     //sprawdzamy czy znakowanie juz istnieje w grafie
     //zwraca wskaznik na istniejacy wezel lub null, jesli nie ma takiego znakowania w grafie
-    private HashMap<Integer,Integer> IsMarkingNew(HashMap<Integer,Integer> marking){
-        for(int i=0;graphVertexList.size()>i;i++){
-            if(marking.equals(graphVertexList.get(i)))return graphVertexList.get(i);
+    private HashMap<Integer, Integer> IsMarkingNew(HashMap<Integer, Integer> marking) {
+        for (int i = 0; graphVertexList.size() > i; i++) {
+            if (marking.equals(graphVertexList.get(i))) return graphVertexList.get(i);
         }
         return null;
     }
@@ -92,15 +92,17 @@ public class ReachGraph {
         for (Map.Entry<Place, Arc> startingPlacesSet : startingPlacesMap.entrySet()) {
             int placeMarking = startingPlacesSet.getKey().getMarking();
             int arcValue = startingPlacesSet.getValue().getValue();
-            if (placeMarking < arcValue || arcValue==0) return false;
+            if (placeMarking < arcValue || arcValue == 0) return false;
             isTransitionDoable = true;
         }
-        return isTransitionDoable;
+
+        return !transition.getPlaceTo().isEmpty() && isTransitionDoable;
+
     }
 
     //jesli wybralismy juz przejscie o najwyzszym priorytecie
-    private HashMap<Integer,Integer> DoTransition(Transition transition) {
-        HashMap<Integer,Integer> marking = new HashMap<>();
+    private HashMap<Integer, Integer> DoTransition(Transition transition) {
+        HashMap<Integer, Integer> marking = new HashMap<>();
         marking.putAll(petriNet.getInitialMarking());
         HashMap<Place, Arc> startingPlaces = new HashMap<>();
         startingPlaces.putAll(transition.getPlaceFrom());
@@ -110,7 +112,7 @@ public class ReachGraph {
             Place startPlace = startingPlacesSet.getKey();
             Arc arcLeavingStartPlace = startingPlacesSet.getValue();
             takenMarkingCount += arcLeavingStartPlace.getValue();
-            int newMarkingForStartPlace=startPlace.getMarking() - arcLeavingStartPlace.getValue();   //odejmujemy znaczniki z miejsca startowego (tyle ile wartość łuku wychodzacego)
+            int newMarkingForStartPlace = startPlace.getMarking() - arcLeavingStartPlace.getValue();   //odejmujemy znaczniki z miejsca startowego (tyle ile wartość łuku wychodzacego)
             marking.replace(startPlace.getIdPlace(), startPlace.getMarking(), newMarkingForStartPlace);
         }
         for (Map.Entry<Place, Arc> endPlaceSet : transition.getPlaceTo().entrySet()) //iterujemy sie po miejscach, do ktorych prowadzi przejscie
@@ -120,8 +122,8 @@ public class ReachGraph {
             Arc arcEnteringEndPlace = endPlaceSet.getValue();   //luk, ktory prowadzi do miejsca
             if (takenMarkingCount >= arcEnteringEndPlace.getValue())     //jesli nie, przejscia nie mozna wykonac - chyba wtedy jest niezywotne
             {
-                int newMarkingForEndPlace=endPlace.getMarking() + arcEnteringEndPlace.getValue(); //dodajemy znaczniki do miejsca koncowego (tyle ile wartość łuku wchodzacego)
-                marking.replace(endPlace.getIdPlace(),endPlace.getMarking(),newMarkingForEndPlace);
+                int newMarkingForEndPlace = endPlace.getMarking() + arcEnteringEndPlace.getValue(); //dodajemy znaczniki do miejsca koncowego (tyle ile wartość łuku wchodzacego)
+                marking.replace(endPlace.getIdPlace(), endPlace.getMarking(), newMarkingForEndPlace);
             }
         }
         return marking;

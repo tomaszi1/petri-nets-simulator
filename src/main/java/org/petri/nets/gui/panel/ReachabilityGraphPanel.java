@@ -16,6 +16,7 @@ import javax.swing.*;
 import java.awt.*;
 
 import java.awt.event.ComponentEvent;
+import java.awt.geom.Point2D;
 import java.util.HashMap;
 
 public class ReachabilityGraphPanel extends JPanel {
@@ -42,9 +43,11 @@ public class ReachabilityGraphPanel extends JPanel {
         DirectedSparseGraph<HashMap<Integer, Integer>, Transition> graph = new DirectedSparseGraph<>();
 
         SpringLayout<HashMap<Integer, Integer>, Transition> layout = new SpringLayout<>(graph, t -> 200);
+
+//        layout.setInitializer(new CustomInitializer());
         layout.setStretch(0.1);
         layout.setRepulsionRange(500);
-        layout.setForceMultiplier(0.1);
+        //layout.setForceMultiplier(0.1);
 
         visualizationViewer = new VisualizationViewer<>(layout);
         DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
@@ -96,4 +99,16 @@ public class ReachabilityGraphPanel extends JPanel {
         visualizationViewer.repaint();
     }
 
+    private class CustomInitializer implements org.apache.commons.collections15.Transformer<HashMap<Integer, Integer>, Point2D> {
+        private int posY = 0;
+        private int posX = 0;
+        private final int distance = 200;
+
+        @Override
+        public Point2D transform(HashMap<Integer, Integer> integerIntegerHashMap) {
+            posY+=distance;
+            posX+=distance;
+            return new Point2D.Double(posX,posY);
+        }
+    }
 }
