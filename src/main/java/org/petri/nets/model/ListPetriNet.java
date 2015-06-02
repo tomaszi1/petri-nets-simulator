@@ -14,16 +14,6 @@ public class ListPetriNet implements PetriNet, Serializable {
     private int placeIdCounter = 1;
     private int transitionIdCounter = 1;
 
-    /*//to bedzie domyslnie uzywany konstruktor - nie usuwac
-        public ListPetriNet() {
-            setPlaceToTransitionArcs(new ArrayList<List<Arc>>());
-            setTransitionToPlaceArcs(new ArrayList<List<Arc>>());
-            initialMarking = new ArrayList<Integer>();
-
-            setPlaceMap(new ArrayList<Place>());
-            setTransitionMap(new ArrayList<Transition>());
-        }*/
-//konstruktor do obecnego poczatkowego stanu aplikacji
     public ListPetriNet() {
         initialMarking = new LinkedHashMap<Integer, Integer>();
         setPlaceMap(new HashMap<Integer, Place>());

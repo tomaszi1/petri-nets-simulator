@@ -3,7 +3,7 @@ package org.petri.nets.service;
 import org.jgraph.JGraph;
 import org.petri.nets.gui.MainFrame;
 import org.petri.nets.model.DomainModel;
-import org.petri.nets.model.JGraphFactory;
+import org.petri.nets.synhronize.SynchronizePanel;
 
 import javax.swing.*;
 import java.io.FileInputStream;
@@ -21,7 +21,6 @@ public class SaveGraphAsFile {
         this.domainModel = domainModel;
     }
     public void saveGaph(){
-        System.out.println("kurwa..");
         try {
            // create a new file with an ObjectOutputStream
             FileOutputStream out = new FileOutputStream("test.txt");
@@ -54,8 +53,10 @@ public class SaveGraphAsFile {
                     IllegalAccessException e) {
                 e.printStackTrace();
             }
+            SynchronizePanel synchronizePanel = new SynchronizePanel();
 
-            SwingUtilities.invokeLater(() -> new MainFrame(null));
+            GraphService graphService = new GraphServiceImpl(domainModel, synchronizePanel);
+            SwingUtilities.invokeLater(() -> new MainFrame(graphService));
 
         }catch(Exception e){
             e.printStackTrace();
@@ -70,21 +71,4 @@ public class SaveGraphAsFile {
     public void setDomainModel(DomainModel domainModel) {
         this.domainModel = domainModel;
     }
-
-    /*        DomainModel domainModel = new DomainModel();
-        domainModel.setPetriNet(new ListPetriNet());
-        JGraph graph = JGraphFactory.createGraph();
-    domainModel.setPetriNetGraph(graph);
-    domainModel.setReachabilityGraph(JGraphFactory.createGraph());
-
-    try {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    } catch (ClassNotFoundException |
-    InstantiationException |
-    UnsupportedLookAndFeelException |
-    IllegalAccessException e) {
-        e.printStackTrace();
-    }
-
-    SwingUtilities.invokeLater(() -> new MainFrame(domainModel));*/
 }

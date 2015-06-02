@@ -64,8 +64,10 @@ public class GraphServiceImpl implements GraphService {
     private void synhronizeRemoveFromGraph(Object cell) {
         if (isPlace(cell)) {
             syncService.removePlace(placeGUI.get(cell));
+            placeGUI.remove(cell);
         } else if (isTransition(cell)) {
             syncService.removeTransition(transitonGUI.get(cell));
+            transitonGUI.remove(cell);
         } else {
             removeArc((ArcGraphCell) cell);
         }
