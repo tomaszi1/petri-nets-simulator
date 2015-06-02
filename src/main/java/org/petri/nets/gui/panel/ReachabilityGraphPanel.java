@@ -1,6 +1,7 @@
 package org.petri.nets.gui.panel;
 
 import edu.uci.ics.jung.algorithms.layout.*;
+import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -40,7 +41,10 @@ public class ReachabilityGraphPanel extends JPanel {
     private JComponent createGraphComponent() {
         DirectedSparseGraph<HashMap<Integer, Integer>, Transition> graph = new DirectedSparseGraph<>();
 
-        Layout<HashMap<Integer, Integer>, Transition> layout = new KKLayout<>(graph);
+        SpringLayout<HashMap<Integer, Integer>, Transition> layout = new SpringLayout<>(graph, t -> 200);
+        layout.setStretch(0.1);
+        layout.setRepulsionRange(500);
+        layout.setForceMultiplier(0.1);
 
         visualizationViewer = new VisualizationViewer<>(layout);
         DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
@@ -66,8 +70,8 @@ public class ReachabilityGraphPanel extends JPanel {
         // edges
         visualizationViewer.getRenderContext().setEdgeLabelTransformer(transition -> "T" + transition.getId());
         visualizationViewer.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<>());
-        visualizationViewer.getRenderContext().getEdgeLabelRenderer().setRotateEdgeLabels(false);
         visualizationViewer.getRenderContext().setEdgeFontTransformer(s -> FONT);
+        visualizationViewer.getRenderContext().getEdgeLabelRenderer().setRotateEdgeLabels(false);
 
         visualizationViewer.setBackground(GRAPH_BACKGROUND);
 

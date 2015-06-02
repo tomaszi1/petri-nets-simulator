@@ -16,7 +16,7 @@ import java.util.Enumeration;
 
 public class InitialMarkingPanel extends JPanel {
     public static final String PANEL_TITLE = "Znakowanie początkowe";
-    public static final int PANEL_HEIGHT = 80;
+    public static final int PANEL_HEIGHT = 100;
 
     private InitialMarkingTable table;
     private MarkingTableModel tableModel;

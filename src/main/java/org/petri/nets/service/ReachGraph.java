@@ -1,5 +1,6 @@
 package org.petri.nets.service;
 
+import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import org.petri.nets.model.*;
@@ -24,7 +25,7 @@ public class ReachGraph {
             petriNet.setTransitionMap(pN.getTransitionMap());
             petriNet.setInitialMarking(pN.getInitialMarking());
         }
-        reachGraph = new SparseMultigraph<>();
+        reachGraph = new DirectedSparseGraph<>();
         graphVertexList=new ArrayList<>();
         this.vertexMaxCount=vertexMaxCount;
     }
