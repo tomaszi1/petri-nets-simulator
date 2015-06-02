@@ -11,6 +11,7 @@ import org.petri.nets.model.Transition;
 import org.petri.nets.synhronize.SynchronizePanel;
 
 import java.awt.*;
+import java.io.File;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -38,7 +39,8 @@ public interface GraphService {
     boolean isTransition(Object cell);
 
     boolean isPlace(Object cell);
-    public void saveGraphAsFile();
+    public void openGraphfromFile(File file);
+    public void saveGraphAsFile(File file);
 
     HashMap<Integer, Integer> getInitialMarking();
 

@@ -12,6 +12,7 @@ import org.petri.nets.model.Transition;
 import org.petri.nets.synhronize.SynchronizePanel;
 
 import java.awt.*;
+import java.io.File;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -158,8 +159,13 @@ public class GraphServiceImpl implements GraphService {
     }
 
     @Override
-    public void saveGraphAsFile() {
-        saveGraphAsFile.saveGaph();
+    public void saveGraphAsFile(File file) {
+        saveGraphAsFile.saveGaph(file);
+    }
+
+    @Override
+    public void openGraphfromFile(File file) {
+        saveGraphAsFile.openGraph(file);
     }
 
     private int getId(String stringId) {
