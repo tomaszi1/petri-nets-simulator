@@ -1,5 +1,6 @@
 package org.petri.nets.gui.panel;
 
+import com.google.common.collect.Maps;
 import edu.uci.ics.jung.algorithms.layout.*;
 import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
@@ -8,7 +9,8 @@ import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
 import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.renderers.VertexLabelAsShapeRenderer;
-import org.petri.nets.model.Transition;
+import org.petri.nets.model.reachability.State;
+import org.petri.nets.model.reachability.TransitionEdge;
 import org.petri.nets.service.GraphService;
 import org.petri.nets.utils.AbstractResizeComponentListener;
 
@@ -17,7 +19,7 @@ import java.awt.*;
 
 import java.awt.event.ComponentEvent;
 import java.awt.geom.Point2D;
-import java.util.HashMap;
+import java.util.Map;
 
 public class ReachabilityGraphPanel extends JPanel {
     public static final String PANEL_TITLE = "Graf pokrycia";
@@ -28,7 +30,7 @@ public class ReachabilityGraphPanel extends JPanel {
     private GraphService graphService;
 
 
-    private VisualizationViewer<HashMap<Integer, Integer>, Transition> visualizationViewer;
+    private VisualizationViewer<State, TransitionEdge> visualizationViewer;
 
     public ReachabilityGraphPanel(GraphService graphService) {
         this.graphService = graphService;
@@ -40,26 +42,26 @@ public class ReachabilityGraphPanel extends JPanel {
     }
 
     private JComponent createGraphComponent() {
-        DirectedSparseGraph<HashMap<Integer, Integer>, Transition> graph = new DirectedSparseGraph<>();
+        DirectedSparseGraph<State, TransitionEdge> graph = new DirectedSparseGraph<>();
 
-        SpringLayout<HashMap<Integer, Integer>, Transition> layout = new SpringLayout<>(graph, t -> 200);
+        Layout<State, TransitionEdge> layout = new StaticLayout<>(graph, new CustomInitializer());
 
-//        layout.setInitializer(new CustomInitializer());
-        layout.setStretch(0.1);
-        layout.setRepulsionRange(500);
-        //layout.setForceMultiplier(0.1);
+//        layout.setInitializer();
+//        layout.setStretch(0.1);
+//        layout.setRepulsionRange(500);
+//        layout.setForceMultiplier(0.1);
 
         visualizationViewer = new VisualizationViewer<>(layout);
         DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
         gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
         visualizationViewer.setGraphMouse(gm);
 
-        VertexLabelAsShapeRenderer<HashMap<Integer, Integer>, Transition> vertexRenderer = new VertexLabelAsShapeRenderer<>(visualizationViewer.getRenderContext());
+        VertexLabelAsShapeRenderer<State, TransitionEdge> vertexRenderer = new VertexLabelAsShapeRenderer<>(visualizationViewer.getRenderContext());
 
         // vertices
-        visualizationViewer.getRenderContext().setVertexLabelTransformer(map -> {
+        visualizationViewer.getRenderContext().setVertexLabelTransformer(state -> {
             StringBuilder sb = new StringBuilder();
-            for (Integer marking : map.values()) {
+            for (Integer marking : state.getMarking().values()) {
                 sb.append(marking).append(",");
             }
             if (sb.length() > 0) sb.setLength(sb.length() - 1);
@@ -71,8 +73,8 @@ public class ReachabilityGraphPanel extends JPanel {
         visualizationViewer.getRenderer().setVertexLabelRenderer(vertexRenderer);
 
         // edges
-        visualizationViewer.getRenderContext().setEdgeLabelTransformer(transition -> "T" + transition.getId());
-        visualizationViewer.getRenderContext().setEdgeShapeTransformer(new EdgeShape.Line<>());
+        visualizationViewer.getRenderContext().setEdgeLabelTransformer(transition -> "T" + transition.getTransition().getId());
+        visualizationViewer.getRenderContext().setEdgeShapeTransformer(new EdgeShape.QuadCurve<>());
         visualizationViewer.getRenderContext().setEdgeFontTransformer(s -> FONT);
         visualizationViewer.getRenderContext().getEdgeLabelRenderer().setRotateEdgeLabels(false);
 
@@ -88,27 +90,28 @@ public class ReachabilityGraphPanel extends JPanel {
         return visualizationViewer;
     }
 
-    public void setLayout(Layout<HashMap<Integer, Integer>, Transition> layout) {
-        visualizationViewer.setGraphLayout(layout);
-    }
-
     public void updateGraph() {
-        Layout<HashMap<Integer, Integer>, Transition> graphLayout = visualizationViewer.getGraphLayout();
+        Layout<State, TransitionEdge> graphLayout = visualizationViewer.getGraphLayout();
+        graphLayout.setInitializer(new CustomInitializer());
         graphLayout.setGraph(graphService.getReachabilityGraph());
         graphLayout.reset();
         visualizationViewer.repaint();
     }
 
-    private class CustomInitializer implements org.apache.commons.collections15.Transformer<HashMap<Integer, Integer>, Point2D> {
-        private int posY = 0;
-        private int posX = 0;
+    private class CustomInitializer implements org.apache.commons.collections15.Transformer<State, Point2D> {
+        private Map<Integer, Integer> verticesCountAtDepth = Maps.newHashMap();
         private final int distance = 200;
 
         @Override
-        public Point2D transform(HashMap<Integer, Integer> integerIntegerHashMap) {
-            posY+=distance;
-            posX+=distance;
-            return new Point2D.Double(posX,posY);
+        public Point2D transform(State state) {
+            int depth = state.getDepth();
+            verticesCountAtDepth.putIfAbsent(depth, 0);
+
+            int posX = 100 * verticesCountAtDepth.get(depth);
+            int posY = distance * depth;
+
+            verticesCountAtDepth.put(depth, verticesCountAtDepth.get(depth) + 1);
+            return new Point2D.Double(posX, posY);
         }
     }
 }

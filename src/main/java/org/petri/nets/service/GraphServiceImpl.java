@@ -6,9 +6,10 @@ import org.jgraph.JGraph;
 import org.jgraph.graph.*;
 import org.petri.nets.gui.graph.*;
 import org.petri.nets.model.DomainModel;
-import org.petri.nets.model.PetriNet;
 import org.petri.nets.model.Place;
+import org.petri.nets.model.reachability.State;
 import org.petri.nets.model.Transition;
+import org.petri.nets.model.reachability.TransitionEdge;
 import org.petri.nets.synhronize.SynchronizePanel;
 
 import java.awt.*;
@@ -21,7 +22,6 @@ public class GraphServiceImpl implements GraphService {
     private final DomainModel model;
     private SynchronizeService syncService;
     private SaveGraphAsFile saveGraphAsFile;
-    private ReachGraph reachGraph;
     private BiMap<PlaceGraphCell, Place> placeGUI;
     private BiMap<TransitionGraphCell, Transition> transitonGUI;
 
@@ -64,10 +64,10 @@ public class GraphServiceImpl implements GraphService {
 
     private void synhronizeRemoveFromGraph(Object cell) {
         if (isPlace(cell)) {
-            syncService.removePlace(placeGUI.get(cell));
+            model.getPetriNet().removePlace(placeGUI.get(cell));
             placeGUI.remove(cell);
         } else if (isTransition(cell)) {
-            syncService.removeTransition(transitonGUI.get(cell));
+            model.getPetriNet().removeTransition(transitonGUI.get(cell));
             transitonGUI.remove(cell);
         } else {
             removeArc((ArcGraphCell) cell);
@@ -78,7 +78,7 @@ public class GraphServiceImpl implements GraphService {
     public PlaceGraphCell addPlace(Point position) {
         Place place = model.getPetriNet().addPlace();
         PlaceGraphCell cell = new PlaceGraphCell(
-                place.getIdPlace(),
+                place.getId(),
                 position);
         model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
         syncService.addPlace();
@@ -110,7 +110,7 @@ public class GraphServiceImpl implements GraphService {
         edge.setValue(0);
         model.getPetriNetGraph().getGraphLayoutCache().insert(edge);
 
-        if (isPlace(start.getUserObject().toString()))
+        if (isPlace(start))
             model.getPetriNet().addArc(placeGUI.get(start), transitonGUI.get(end), 1, true);
         else
             model.getPetriNet().addArc(placeGUI.get(end), transitonGUI.get(start), 1, false);
@@ -173,18 +173,11 @@ public class GraphServiceImpl implements GraphService {
         return id - 1;
     }
 
-    private boolean isPlace(String stringId) {
-        if (stringId.substring(0, 1).equals("P")) {
-            return true;
-        }
-        return false;
-    }
-
     private void removeArc(ArcGraphCell arc) {
         if (isPlace(arc.getStart())) {
-            syncService.removeArc(transitonGUI.get(arc.getEnd()), placeGUI.get(arc.getStart()), true);
+            model.getPetriNet().removeArc(placeGUI.get(arc.getStart()), transitonGUI.get(arc.getEnd()), true);
         } else {
-            syncService.removeArc(transitonGUI.get(arc.getStart()), placeGUI.get(arc.getEnd()), false);
+            model.getPetriNet().removeArc(placeGUI.get(arc.getEnd()), transitonGUI.get(arc.getStart()), false);
         }
     }
 
@@ -205,10 +198,9 @@ public class GraphServiceImpl implements GraphService {
     }
 
     private void invalidateReachabilityGraph() {
-        reachGraph = new ReachGraph(model.getPetriNet(), 50);
-        reachGraph.RunReachGraph();
-        Graph<HashMap<Integer, Integer>, Transition> reachGraph = this.reachGraph.getReachGraph();
-        model.setReachabilityGraph(reachGraph);
+        ReachabilityGraphGenerator reachGraph = new ReachabilityGraphGenerator(model.getPetriNet(), 50);
+        Graph<State, TransitionEdge> reachabilityGraph = reachGraph.generateGraph();
+        model.setReachabilityGraph(reachabilityGraph);
         syncService.updateReachabilityGraph();
     }
 
@@ -223,7 +215,7 @@ public class GraphServiceImpl implements GraphService {
     }
 
     @Override
-    public Graph<HashMap<Integer, Integer>, Transition> getReachabilityGraph() {
+    public Graph<State, TransitionEdge> getReachabilityGraph() {
         return model.getReachabilityGraph();
     }
 

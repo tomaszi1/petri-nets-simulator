@@ -7,13 +7,13 @@ import org.petri.nets.gui.graph.PetriNetGraphCell;
 import org.petri.nets.gui.graph.PlaceGraphCell;
 import org.petri.nets.gui.graph.TransitionGraphCell;
 import org.petri.nets.model.DomainModel;
+import org.petri.nets.model.reachability.State;
 import org.petri.nets.model.Transition;
-import org.petri.nets.synhronize.SynchronizePanel;
+import org.petri.nets.model.reachability.TransitionEdge;
 
 import java.awt.*;
 import java.io.File;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 public interface GraphService {
 
@@ -39,7 +39,9 @@ public interface GraphService {
     boolean isTransition(Object cell);
 
     boolean isPlace(Object cell);
+
     public void openGraphfromFile(File file);
+
     public void saveGraphAsFile(File file);
 
     HashMap<Integer, Integer> getInitialMarking();
@@ -50,7 +52,7 @@ public interface GraphService {
 
     DomainModel getDomainModel();
 
-    Graph<HashMap<Integer,Integer>,Transition> getReachabilityGraph();
+    Graph<State, TransitionEdge> getReachabilityGraph();
 
     SynchronizeService getSynchronizeService();
 }

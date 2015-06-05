@@ -1,18 +1,15 @@
 package org.petri.nets.model;
 
-import com.google.common.collect.BiMap;
 import edu.uci.ics.jung.graph.Graph;
 import org.jgraph.JGraph;
-import org.jgraph.graph.GraphLayoutCache;
-import org.petri.nets.gui.graph.PlaceGraphCell;
-import org.petri.nets.gui.graph.TransitionGraphCell;
+import org.petri.nets.model.reachability.State;
+import org.petri.nets.model.reachability.TransitionEdge;
 
 import java.io.Serializable;
-import java.util.HashMap;
 
 public class DomainModel implements Serializable {
     private JGraph petriNetGraph;
-    private Graph<HashMap<Integer, Integer>, Transition> reachabilityGraph;
+    private Graph<State, TransitionEdge> reachabilityGraph;
 
     public JGraph getPetriNetGraph() {
         return petriNetGraph;
@@ -22,11 +19,11 @@ public class DomainModel implements Serializable {
         this.petriNetGraph = petriNetGraph;
     }
 
-    public Graph<HashMap<Integer, Integer>, Transition> getReachabilityGraph() {
+    public Graph<State, TransitionEdge> getReachabilityGraph() {
         return reachabilityGraph;
     }
 
-    public void setReachabilityGraph(Graph<HashMap<Integer, Integer>, Transition> reachabilityGraph) {
+    public void setReachabilityGraph(Graph<State, TransitionEdge> reachabilityGraph) {
         this.reachabilityGraph = reachabilityGraph;
     }
 

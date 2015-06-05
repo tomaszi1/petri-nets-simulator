@@ -1,64 +1,67 @@
 package org.petri.nets.model;
 
+import com.google.common.collect.Maps;
+
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Asia on 2015-05-17.
  */
 public class Transition implements Serializable {
-    private int idTransition;
+    private int id;
     //z ktorych miejsc wchodzi sie do przejscia
-    private HashMap<Place, Arc> placeFrom;
+    private HashMap<Place, Arc> placesFrom;
     // do ktorych miejsc idzie sie z przejscia
-    private HashMap<Place, Arc> placeTo;
+    private HashMap<Place, Arc> placesTo;
     private int priority;
 
-    public Transition copy()
-    {
-        Transition transition = new Transition();
-        transition.idTransition = this.idTransition;
-        transition.priority=this.priority;
-        transition.placeFrom=this.placeFrom;
-        transition.placeTo=this.placeTo;
-        return transition;
+    public Transition() {
+        this(-1, -1);
     }
 
-    public Transition(){
-        this.idTransition = -1;
-        placeFrom = new HashMap<Place, Arc>();
-        placeTo = new HashMap<Place, Arc>();
-        this.priority=-1;
+    public Transition(int id, int priority) {
+        this.id = id;
+        placesFrom = Maps.newHashMap();
+        placesTo = Maps.newHashMap();
+        this.priority = priority;
     }
 
-    public Transition(int idTrans, int priority){
-        this.idTransition = idTrans;
-        placeFrom = new HashMap<Place, Arc>();
-        placeTo = new HashMap<Place, Arc>();
-        this.priority=priority;
-    }
     public int getId() {
-        return idTransition;
+        return id;
     }
 
-    public void setIdTransition(int idTransition) {
-        this.idTransition = idTransition;
+    public Map<Place, Arc> getPlacesFrom() {
+        return Maps.newHashMap(placesFrom);
     }
 
-    public HashMap<Place, Arc> getPlaceFrom() {
-        return placeFrom;
+    public void setPlacesFrom(Map<Place, Arc> placeFrom) {
+        this.placesFrom = Maps.newHashMap(placeFrom);
     }
 
-    public void setPlaceFrom(HashMap<Place, Arc> placeFrom) {
-        this.placeFrom = placeFrom;
+    public void addPlaceFrom(Place placeFrom, Arc arc) {
+        placesFrom.put(placeFrom, arc);
     }
 
-    public HashMap<Place, Arc> getPlaceTo() {
-        return placeTo;
+    public void addPlaceTo(Place placeTo, Arc arc) {
+        placesTo.put(placeTo, arc);
     }
 
-    public void setPlaceTo(HashMap<Place, Arc> placeTo) {
-        this.placeTo = placeTo;
+    public void removePlaceFrom(Place placeFrom) {
+        placesFrom.remove(placeFrom);
+    }
+
+    public void removePlaceTo(Place placeTo) {
+        placesTo.remove(placeTo);
+    }
+
+    public HashMap<Place, Arc> getPlacesTo() {
+        return Maps.newHashMap(placesTo);
+    }
+
+    public void setPlacesTo(Map<Place, Arc> placesTo) {
+        this.placesTo = Maps.newHashMap(placesTo);
     }
 
     public int getPriority() {
@@ -67,5 +70,10 @@ public class Transition implements Serializable {
 
     public void setPriority(int priority) {
         this.priority = priority;
+    }
+
+    @Override
+    public String toString() {
+        return "T"+id;
     }
 }

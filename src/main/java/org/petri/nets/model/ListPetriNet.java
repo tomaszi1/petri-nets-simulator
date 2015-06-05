@@ -1,9 +1,9 @@
 package org.petri.nets.model;
 
+import com.google.common.collect.Maps;
+
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ListPetriNet implements PetriNet, Serializable {
 
@@ -15,9 +15,9 @@ public class ListPetriNet implements PetriNet, Serializable {
     private int transitionIdCounter = 1;
 
     public ListPetriNet() {
-        initialMarking = new LinkedHashMap<Integer, Integer>();
-        setPlaceMap(new HashMap<Integer, Place>());
-        setTransitionMap(new HashMap<Integer, Transition>());
+        initialMarking = new LinkedHashMap<>();
+        setPlaceMap(new HashMap<>());
+        setTransitionMap(new HashMap<>());
     }
 
     ////////////
@@ -28,7 +28,7 @@ public class ListPetriNet implements PetriNet, Serializable {
     @Override
     public void setInitialMarking(LinkedHashMap<Integer, Integer> marking) {
         for (Map.Entry<Integer, Integer> markingEntry : marking.entrySet()) {
-            placeMap.get(markingEntry.getKey()).setMarking(markingEntry.getValue());
+            placeMap.get(markingEntry.getKey()).setInitialMarking(markingEntry.getValue());
         }
         this.initialMarking = marking;
     }
@@ -36,12 +36,12 @@ public class ListPetriNet implements PetriNet, Serializable {
     @Override
     public void setInitialMarking(Integer placeId, int marking) {
         initialMarking.put(placeId, marking);
-        placeMap.get(placeId).setMarking(marking);
+        placeMap.get(placeId).setInitialMarking(marking);
     }
 
     @Override
     public LinkedHashMap<Integer, Integer> getInitialMarking() {
-        return initialMarking;
+        return Maps.newLinkedHashMap(initialMarking);
     }
 
     @Override
@@ -53,15 +53,15 @@ public class ListPetriNet implements PetriNet, Serializable {
     //
     // place
 
-
     @Override
     public HashMap<Integer, Place> getPlaceMap() {
-        return placeMap;
+        return Maps.newHashMap(placeMap);
     }
+
 
     @Override
     public void setPlaceMap(HashMap<Integer, Place> placeMap) {
-        this.placeMap = placeMap;
+        this.placeMap = Maps.newHashMap(placeMap);
     }
 
     /////////
@@ -79,6 +79,21 @@ public class ListPetriNet implements PetriNet, Serializable {
     }
 
     @Override
+    public Transition getTransition(int id) {
+        return transitionMap.get(id);
+    }
+
+    @Override
+    public Place getPlace(int id) {
+        return placeMap.get(id);
+    }
+
+    @Override
+    public void putTransition(Transition transition) {
+        transitionMap.put(transition.getId(), transition);
+    }
+
+    @Override
     public int getTransitionsCount() {
         return transitionMap.size();
     }
@@ -86,26 +101,6 @@ public class ListPetriNet implements PetriNet, Serializable {
     @Override
     public int getPlacesCount() {
         return placeMap.size();
-    }
-
-    @Override
-    public int getPlaceIdCounter() {
-        return placeIdCounter;
-    }
-
-    @Override
-    public void setPlaceIdCounter(int placeIdCounter) {
-        this.placeIdCounter = placeIdCounter;
-    }
-
-    @Override
-    public int getTransitionIdCounter() {
-        return transitionIdCounter;
-    }
-
-    @Override
-    public void setTransitionIdCounter(int transitionIdCounter) {
-        this.transitionIdCounter = transitionIdCounter;
     }
 
     @Override
@@ -129,87 +124,58 @@ public class ListPetriNet implements PetriNet, Serializable {
     public Arc addArc(Place place, Transition transition, int value, boolean startsInPlace) {
         Arc arc = new Arc(value);
         if (startsInPlace) {
-            placeMap.get(place.getIdPlace()).getTransitionTo().put(transition, arc);
-            transitionMap.get(transition.getId()).getPlaceFrom().put(place, arc);
+            placeMap.get(place.getId()).addTransitionTo(transition, arc);
+            transitionMap.get(transition.getId()).addPlaceFrom(place, arc);
         } else {
-            placeMap.get(place.getIdPlace()).getTransitionFrom().put(transition, arc);
-            transitionMap.get(transition.getId()).getPlaceTo().put(place, arc);
+            placeMap.get(place.getId()).addTransitionFrom(transition, arc);
+            transitionMap.get(transition.getId()).addPlaceTo(place, arc);
         }
 
         return arc;
     }
 
-    //chyba nie sa nam potrzbne te metody w nowej reprezentacji sieci
-/*    @Override
-   public List<Arc> getIngoingArcsForPlace(Place place) {
-        ArrayList<Arc> ingoingArc= new ArrayList<Arc>();
-        for(Integer Transition : getPlaceMap().get(placeId).getTransitionFrom().keySet()){
-            ingoingArc.add(getPlaceMap().get(placeId).getTransitionFrom().get(idTransition));
+    @Override
+    public void removeArc(Place place, Transition transition, boolean isPlaceStart) {
+        if(isPlaceStart){
+            place.removeTransitionTo(transition);
+            transition.removePlaceFrom(place);
+        }else{
+            place.removeTransitionFrom(transition);
+            transition.removePlaceTo(place);
         }
-        return  ingoingArc;
-        //throw new UnsupportedOperationException();
     }
 
     @Override
-    public List<Arc> getOutgoingArcsForPlace(int placeId) {
-        ArrayList<Arc> outgoingArc= new ArrayList<Arc>();
-        for(Integer idTransition : getPlaceMap().get(placeId).getTransitionTo().keySet()){
-            outgoingArc.add(getPlaceMap().get(placeId).getTransitionFrom().get(idTransition));
+    public Collection<Transition> getTransitions() {
+        return transitionMap.values();
+    }
+
+    @Override
+    public void removePlace(Place place) {
+        removePlace(place.getId());
+    }
+
+    @Override
+    public void removePlace(int id) {
+        Place removed = placeMap.remove(id);
+        if (removed != null) {
+            removed.getTransitionsFrom().forEach((transition, arc) -> transition.removePlaceTo(removed));
+            removed.getTransitionsTo().forEach((transition, arc) -> transition.removePlaceFrom(removed));
         }
-        return  outgoingArc;
-
-        //throw new UnsupportedOperationException();
+        initialMarking.remove(id);
     }
 
     @Override
-    public List<Arc> getIngoingArcsForTransition(int idTransition) {
-        return new ArrayList<>(getPlaceToTransitionArcs().get(idTransition));
+    public void removeTransition(Transition transition) {
+        removeTransition(transition.getId());
     }
 
     @Override
-    public List<Arc> getOutgoingArcsForTransition(int idTransition) {
-        return new ArrayList<>(getTransitionToPlaceArcs().get(idTransition));
+    public void removeTransition(int id) {
+        Transition removed = transitionMap.remove(id);
+        if (removed != null) {
+            removed.getPlacesFrom().forEach((place, arc) -> place.removeTransitionTo(removed));
+            removed.getPlacesTo().forEach((place, arc) -> place.removeTransitionFrom(removed));
+        }
     }
-
-    @Override
-    public Arc getArcFromPlaceToTransition(int fromPlace, int toTransition) {
-        return getPlaceToTransitionArcs().get(toTransition).get(fromPlace);
-    }
-
-    @Override
-    public void putArcFromPlaceToTransition(int fromPlace, int toTransition, Arc arc) {
-        getPlaceToTransitionArcs().get(toTransition).set(fromPlace, arc);
-    }
-
-    @Override
-    public Arc getArcFromTransitionToPlace(int fromTransition, int toPlace) {
-        return getTransitionToPlaceArcs().get(fromTransition).get(toPlace);
-    }
-
-    @Override
-    public void putArcFromTransitionToPlace(int fromTransition, int toPlace, Arc arc) {
-        getTransitionToPlaceArcs().get(fromTransition).set(toPlace, arc);
-    }*/
-
- /*   @Override
-    public List<List<Arc>> getPlaceToTransitionArcs() {
-        return placeToTransitionArcs;
-    }
-
-    @Override
-    public void setPlaceToTransitionArcs(List<List<Arc>> placeToTransitionArcs) {
-        this.placeToTransitionArcs = placeToTransitionArcs;
-    }
-
-    @Override
-    public List<List<Arc>> getTransitionToPlaceArcs() {
-        return transitionToPlaceArcs;
-    }
-
-    @Override
-    public void setTransitionToPlaceArcs(List<List<Arc>> transitionToPlaceArcs) {
-        this.transitionToPlaceArcs = transitionToPlaceArcs;
-    }
-*/
-
 }

@@ -7,55 +7,74 @@ import java.util.HashMap;
  * Created by Asia on 2015-05-17.
  */
 public class Place implements Serializable{
-    private int idPlace;
+    private int id;
     //z ktorych przejsc wchodzi sie do miejsca
-    private HashMap<Transition, Arc> transitionFrom;
+    private HashMap<Transition, Arc> transitionsFrom;
     // do ktorych przejsc mozna isc
-    private HashMap<Transition, Arc> transitionTo;
-    private int marking;
+    private HashMap<Transition, Arc> transitionsTo;
+    private int initialMarking;
 
-    public Place(int idPlace){
-        this.idPlace = idPlace;
-        transitionFrom = new HashMap<Transition, Arc>();
-        transitionTo = new HashMap<Transition, Arc>();
-        marking = 0;
-    }
-    public Place(int idPlace, int marking){
-        this.idPlace = idPlace;
-        transitionFrom = new HashMap<Transition, Arc>();
-        transitionTo = new HashMap<Transition, Arc>();
-        this.marking = marking;
+    public Place(int id){
+        this(id, 0);
     }
 
-    public int getIdPlace() {
-        return idPlace;
+    public Place(int id, int initialMarking){
+        this.id = id;
+        transitionsFrom = new HashMap<>();
+        transitionsTo = new HashMap<>();
+        this.initialMarking = initialMarking;
     }
 
-    public void setIdPlace(int idPlace) {
-        this.idPlace = idPlace;
+    public int getId() {
+        return id;
     }
 
-    public HashMap<Transition, Arc> getTransitionFrom() {
-        return transitionFrom;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setTransitionFrom(HashMap<Transition, Arc> transitionFrom) {
-        this.transitionFrom = transitionFrom;
+    public HashMap<Transition, Arc> getTransitionsFrom() {
+        return transitionsFrom;
     }
 
-    public HashMap<Transition, Arc> getTransitionTo() {
-        return transitionTo;
+    public void setTransitionsFrom(HashMap<Transition, Arc> transitionsFrom) {
+        this.transitionsFrom = transitionsFrom;
     }
 
-    public void setTransitionTo(HashMap<Transition, Arc> transitionTo) {
-        this.transitionTo = transitionTo;
+    public HashMap<Transition, Arc> getTransitionsTo() {
+        return transitionsTo;
     }
 
-    public int getMarking() {
-        return marking;
+    public void setTransitionsTo(HashMap<Transition, Arc> transitionsTo) {
+        this.transitionsTo = transitionsTo;
     }
 
-    public void setMarking(int marking) {
-        this.marking = marking;
+    public int getInitialMarking() {
+        return initialMarking;
+    }
+
+    public void addTransitionFrom(Transition transitionFrom, Arc arc){
+        transitionsFrom.put(transitionFrom, arc);
+    }
+
+    public void removeTransitionFrom(Transition transitionFrom){
+        transitionsFrom.remove(transitionFrom);
+    }
+
+    public void addTransitionTo(Transition transitionTo, Arc arc){
+        transitionsTo.put(transitionTo, arc);
+    }
+
+    public void removeTransitionTo(Transition transitionTo){
+        transitionsTo.remove(transitionTo);
+    }
+
+    public void setInitialMarking(int initialMarking) {
+        this.initialMarking = initialMarking;
+    }
+
+    @Override
+    public String toString() {
+        return "P" + id;
     }
 }
