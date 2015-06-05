@@ -72,6 +72,7 @@ public class GraphServiceImpl implements GraphService {
         } else {
             removeArc((ArcGraphCell) cell);
         }
+        syncService.getSynchronizePanel().updateMarking();
     }
 
     @Override
@@ -166,11 +167,6 @@ public class GraphServiceImpl implements GraphService {
     @Override
     public void openGraphfromFile(File file) {
         saveGraphAsFile.openGraph(file);
-    }
-
-    private int getId(String stringId) {
-        int id = Integer.valueOf(stringId.substring(1));
-        return id - 1;
     }
 
     private void removeArc(ArcGraphCell arc) {

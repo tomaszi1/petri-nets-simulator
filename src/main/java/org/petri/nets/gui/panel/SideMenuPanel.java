@@ -10,21 +10,20 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 
 public class SideMenuPanel extends JPanel {
-    //private SaveGraphAsFile saveGraphAsFile;
+    private static final int MENU_WIDTH = 220;
     private GraphService graphService;
-    private DomainModel domainModel;
     JButton openButton, saveButton;
     JFileChooser fc;
     public static final String PANEL_TITLE = "Menu";
 
+
     public SideMenuPanel(GraphService graphService) {
-        this.domainModel = graphService.getDomainModel();
         //this.setSaveGraphAsFile(new SaveGraphAsFile(graphService.getDomainModel()));
         this.graphService = graphService;
 
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
-        setBackground(Color.white);
+        setPreferredSize(new Dimension(MENU_WIDTH,500));
         //add(new "Menu",BorderLayout.CENTER);
         createSaveButtom();
 

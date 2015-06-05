@@ -2,6 +2,7 @@ package org.petri.nets.service;
 
 import com.google.common.collect.Sets;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
+import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import org.petri.nets.model.*;
 import org.petri.nets.model.reachability.State;
@@ -25,7 +26,7 @@ public class ReachabilityGraphGenerator {
     }
 
     public Graph<State, TransitionEdge> generateGraph() {
-        reachGraph = new DirectedSparseGraph<>();
+        reachGraph = new DirectedSparseMultigraph<>();
         stateQueue = new LinkedList<>();
         int vertexCount = 0;
 
@@ -104,7 +105,7 @@ public class ReachabilityGraphGenerator {
             Place place = placeArcEntry.getKey();
             Arc arc = placeArcEntry.getValue();
 
-            if (state.getMarkingForPlace(place) - arc.getValue() < 0 && arc.getValue()!=0)
+            if (state.getMarkingForPlace(place) - arc.getValue() < 0)
                 return false;
 
             for (Transition t : place.getTransitionsTo().keySet()) {

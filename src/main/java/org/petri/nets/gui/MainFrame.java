@@ -2,7 +2,7 @@ package org.petri.nets.gui;
 
 import org.petri.nets.gui.panel.PetriNetWrapperPanel;
 import org.petri.nets.gui.panel.ReachabilityGraphPanel;
-import org.petri.nets.gui.panel.SideMenuWrapper;
+import org.petri.nets.gui.panel.SideMenuPanel;
 import org.petri.nets.service.GraphService;
 import org.petri.nets.synhronize.SynchronizePanel;
 
@@ -14,7 +14,7 @@ public class MainFrame extends JFrame {
     public static final int FRAME_WIDTH = 900;
     public static final int FRAME_HEIGHT = 600;
 
-    private SideMenuWrapper sideMenuWrapper;
+    private SideMenuPanel sideMenuWrapper;
     private JSplitPane graphsWrapper;
 
     public MainFrame(GraphService graphService) {
@@ -28,7 +28,7 @@ public class MainFrame extends JFrame {
     }
 
     private void initComponents(GraphService graphService) {
-        sideMenuWrapper = new SideMenuWrapper(graphService);
+        sideMenuWrapper = new SideMenuPanel(graphService);
 
         SynchronizePanel synchronizePanel = graphService.getSynchronizeService().getSynchronizePanel();
         PetriNetWrapperPanel petriNetWrapperPanel = new PetriNetWrapperPanel(graphService, synchronizePanel);
@@ -37,10 +37,10 @@ public class MainFrame extends JFrame {
         ReachabilityGraphPanel reachGraphPanel = new ReachabilityGraphPanel(graphService);
         synchronizePanel.setReachabilityGraphPanel(reachGraphPanel);
 
-        setGraphsWrapper(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+        graphsWrapper = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 petriNetWrapperPanel,
-                reachGraphPanel));
-        getGraphsWrapper().setResizeWeight(0.5);
+                reachGraphPanel);
+        graphsWrapper.setResizeWeight(0.5);
 
         add(getGraphsWrapper(), BorderLayout.CENTER);
         add(sideMenuWrapper, BorderLayout.LINE_END);
@@ -50,7 +50,4 @@ public class MainFrame extends JFrame {
         return graphsWrapper;
     }
 
-    public void setGraphsWrapper(JSplitPane graphsWrapper) {
-        this.graphsWrapper = graphsWrapper;
-    }
 }

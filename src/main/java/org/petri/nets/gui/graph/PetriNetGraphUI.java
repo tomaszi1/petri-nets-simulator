@@ -1,14 +1,11 @@
 package org.petri.nets.gui.graph;
 
-import org.jgraph.graph.CellHandle;
-import org.jgraph.graph.CellView;
-import org.jgraph.graph.GraphContext;
-import org.jgraph.graph.VertexView;
+import org.jgraph.graph.*;
 import org.jgraph.plaf.basic.BasicGraphUI;
+import org.petri.nets.gui.dialog.GlobalDialogsHandler;
 import org.petri.nets.gui.popup.BackgroundPopupMenu;
 import org.petri.nets.gui.popup.MultipleSelectionsPopupMenu;
 import org.petri.nets.gui.popup.PlacePopupMenu;
-import org.petri.nets.model.DomainModel;
 import org.petri.nets.service.GraphService;
 import org.petri.nets.service.GraphServiceImpl;
 import org.petri.nets.synhronize.SynchronizePanel;
@@ -23,10 +20,12 @@ public class PetriNetGraphUI extends BasicGraphUI {
     private PlacePopupMenu placePopupMenu;
     private BackgroundPopupMenu backgroundPopupMenu;
     private MultipleSelectionsPopupMenu multipleSelectionsPopupMenu;
-    private final GraphService graphService;
+    private GraphService graphService;
+    private GlobalDialogsHandler globalDialogsHandler;
+    private CellEditHandler cellEditHandler;
 
     public PetriNetGraphUI(GraphService graphService, SynchronizePanel synchronizePanel) { // maybe graphService
-        this.graphService = new GraphServiceImpl(graphService.getDomainModel(),synchronizePanel);
+        this.graphService = new GraphServiceImpl(graphService.getDomainModel(), synchronizePanel);
         backgroundPopupMenu = new BackgroundPopupMenu(graphService);
         placePopupMenu = new PlacePopupMenu(graphService);
         multipleSelectionsPopupMenu = new MultipleSelectionsPopupMenu(graphService);
@@ -124,15 +123,10 @@ public class PetriNetGraphUI extends BasicGraphUI {
                     focus = cell;
                 completeEditing();
                 boolean isForceMarquee = isForceMarqueeEvent(e);
-                boolean isEditable = graph.isGroupsEditable()
-                        || (focus != null && focus.isLeaf());
                 if (!isForceMarquee) {
-                    if (e.getClickCount() == graph.getEditClickCount()
-                            && focus != null && isEditable
-                            && focus.getParentView() == null
-                            && graph.isCellEditable(focus.getCell())
-                            && handleEditTrigger(cell.getCell(), e)) {
+                    if (e.getClickCount() == graph.getEditClickCount() && focus != null) {
                         e.consume();
+                        cellEditHandler.editCell();
                         cell = null;
                     } else if (!isToggleSelectionEvent(e)) {
                         if (handle != null) {
@@ -214,9 +208,9 @@ public class PetriNetGraphUI extends BasicGraphUI {
                         graph.repaint();
                     } else if (keyStroke.getKeyCode() == KeyEvent.VK_DELETE && focus != null) {
                         graphService.removeFromGraph(graphService.getSelectedCells());
-                    } else if(keyStroke.getKeyCode()==KeyEvent.VK_Z){
+                    } else if (keyStroke.getKeyCode() == KeyEvent.VK_Z) {
                         int mods = keyStroke.getModifiers();
-                        if((mods & InputEvent.CTRL_MASK) !=0)
+                        if ((mods & InputEvent.CTRL_MASK) != 0)
                             System.out.println("Implement undo action!"); // TODO implement UNDO
                     }
                 }
@@ -227,6 +221,13 @@ public class PetriNetGraphUI extends BasicGraphUI {
                 } else
                     isKeyDown = true;
             }
+        }
+    }
+
+    private class CellEditHandler {
+
+        private void editCell(){
+
         }
     }
 }

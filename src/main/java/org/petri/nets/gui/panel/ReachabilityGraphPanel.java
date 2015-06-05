@@ -1,8 +1,8 @@
 package org.petri.nets.gui.panel;
 
 import com.google.common.collect.Maps;
-import edu.uci.ics.jung.algorithms.layout.*;
-import edu.uci.ics.jung.algorithms.layout.SpringLayout;
+import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.StaticLayout;
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -16,7 +16,6 @@ import org.petri.nets.utils.AbstractResizeComponentListener;
 
 import javax.swing.*;
 import java.awt.*;
-
 import java.awt.event.ComponentEvent;
 import java.awt.geom.Point2D;
 import java.util.Map;
