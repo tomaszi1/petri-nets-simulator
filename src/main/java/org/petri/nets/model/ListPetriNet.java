@@ -141,4 +141,11 @@ public class ListPetriNet implements PetriNet, Serializable {
         }
     }
 
+    @Override
+    public boolean hasArc(Place place, Transition transition) {
+        return !(place == null || transition == null)
+                && (place.getTransitionsFrom().containsKey(transition)
+                || transition.getPlacesFrom().containsKey(place));
+    }
+
 }

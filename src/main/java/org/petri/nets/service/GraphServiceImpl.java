@@ -103,6 +103,11 @@ public class GraphServiceImpl implements GraphService {
 
     @Override
     public void addArc(PetriNetGraphCell start, PetriNetGraphCell end) {
+        Place place = placeGUI.get(start);
+        Transition transition = transitonGUI.get(end);
+        if(place!=null && transition!=null && model.getPetriNet().hasArc(place, transition))
+            return;
+
         ArcGraphCell edge = new ArcGraphCell();
         edge.setSource(start.getFirstChild());
         edge.setTarget(end.getFirstChild());

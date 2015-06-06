@@ -1,5 +1,6 @@
 package org.petri.nets.model.reachability;
 
+import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
 import org.petri.nets.model.Place;
 
@@ -42,7 +43,12 @@ public class State {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         State state1 = (State) o;
-        return !(marking != null ? !marking.equals(state1.marking) : state1.marking != null);
+        return Maps.difference(state1.marking, marking).areEqual();
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
     }
 
     @Override

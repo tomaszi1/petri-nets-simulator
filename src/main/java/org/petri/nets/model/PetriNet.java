@@ -34,4 +34,5 @@ public interface PetriNet {
 
     void removeTransition(int id);
 
+    boolean hasArc(Place place, Transition transition);
 }

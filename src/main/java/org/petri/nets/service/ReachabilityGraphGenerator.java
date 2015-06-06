@@ -15,10 +15,8 @@ import java.util.*;
  */
 public class ReachabilityGraphGenerator {
 
-    private Graph<State, TransitionEdge> reachGraph;
     private PetriNet petriNet;
     private int maxVertexCount;
-    private Queue<State> stateQueue;
     private Map<Integer, Integer> kBoundedness;
     private State initialState;
     private boolean isPetriNetConservative;
@@ -33,8 +31,8 @@ public class ReachabilityGraphGenerator {
     }
 
     public Graph<State, TransitionEdge> generateGraph() {
-        reachGraph = new DirectedSparseMultigraph<>();
-        stateQueue = new LinkedList<>();
+        Graph<State, TransitionEdge> reachGraph = new DirectedSparseMultigraph<>();
+        Queue<State> stateQueue = new LinkedList<>();
         int vertexCount = 0;
 
         initialState = new State();

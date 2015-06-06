@@ -29,8 +29,7 @@ public class GraphMouseClickListener implements GraphMouseListener<State>, Mouse
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getClickCount() == 2)
-            visualizationViewer.getPickedVertexState().clear();
+        visualizationViewer.getPickedVertexState().clear();
     }
 
     @Override

@@ -34,7 +34,9 @@ public class ReachabilityGraphPanel extends JPanel {
     public static final Color INACTIVE_VERTEX_FILL_COLOR = new Color(255, 255, 180);
 
     public static final Color EDGE_FILL_COLOR = new Color(30, 30, 30);
-    public static final Color INACTIVE_EDGE_FILL_COLOR = new Color(230, 230, 230);
+    public static final Color INACTIVE_EDGE_FILL_COLOR = new Color(0, 0, 0, 20);
+
+    public static final Color ALIVE_TRANSITION_COLOR = Color.MAGENTA;
 
     public static final Color GRAPH_BACKGROUND = Color.WHITE;
     public static final Font FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 20);
@@ -57,7 +59,7 @@ public class ReachabilityGraphPanel extends JPanel {
 
         Graph<State, TransitionEdge> graph = new DirectedSparseGraph<>();
 
-        Layout<State, TransitionEdge> layout = new StaticLayout<>(graph, new CustomInitializer());
+        Layout<State, TransitionEdge> layout = new StaticLayout<>(graph, new CustomInitializer(graph.getVertices()));
 
         visualizationViewer = new VisualizationViewer<>(layout);
         DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
@@ -86,12 +88,13 @@ public class ReachabilityGraphPanel extends JPanel {
 
         // edges
         visualizationViewer.getRenderContext().setEdgeLabelTransformer(transition -> "T" + transition.getTransition().getId());
-        visualizationViewer.getRenderContext().setEdgeShapeTransformer(new EdgeShape.QuadCurve<>());
-        visualizationViewer.getRenderContext().setEdgeDrawPaintTransformer(this::edgeColor);
-        visualizationViewer.getRenderContext().setArrowDrawPaintTransformer(this::edgeColor);
+        visualizationViewer.getRenderContext().setEdgeShapeTransformer(new EdgeShape.CubicCurve<>());
+        visualizationViewer.getRenderContext().setEdgeDrawPaintTransformer(e -> edgeColor(e, null));
+        visualizationViewer.getRenderContext().setArrowDrawPaintTransformer(e -> edgeColor(e, null));
+        visualizationViewer.getRenderContext().setArrowFillPaintTransformer(e -> edgeColor(e, null));
         visualizationViewer.getRenderContext().setEdgeFontTransformer(s -> FONT);
         visualizationViewer.getRenderContext().getEdgeLabelRenderer().setRotateEdgeLabels(false);
-        CustomEdgeLabelRenderer<State, TransitionEdge> customEdgeLabelRenderer = new CustomEdgeLabelRenderer<>(this::edgeColor);
+        CustomEdgeLabelRenderer<State, TransitionEdge> customEdgeLabelRenderer = new CustomEdgeLabelRenderer<>(e -> edgeColor(e, Color.BLACK));
         visualizationViewer.getRenderer().setEdgeLabelRenderer(customEdgeLabelRenderer);
 
         visualizationViewer.setBackground(GRAPH_BACKGROUND);
@@ -115,8 +118,8 @@ public class ReachabilityGraphPanel extends JPanel {
         if (graphService == null || graphService.getReachabilityGraph() == null)
             return;
         Layout<State, TransitionEdge> graphLayout = visualizationViewer.getGraphLayout();
-        graphLayout.setInitializer(new CustomInitializer());
         Graph<State, TransitionEdge> graph = graphService.getReachabilityGraph();
+        graphLayout.setInitializer(new CustomInitializer(graph.getVertices()));
         bfsDistanceLabeler.labelDistances(graph, ReachabilityGraphGenerator.findRoot(graph));
         graphLayout.setGraph(graph);
         visualizationViewer.getPickedVertexState().clear();
@@ -125,27 +128,34 @@ public class ReachabilityGraphPanel extends JPanel {
 
     public Set<State> gatherAllPredecessors(State endPoint) {
         Set<State> predecessors = Sets.newHashSet(bfsDistanceLabeler.getPredecessors(endPoint));
-        for (State predecessor : predecessors) {
-            Set<State> preds = gatherAllPredecessors(predecessor);
-            predecessors.addAll(preds);
-        }
+        Set<State> morePreds = Sets.newHashSet();
+        for (State predecessor : predecessors)
+            morePreds.addAll(gatherAllPredecessors(predecessor));
+        predecessors.addAll(morePreds);
         return predecessors;
     }
 
-    public Color edgeColor(TransitionEdge transitionEdge) {
-        PickedState<State> pickedVertexState = visualizationViewer.getPickedVertexState();
-        Set<State> pickedStates = pickedVertexState.getPicked();
-        if (pickedStates.isEmpty())
+    private Color edgeColor(TransitionEdge transitionEdge, Color customAliveTransition) {
+        State picked = getPickedState();
+        if (picked == null)
             return EDGE_FILL_COLOR;
-        State picked = pickedStates.iterator().next();
 
         Set<State> predecessors = gatherAllPredecessors(picked);
         predecessors.add(picked);
-        Set<State> incidentVertices = new HashSet<>(visualizationViewer.getGraphLayout().getGraph().getIncidentVertices(transitionEdge));
+        Graph<State, TransitionEdge> graph = visualizationViewer.getGraphLayout().getGraph();
+        Set<State> incidentVertices = new HashSet<>(graph.getIncidentVertices(transitionEdge));
 
         if (Sets.intersection(incidentVertices, predecessors).size() == 2)
             return EDGE_FILL_COLOR;
+        else if (graph.getOutEdges(picked).contains(transitionEdge))
+            return customAliveTransition != null ? customAliveTransition : ALIVE_TRANSITION_COLOR;
         return INACTIVE_EDGE_FILL_COLOR;
+    }
+
+    private State getPickedState() {
+        PickedState<State> pickedVertexState = visualizationViewer.getPickedVertexState();
+        Set<State> pickedStates = pickedVertexState.getPicked();
+        return pickedStates.isEmpty() ? null : pickedStates.iterator().next();
     }
 
 }
