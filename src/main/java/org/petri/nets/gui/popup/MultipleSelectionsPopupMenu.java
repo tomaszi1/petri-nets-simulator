@@ -1,7 +1,6 @@
 package org.petri.nets.gui.popup;
 
-import org.jgraph.graph.DefaultEdge;
-import org.petri.nets.gui.graph.PetriNetGraphCell;
+import org.petri.nets.gui.graph.petriNet.PetriNetGraphCell;
 import org.petri.nets.service.GraphService;
 
 import javax.swing.*;

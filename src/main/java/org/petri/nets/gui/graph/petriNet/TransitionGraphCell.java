@@ -1,10 +1,8 @@
-package org.petri.nets.gui.graph;
+package org.petri.nets.gui.graph.petriNet;
 
-import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.GraphConstants;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 
 public class TransitionGraphCell extends PetriNetGraphCell {
     private static final Font FONT = new Font(Font.SANS_SERIF, Font.BOLD, 14);

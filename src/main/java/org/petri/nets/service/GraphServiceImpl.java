@@ -4,7 +4,7 @@ import com.google.common.collect.BiMap;
 import edu.uci.ics.jung.graph.Graph;
 import org.jgraph.JGraph;
 import org.jgraph.graph.*;
-import org.petri.nets.gui.graph.*;
+import org.petri.nets.gui.graph.petriNet.*;
 import org.petri.nets.model.Arc;
 import org.petri.nets.model.DomainModel;
 import org.petri.nets.model.Place;

@@ -1,4 +1,4 @@
-package org.petri.nets.gui.graph;
+package org.petri.nets.gui.graph.petriNet;
 
 import org.petri.nets.gui.dialog.DialogCloseListener;
 import org.petri.nets.gui.dialog.GlobalDialogsHandler;

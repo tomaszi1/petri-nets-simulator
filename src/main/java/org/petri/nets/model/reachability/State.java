@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class State {
     private Map<Integer, Integer> marking;
-    private int depth;
+    private int depth = 0;
 
     public State(Map<Integer, Integer> marking) {
         this.marking = Maps.newHashMap(marking);
@@ -52,4 +52,6 @@ public class State {
                 ", depth=" + depth +
                 '}';
     }
+
+
 }

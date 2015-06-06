@@ -2,7 +2,6 @@ package org.petri.nets.gui.panel;
 
 import org.jgraph.JGraph;
 import org.jgraph.plaf.GraphUI;
-import org.petri.nets.gui.graph.PetriNetGraphUI;
 import org.petri.nets.service.GraphService;
 import org.petri.nets.synhronize.SynchronizePanel;
 

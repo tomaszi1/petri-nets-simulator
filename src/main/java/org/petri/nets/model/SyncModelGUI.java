@@ -2,8 +2,8 @@ package org.petri.nets.model;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import org.petri.nets.gui.graph.PlaceGraphCell;
-import org.petri.nets.gui.graph.TransitionGraphCell;
+import org.petri.nets.gui.graph.petriNet.PlaceGraphCell;
+import org.petri.nets.gui.graph.petriNet.TransitionGraphCell;
 
 import java.io.Serializable;
 import java.util.ArrayList;

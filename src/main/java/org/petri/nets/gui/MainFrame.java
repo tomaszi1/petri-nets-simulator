@@ -1,8 +1,7 @@
 package org.petri.nets.gui;
 
-import jdk.nashorn.internal.objects.Global;
 import org.petri.nets.gui.dialog.GlobalDialogsHandler;
-import org.petri.nets.gui.graph.PetriNetGraphUI;
+import org.petri.nets.gui.graph.petriNet.PetriNetGraphUI;
 import org.petri.nets.gui.panel.PetriNetWrapperPanel;
 import org.petri.nets.gui.panel.ReachabilityGraphPanel;
 import org.petri.nets.gui.panel.SideMenuPanel;

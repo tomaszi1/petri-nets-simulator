@@ -160,4 +160,12 @@ public class ReachabilityGraphGenerator {
     public Map<Integer, Integer> getKBoundedness() {
         return Maps.newHashMap(kBoundedness);
     }
+
+    public static State findRoot(Graph<State, TransitionEdge> graph) {
+        return graph.getVertices()
+                .stream()
+                .filter(state -> state.getDepth() == 0)
+                .findFirst()
+                .get();
+    }
 }

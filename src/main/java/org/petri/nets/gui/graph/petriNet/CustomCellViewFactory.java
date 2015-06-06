@@ -1,8 +1,6 @@
-package org.petri.nets.gui.graph;
+package org.petri.nets.gui.graph.petriNet;
 
-import javafx.print.PageLayout;
 import org.jgraph.graph.*;
-import org.petri.nets.model.Arc;
 
 public class CustomCellViewFactory extends DefaultCellViewFactory {
     @Override
