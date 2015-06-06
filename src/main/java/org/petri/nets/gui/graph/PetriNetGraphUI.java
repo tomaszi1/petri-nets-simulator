@@ -224,5 +224,4 @@ public class PetriNetGraphUI extends BasicGraphUI {
             }
         }
     }
-
 }

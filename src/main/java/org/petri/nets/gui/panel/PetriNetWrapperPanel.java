@@ -11,7 +11,6 @@ import java.awt.*;
 
 public class PetriNetWrapperPanel extends JPanel{
 
-    private final PetriNetGraphPanel petriNetGraphPanel;
     private final InitialMarkingPanel initialMarkingPanel;
 
     public PetriNetWrapperPanel(GraphService graphService, GraphUI graphUI, SynchronizePanel synchronizePanel) {
@@ -19,7 +18,7 @@ public class PetriNetWrapperPanel extends JPanel{
 
         initialMarkingPanel = new InitialMarkingPanel(graphService);
 
-        petriNetGraphPanel = new PetriNetGraphPanel(graphService, graphUI, synchronizePanel);
+        PetriNetGraphPanel petriNetGraphPanel = new PetriNetGraphPanel(graphService, graphUI, synchronizePanel);
 
         add(petriNetGraphPanel, BorderLayout.CENTER);
         add(getInitialMarkingPanel(), BorderLayout.PAGE_END);

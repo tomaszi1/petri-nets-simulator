@@ -11,6 +11,9 @@ public class JGraphFactory {
     public static JGraph createGraph() {
         DefaultGraphModel defaultGraphModel = new DefaultGraphModel();
         GraphLayoutCache graphLayoutCache  = new GraphLayoutCache(defaultGraphModel, new CustomCellViewFactory());
-        return new JGraph(defaultGraphModel, graphLayoutCache);
+        JGraph newGraph = new JGraph(defaultGraphModel, graphLayoutCache);
+        newGraph.setDisconnectable(false);
+        newGraph.setAntiAliased(true);
+        return newGraph;
     }
 }

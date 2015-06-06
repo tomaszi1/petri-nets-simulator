@@ -22,6 +22,7 @@ class CellEditHandler {
     private TransitionEditorPanel transitionEditorPanel;
     private PlaceEditorPanel placeEditorPanel;
     private ArcEditorPanel arcEditorPanel;
+    private ArcGraphCell arcGraphCell;
 
     public CellEditHandler(GraphService graphService, GlobalDialogsHandler globalDialogsHandler) {
         this.graphService = graphService;
@@ -46,9 +47,10 @@ class CellEditHandler {
             prepareTransitionEditorPanel(transition);
             panel = transitionEditorPanel;
         } else if(graphService.isArc(cell)) {
-            ArcGraphCell arcGraphCell = graphService.tryCastToArc(cell);
+            arcGraphCell = graphService.tryCastToArc(cell);
             Arc arc = graphService.getModelRepresentative(arcGraphCell);
             prepareArcEditorPanel(arc);
+            panel = arcEditorPanel;
         }
         if (panel != null) {
             DialogCloseListener dialogCloseListener = globalDialogsHandler.setDialog(panel.getName(), new OkCancelPanel(panel));
@@ -59,7 +61,14 @@ class CellEditHandler {
 
     private void prepareArcEditorPanel(Arc arc) {
         arcEditorPanel.setValue(arc.getValue());
-        arcEditorPanel.setListener(arc::setValue);
+        arcEditorPanel.setListener(value -> {
+            if(arc.getValue()!=value) {
+                arc.setValue(value);
+                arcGraphCell.setUserObject(value);
+                graphService.repaintGraph();
+                graphService.invalidateReachabilityGraph();
+            }
+        });
     }
 
     private void prepareTransitionEditorPanel(Transition transition) {

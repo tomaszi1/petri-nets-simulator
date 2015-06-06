@@ -22,7 +22,6 @@ public interface GraphService {
 
     void removeFromGraph(Object cell);
 
-
     PlaceGraphCell addPlace(Point position);
 
     TransitionGraphCell addTransition(Point position);
@@ -30,8 +29,6 @@ public interface GraphService {
     void addArc(PetriNetGraphCell start, PetriNetGraphCell end);
 
     void setInitialMarking(int placeId, int marking);
-
-    CellView getLastFocusedCell();
 
     Object[] getSelectedCells();
 
@@ -47,13 +44,15 @@ public interface GraphService {
 
     boolean isPlace(Object cell);
 
-    public void openGraphfromFile(File file);
+    void openGraphfromFile(File file);
 
-    public void saveGraphAsFile(File file);
+    void saveGraphAsFile(File file);
 
     HashMap<Integer, Integer> getInitialMarking();
 
     int getInitialMarking(int placeId);
+
+    void invalidateReachabilityGraph();
 
     JGraph getPetriNetGraph();
 
@@ -67,10 +66,11 @@ public interface GraphService {
 
     Transition getModelRepresentative(TransitionGraphCell transitionGraphCell);
 
-
     boolean isArc(Object cell);
 
     ArcGraphCell tryCastToArc(Object cell);
 
     Arc getModelRepresentative(ArcGraphCell arcGraphCell);
+
+    void repaintGraph();
 }

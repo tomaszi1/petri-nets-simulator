@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.geom.Rectangle2D;
 
 public class TransitionGraphCell extends PetriNetGraphCell {
+    private static final Font FONT = new Font(Font.SANS_SERIF, Font.BOLD, 14);
+
     public TransitionGraphCell(int id, Point position) {
         this(id, (int) position.getX(), (int) position.getY());
     }
@@ -14,9 +16,7 @@ public class TransitionGraphCell extends PetriNetGraphCell {
     public TransitionGraphCell(int id, int posX, int posY) {
         super("T" + id, posX, posY);
         GraphConstants.setBackground(getAttributes(), Color.CYAN);
-
-        // TEMPORARY
-        //setDescription("Przejście T"+id);
+        GraphConstants.setFont(getAttributes(), FONT);
     }
 
 }

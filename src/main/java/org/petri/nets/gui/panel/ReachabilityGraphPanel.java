@@ -45,11 +45,6 @@ public class ReachabilityGraphPanel extends JPanel {
 
         Layout<State, TransitionEdge> layout = new StaticLayout<>(graph, new CustomInitializer());
 
-//        layout.setInitializer();
-//        layout.setStretch(0.1);
-//        layout.setRepulsionRange(500);
-//        layout.setForceMultiplier(0.1);
-
         visualizationViewer = new VisualizationViewer<>(layout);
         DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
         gm.setMode(ModalGraphMouse.Mode.TRANSFORMING);
@@ -106,8 +101,8 @@ public class ReachabilityGraphPanel extends JPanel {
             int depth = state.getDepth();
             verticesCountAtDepth.putIfAbsent(depth, 0);
 
-            int posX = 100 * verticesCountAtDepth.get(depth);
-            int posY = distance * depth;
+            int posX = 100 * verticesCountAtDepth.get(depth)+ 100;
+            int posY = distance * depth + 100;
 
             verticesCountAtDepth.put(depth, verticesCountAtDepth.get(depth) + 1);
             return new Point2D.Double(posX, posY);

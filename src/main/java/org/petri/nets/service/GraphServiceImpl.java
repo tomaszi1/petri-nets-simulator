@@ -108,8 +108,6 @@ public class GraphServiceImpl implements GraphService {
         edge.setTarget(end.getFirstChild());
         edge.setStart(start);
         edge.setEnd(end);
-        edge.setPriority(0);
-        edge.setValue(0);
         model.getPetriNetGraph().getGraphLayoutCache().insert(edge);
 
         if (isPlace(start))
@@ -122,12 +120,6 @@ public class GraphServiceImpl implements GraphService {
 
     public DomainModel getModel() {
         return model;
-    }
-
-    @Override
-    public CellView getLastFocusedCell() {
-        PetriNetGraphUI ui = (PetriNetGraphUI) model.getPetriNetGraph().getUI();
-        return ui.getLastFocus();
     }
 
 
@@ -204,7 +196,8 @@ public class GraphServiceImpl implements GraphService {
         return model.getPetriNet().getInitialMarking(placeId);
     }
 
-    private void invalidateReachabilityGraph() {
+    @Override
+    public void invalidateReachabilityGraph() {
         ReachabilityGraphGenerator reachGraph = new ReachabilityGraphGenerator(model.getPetriNet(), 50);
         Graph<State, TransitionEdge> reachabilityGraph = reachGraph.generateGraph();
         model.setReachabilityGraph(reachabilityGraph);
@@ -268,6 +261,11 @@ public class GraphServiceImpl implements GraphService {
         Place place = getModelRepresentative(placeGraphCell);
         Transition transition = getModelRepresentative(transitionGraphCell);
         return getArc(place, transition, false);
+    }
+
+    @Override
+    public void repaintGraph() {
+        model.getPetriNetGraph().refresh();
     }
 
     public Arc getArc(Place place, Transition transition, boolean startsInPlace) {

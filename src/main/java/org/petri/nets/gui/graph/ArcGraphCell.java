@@ -1,17 +1,24 @@
 package org.petri.nets.gui.graph;
 
 
+import edu.uci.ics.jung.graph.Graph;
 import org.jgraph.graph.DefaultEdge;
 import org.jgraph.graph.GraphConstants;
 
-public class ArcGraphCell extends DefaultEdge{
+import java.awt.*;
+import java.awt.geom.Point2D;
 
-    private int priority;
-    private int value;
+public class ArcGraphCell extends DefaultEdge {
+
+    private static final Font FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 16);
+
     private PetriNetGraphCell start;
     private PetriNetGraphCell end;
+
     public ArcGraphCell() {
-        GraphConstants.setLineEnd(getAttributes(), GraphConstants.ARROW_CLASSIC);
+        GraphConstants.setLineEnd(getAttributes(), GraphConstants.ARROW_TECHNICAL);
+        GraphConstants.setLabelPosition(getAttributes(), new Point2D.Double(GraphConstants.PERMILLE / 2, -10));
+        GraphConstants.setFont(getAttributes(), FONT);
     }
 
     public PetriNetGraphCell getStart() {
@@ -28,21 +35,5 @@ public class ArcGraphCell extends DefaultEdge{
 
     public void setEnd(PetriNetGraphCell end) {
         this.end = end;
-    }
-
-    public int getPriority() {
-        return priority;
-    }
-
-    public void setPriority(int priority) {
-        this.priority = priority;
-    }
-
-    public int getValue() {
-        return value;
-    }
-
-    public void setValue(int value) {
-        this.value = value;
     }
 }
