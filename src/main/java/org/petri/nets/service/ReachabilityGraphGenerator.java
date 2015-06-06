@@ -1,7 +1,7 @@
 package org.petri.nets.service;
 
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.Graph;
 import org.petri.nets.model.*;
@@ -19,10 +19,17 @@ public class ReachabilityGraphGenerator {
     private PetriNet petriNet;
     private int maxVertexCount;
     private Queue<State> stateQueue;
+    private Map<Integer, Integer> kBoundedness;
+    private State initialState;
+    private boolean isPetriNetConservative;
+    private boolean isPetriNetBounded;
 
     public ReachabilityGraphGenerator(PetriNet petriNet, int maxVertexCount) {
         this.maxVertexCount = maxVertexCount;
         this.petriNet = petriNet;
+        this.kBoundedness = Maps.newHashMap();
+        this.isPetriNetConservative = true;
+        this.isPetriNetBounded = true;
     }
 
     public Graph<State, TransitionEdge> generateGraph() {
@@ -30,9 +37,10 @@ public class ReachabilityGraphGenerator {
         stateQueue = new LinkedList<>();
         int vertexCount = 0;
 
-        State initialState = new State();
+        initialState = new State();
         initialState.setMarking(petriNet.getInitialMarking());
         initialState.setDepth(0);
+        updateProperties(initialState);
 
         reachGraph.addVertex(initialState);
 
@@ -49,6 +57,7 @@ public class ReachabilityGraphGenerator {
                 boolean stateIsNew = reachGraph.addVertex(newState);
 
                 if (stateIsNew) {
+                    updateProperties(newState);
                     stateQueue.add(newState);
                     vertexCount++;
                 }
@@ -117,4 +126,38 @@ public class ReachabilityGraphGenerator {
         return !(placesFrom.isEmpty() || transition.getPlacesTo().isEmpty());
     }
 
+    private void updateProperties(State state) {
+        updateKBoundedness(state);
+        updateConservation(state);
+    }
+
+    private void updateKBoundedness(State state) {
+        state.getMarking().forEach(
+                (placeId, marking) -> kBoundedness.put(placeId, Math.max(marking, kBoundedness.getOrDefault(placeId, 0))));
+    }
+
+    private void updateConservation(State state) {
+        if (initialState == null)
+            initialState = state;
+        if (sumOfTokens(state) != sumOfTokens(initialState)) {
+            isPetriNetConservative = false;
+            System.out.println("not conservative!");
+        }
+    }
+
+    private static int sumOfTokens(State state) {
+        return state.getMarking().values().stream().mapToInt(v -> v).sum();
+    }
+
+    private boolean isPetriNetBounded() {
+        return isPetriNetBounded;
+    }
+
+    public boolean isPetriNetConservative() {
+        return isPetriNetConservative;
+    }
+
+    public Map<Integer, Integer> getKBoundedness() {
+        return Maps.newHashMap(kBoundedness);
+    }
 }
