@@ -2,7 +2,7 @@ package org.petri.nets.gui.dialog;
 
 import org.junit.Test;
 import org.petri.nets.gui.panel.OkCancelPanel;
-import org.petri.nets.gui.panel.TransitionEditorPanel;
+import org.petri.nets.gui.panel.editorPanels.TransitionEditorPanel;
 
 import javax.swing.*;
 
@@ -24,7 +24,7 @@ public class GlobalDialogsHandlerTest {
             TransitionEditorPanel listenerPanel = new TransitionEditorPanel();
             OkCancelPanel okCancelPanel = new OkCancelPanel(listenerPanel);
 
-            DialogCloseListener dialogCloseListener = globalDialogsHandler.showDialog("Hello", okCancelPanel);
+            DialogCloseListener dialogCloseListener = globalDialogsHandler.setDialog("Hello", okCancelPanel);
             listenerPanel.setDialogCloseListener(dialogCloseListener);
         });
     }

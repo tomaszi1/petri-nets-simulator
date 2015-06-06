@@ -2,6 +2,7 @@ package org.petri.nets.gui.graph;
 
 import javafx.print.PageLayout;
 import org.jgraph.graph.*;
+import org.petri.nets.model.Arc;
 
 public class CustomCellViewFactory extends DefaultCellViewFactory {
     @Override
@@ -61,5 +62,15 @@ public class CustomCellViewFactory extends DefaultCellViewFactory {
 
     private static boolean isCell(Object obj) {
         return obj instanceof GraphCell;
+    }
+
+    public static boolean isArc(Object cell) {
+        return cell instanceof ArcGraphCell;
+    }
+
+    public static ArcGraphCell tryCastToArc(Object cell) {
+        if(!isArc(cell))
+            return null;
+        return (ArcGraphCell) cell;
     }
 }

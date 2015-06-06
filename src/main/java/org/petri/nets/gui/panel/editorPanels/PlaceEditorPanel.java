@@ -1,6 +1,6 @@
-package org.petri.nets.gui.panel;
+package org.petri.nets.gui.panel.editorPanels;
 
-import org.petri.nets.gui.dialog.DialogCloseListener;
+import org.petri.nets.gui.panel.PropertyEditorAbstractPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,18 +8,24 @@ import java.awt.*;
 /**
  * Created by Tomasz on 2015-06-06.
  */
-public class PlaceEditorPanel extends DialogClosingAbstractPanel {
+public class PlaceEditorPanel extends PropertyEditorAbstractPanel<String> {
     public static final String DESCRIPTION_LABEL_TEXT = "Opis";
     private final JTextField descriptionTextField;
 
     public PlaceEditorPanel() {
-        setLayout(new GridLayout(4, 0));
+        setLayout(new GridLayout(2, 0));
 
         JLabel descriptionLabel = new JLabel(DESCRIPTION_LABEL_TEXT);
         descriptionTextField = new JTextField(20);
 
         add(descriptionLabel);
         add(descriptionTextField);
+    }
+
+    @Override
+    public void okClicked() {
+        publishChanges(descriptionTextField.getText());
+        super.okClicked();
     }
 
     public void setDescription(String description) {

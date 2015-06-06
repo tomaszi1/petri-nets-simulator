@@ -5,6 +5,7 @@ import edu.uci.ics.jung.graph.Graph;
 import org.jgraph.JGraph;
 import org.jgraph.graph.*;
 import org.petri.nets.gui.graph.*;
+import org.petri.nets.model.Arc;
 import org.petri.nets.model.DomainModel;
 import org.petri.nets.model.Place;
 import org.petri.nets.model.reachability.State;
@@ -231,12 +232,49 @@ public class GraphServiceImpl implements GraphService {
     }
 
     @Override
-    public Place getModelRepresentative(PlaceGraphCell placeGraphCell){
+    public Place getModelRepresentative(PlaceGraphCell placeGraphCell) {
         return placeGUI.get(placeGraphCell);
     }
 
     @Override
-    public Transition getModelRepresentative(TransitionGraphCell transitionGraphCell){
+    public Transition getModelRepresentative(TransitionGraphCell transitionGraphCell) {
         return transitonGUI.get(transitionGraphCell);
+    }
+
+    @Override
+    public boolean isArc(Object cell) {
+        return CustomCellViewFactory.isArc(cell);
+    }
+
+    @Override
+    public ArcGraphCell tryCastToArc(Object cell) {
+        return CustomCellViewFactory.tryCastToArc(cell);
+    }
+
+    @Override
+    public Arc getModelRepresentative(ArcGraphCell arcGraphCell) {
+        PetriNetGraphCell start = arcGraphCell.getStart();
+        PetriNetGraphCell end = arcGraphCell.getEnd();
+        if (isPlace(start)) {
+            PlaceGraphCell placeGraphCell = tryCastToPlace(start);
+            TransitionGraphCell transitionGraphCell = tryCastToTransition(end);
+            Place place = getModelRepresentative(placeGraphCell);
+            Transition transition = getModelRepresentative(transitionGraphCell);
+            return getArc(place, transition, true);
+        }
+
+        TransitionGraphCell transitionGraphCell = tryCastToTransition(start);
+        PlaceGraphCell placeGraphCell = tryCastToPlace(end);
+        Place place = getModelRepresentative(placeGraphCell);
+        Transition transition = getModelRepresentative(transitionGraphCell);
+        return getArc(place, transition, false);
+    }
+
+    public Arc getArc(Place place, Transition transition, boolean startsInPlace) {
+        if (startsInPlace) {
+            return place.getTransitionsTo().get(transition);
+        } else {
+            return place.getTransitionsFrom().get(transition);
+        }
     }
 }

@@ -24,14 +24,14 @@ public class GlobalDialogsHandler {
         dialog = new JDialog();
     }
 
-    public DialogCloseListener showDialog(String title, JPanel dialogContent) {
+    public DialogCloseListener setDialog(String title, JPanel dialogContent) {
         if (dialog.isVisible())
             throw new IllegalStateException("Another dialog is active");
         dialog.setModal(mainFrame!=null);
         dialog.setTitle(title);
         dialog.setContentPane(dialogContent);
         dialog.pack();
-        dialog.setVisible(true);
+        dialog.setLocationRelativeTo(mainFrame);
         return dialogCloseListener;
     }
 
@@ -45,4 +45,8 @@ public class GlobalDialogsHandler {
             dialog.setVisible(false);
         }
     };
+
+    public void showDialog() {
+        dialog.setVisible(true);
+    }
 }

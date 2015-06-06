@@ -3,9 +3,11 @@ package org.petri.nets.service;
 import edu.uci.ics.jung.graph.Graph;
 import org.jgraph.JGraph;
 import org.jgraph.graph.CellView;
+import org.petri.nets.gui.graph.ArcGraphCell;
 import org.petri.nets.gui.graph.PetriNetGraphCell;
 import org.petri.nets.gui.graph.PlaceGraphCell;
 import org.petri.nets.gui.graph.TransitionGraphCell;
+import org.petri.nets.model.Arc;
 import org.petri.nets.model.DomainModel;
 import org.petri.nets.model.Place;
 import org.petri.nets.model.reachability.State;
@@ -64,4 +66,11 @@ public interface GraphService {
     Place getModelRepresentative(PlaceGraphCell placeGraphCell);
 
     Transition getModelRepresentative(TransitionGraphCell transitionGraphCell);
+
+
+    boolean isArc(Object cell);
+
+    ArcGraphCell tryCastToArc(Object cell);
+
+    Arc getModelRepresentative(ArcGraphCell arcGraphCell);
 }

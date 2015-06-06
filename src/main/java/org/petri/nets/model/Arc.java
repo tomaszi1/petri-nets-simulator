@@ -6,11 +6,10 @@ import java.io.Serializable;
 
 public class Arc implements Serializable {
     private int value;
-
+    private PetriNetElement start, end;
 
     public Arc(int value) {
-        Preconditions.checkArgument(value > 0);
-        this.value = value;
+        setValue(value);
     }
 
     public int getValue() {
@@ -22,4 +21,19 @@ public class Arc implements Serializable {
         this.value = value;
     }
 
+    public void setStart(PetriNetElement start) {
+        this.start = start;
+    }
+
+    public void setEnd(PetriNetElement end) {
+        this.end = end;
+    }
+
+    public PetriNetElement getEnd() {
+        return end;
+    }
+
+    public PetriNetElement getStart() {
+        return start;
+    }
 }

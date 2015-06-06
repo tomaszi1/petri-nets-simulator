@@ -1,6 +1,8 @@
-package org.petri.nets.gui.panel;
+package org.petri.nets.gui.panel.editorPanels;
 
-import org.petri.nets.gui.dialog.DialogCloseListener;
+import com.google.common.primitives.Ints;
+import org.petri.nets.gui.panel.PropertyEditorAbstractPanel;
+import org.petri.nets.utils.TransitionProperties;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,7 +10,7 @@ import java.awt.*;
 /**
  * Created by Tomasz on 2015-06-06.
  */
-public class TransitionEditorPanel extends DialogClosingAbstractPanel{
+public class TransitionEditorPanel extends PropertyEditorAbstractPanel<TransitionProperties> {
     public static final String DESCRIPTION_LABEL_TEXT = "Opis";
     public static final String PRIORITY_LABEL_TEXT = "Priorytet przejścia";
     private final JTextField descriptionTextField;
@@ -26,6 +28,22 @@ public class TransitionEditorPanel extends DialogClosingAbstractPanel{
         add(descriptionTextField);
         add(priorityLabel);
         add(priorityTextField);
+    }
+
+    @Override
+    public void okClicked() {
+        TransitionProperties props = new TransitionProperties();
+        props.description = descriptionTextField.getText();
+        String priorityText = priorityTextField.getText();
+        if(priorityText!=null){
+            Integer integer = Ints.tryParse(priorityText);
+            if(integer==null) {
+                Toolkit.getDefaultToolkit().beep();
+                return;
+            }
+        }
+        publishChanges(props); // FIXME
+        super.okClicked();
     }
 
     public void setDescription(String description){

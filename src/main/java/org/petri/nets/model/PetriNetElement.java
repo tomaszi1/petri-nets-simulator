@@ -1,9 +1,11 @@
 package org.petri.nets.model;
 
+import java.io.Serializable;
+
 /**
  * Created by Tomasz on 2015-06-06.
  */
-public abstract class PetriNetElement {
+public abstract class PetriNetElement implements Serializable{
     private String description;
     private int id;
 

@@ -1,5 +1,7 @@
 package org.petri.nets.model;
 
+import com.google.common.collect.Maps;
+
 import java.io.Serializable;
 import java.util.HashMap;
 
@@ -26,23 +28,11 @@ public class Place extends PetriNetElement implements Serializable {
     }
 
     public HashMap<Transition, Arc> getTransitionsFrom() {
-        return transitionsFrom;
-    }
-
-    public void setTransitionsFrom(HashMap<Transition, Arc> transitionsFrom) {
-        this.transitionsFrom = transitionsFrom;
+        return Maps.newHashMap(transitionsFrom);
     }
 
     public HashMap<Transition, Arc> getTransitionsTo() {
-        return transitionsTo;
-    }
-
-    public void setTransitionsTo(HashMap<Transition, Arc> transitionsTo) {
-        this.transitionsTo = transitionsTo;
-    }
-
-    public int getInitialMarking() {
-        return initialMarking;
+        return Maps.newHashMap(transitionsTo);
     }
 
     public void addTransitionFrom(Transition transitionFrom, Arc arc) {

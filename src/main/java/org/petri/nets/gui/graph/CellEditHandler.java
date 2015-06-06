@@ -1,10 +1,13 @@
 package org.petri.nets.gui.graph;
 
-import com.sun.istack.internal.Nullable;
 import org.petri.nets.gui.dialog.DialogCloseListener;
 import org.petri.nets.gui.dialog.GlobalDialogsHandler;
-import org.petri.nets.gui.panel.PlaceEditorPanel;
-import org.petri.nets.gui.panel.TransitionEditorPanel;
+import org.petri.nets.gui.panel.OkCancelPanel;
+import org.petri.nets.gui.panel.PropertyEditorAbstractPanel;
+import org.petri.nets.gui.panel.editorPanels.ArcEditorPanel;
+import org.petri.nets.gui.panel.editorPanels.PlaceEditorPanel;
+import org.petri.nets.gui.panel.editorPanels.TransitionEditorPanel;
+import org.petri.nets.model.Arc;
 import org.petri.nets.model.Place;
 import org.petri.nets.model.Transition;
 import org.petri.nets.service.GraphService;
@@ -18,6 +21,7 @@ class CellEditHandler {
 
     private TransitionEditorPanel transitionEditorPanel;
     private PlaceEditorPanel placeEditorPanel;
+    private ArcEditorPanel arcEditorPanel;
 
     public CellEditHandler(GraphService graphService, GlobalDialogsHandler globalDialogsHandler) {
         this.graphService = graphService;
@@ -25,28 +29,50 @@ class CellEditHandler {
 
         this.transitionEditorPanel = new TransitionEditorPanel();
         this.placeEditorPanel = new PlaceEditorPanel();
+        this.arcEditorPanel = new ArcEditorPanel();
     }
 
     public void editCell(Object cell) {
-        if(graphService.isPlace(cell)){
+        PropertyEditorAbstractPanel panel = null;
+
+        if (graphService.isPlace(cell)) {
             PlaceGraphCell placeGraphCell = graphService.tryCastToPlace(cell);
             Place place = graphService.getModelRepresentative(placeGraphCell);
             preparePlaceEditorPanel(place);
-            DialogCloseListener dialogCloseListener = globalDialogsHandler.showDialog(place.getName(), placeEditorPanel);
-        }else if(graphService.isTransition(cell)){
+            panel = placeEditorPanel;
+        } else if (graphService.isTransition(cell)) {
             TransitionGraphCell transitionGraphCell = graphService.tryCastToTransition(cell);
             Transition transition = graphService.getModelRepresentative(transitionGraphCell);
             prepareTransitionEditorPanel(transition);
-            globalDialogsHandler.showDialog(transition.getName(), transitionEditorPanel);
+            panel = transitionEditorPanel;
+        } else if(graphService.isArc(cell)) {
+            ArcGraphCell arcGraphCell = graphService.tryCastToArc(cell);
+            Arc arc = graphService.getModelRepresentative(arcGraphCell);
+            prepareArcEditorPanel(arc);
         }
+        if (panel != null) {
+            DialogCloseListener dialogCloseListener = globalDialogsHandler.setDialog(panel.getName(), new OkCancelPanel(panel));
+            panel.setDialogCloseListener(dialogCloseListener);
+            globalDialogsHandler.showDialog();
+        }
+    }
+
+    private void prepareArcEditorPanel(Arc arc) {
+        arcEditorPanel.setValue(arc.getValue());
+        arcEditorPanel.setListener(arc::setValue);
     }
 
     private void prepareTransitionEditorPanel(Transition transition) {
         transitionEditorPanel.setDescription(transition.getDescription());
         transitionEditorPanel.setPriority(transition.getPriority());
+        transitionEditorPanel.setListener(props -> {
+            transition.setPriority(props.priority);
+            transition.setDescription(props.description);
+        });
     }
 
     private void preparePlaceEditorPanel(Place place) {
         placeEditorPanel.setDescription(place.getDescription());
+        placeEditorPanel.setListener(place::setDescription);
     }
 }
