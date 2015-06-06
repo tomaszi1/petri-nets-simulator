@@ -9,27 +9,23 @@ import java.util.Map;
 /**
  * Created by Asia on 2015-05-17.
  */
-public class Transition implements Serializable {
-    private int id;
+public class Transition extends PetriNetElement implements Serializable {
     //z ktorych miejsc wchodzi sie do przejscia
     private HashMap<Place, Arc> placesFrom;
     // do ktorych miejsc idzie sie z przejscia
     private HashMap<Place, Arc> placesTo;
     private int priority;
+    private String description;
 
     public Transition() {
         this(-1, -1);
     }
 
     public Transition(int id, int priority) {
-        this.id = id;
+        setId(id);
         placesFrom = Maps.newHashMap();
         placesTo = Maps.newHashMap();
         this.priority = priority;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public Map<Place, Arc> getPlacesFrom() {
@@ -74,6 +70,19 @@ public class Transition implements Serializable {
 
     @Override
     public String toString() {
-        return "T"+id;
+        return getName();
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String getName() {
+        return "T" + getId();
     }
 }

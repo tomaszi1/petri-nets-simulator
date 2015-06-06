@@ -9,9 +9,6 @@ import org.petri.nets.synhronize.SynchronizePanel;
  */
 public interface SynchronizeService {
     void addPlace();
-    void removePlace();
-
-    void removeArc(Transition transition, Place place, boolean isPlaceStart);
     void updateReachabilityGraph();
     SynchronizePanel getSynchronizePanel();
 }

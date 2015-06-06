@@ -146,6 +146,16 @@ public class GraphServiceImpl implements GraphService {
     }
 
     @Override
+    public PlaceGraphCell tryCastToPlace(Object cell) {
+        return CustomCellViewFactory.tryCastToPlace(cell);
+    }
+
+    @Override
+    public TransitionGraphCell tryCastToTransition(Object cell) {
+        return CustomCellViewFactory.tryCastToTransition(cell);
+    }
+
+    @Override
     public boolean isVertex(Object cell) {
         return CustomCellViewFactory.isVertex(cell);
     }
@@ -218,5 +228,15 @@ public class GraphServiceImpl implements GraphService {
     @Override
     public SynchronizeService getSynchronizeService() {
         return syncService;
+    }
+
+    @Override
+    public Place getModelRepresentative(PlaceGraphCell placeGraphCell){
+        return placeGUI.get(placeGraphCell);
+    }
+
+    @Override
+    public Transition getModelRepresentative(TransitionGraphCell transitionGraphCell){
+        return transitonGUI.get(transitionGraphCell);
     }
 }

@@ -1,5 +1,6 @@
 package org.petri.nets.gui.graph;
 
+import javafx.print.PageLayout;
 import org.jgraph.graph.*;
 
 public class CustomCellViewFactory extends DefaultCellViewFactory {
@@ -44,6 +45,18 @@ public class CustomCellViewFactory extends DefaultCellViewFactory {
         if(!isCell(obj))
             return null;
         return (DefaultGraphCell) obj;
+    }
+
+    public static PlaceGraphCell tryCastToPlace(Object place){
+        if(!isPlace(place))
+            return null;
+        return (PlaceGraphCell) place;
+    }
+
+    public static TransitionGraphCell tryCastToTransition(Object transition){
+        if(!isTransition(transition))
+            return null;
+        return (TransitionGraphCell) transition;
     }
 
     private static boolean isCell(Object obj) {

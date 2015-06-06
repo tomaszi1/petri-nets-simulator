@@ -7,8 +7,6 @@ import org.petri.nets.gui.popup.BackgroundPopupMenu;
 import org.petri.nets.gui.popup.MultipleSelectionsPopupMenu;
 import org.petri.nets.gui.popup.PlacePopupMenu;
 import org.petri.nets.service.GraphService;
-import org.petri.nets.service.GraphServiceImpl;
-import org.petri.nets.synhronize.SynchronizePanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,11 +22,14 @@ public class PetriNetGraphUI extends BasicGraphUI {
     private GlobalDialogsHandler globalDialogsHandler;
     private CellEditHandler cellEditHandler;
 
-    public PetriNetGraphUI(GraphService graphService, SynchronizePanel synchronizePanel) { // maybe graphService
-        this.graphService = new GraphServiceImpl(graphService.getDomainModel(), synchronizePanel);
-        backgroundPopupMenu = new BackgroundPopupMenu(graphService);
-        placePopupMenu = new PlacePopupMenu(graphService);
-        multipleSelectionsPopupMenu = new MultipleSelectionsPopupMenu(graphService);
+    public PetriNetGraphUI(GraphService graphService, GlobalDialogsHandler globalDialogsHandler) {
+        this.graphService = graphService;
+        this.globalDialogsHandler = globalDialogsHandler;
+
+        this.cellEditHandler = new CellEditHandler(graphService, globalDialogsHandler);
+        this.backgroundPopupMenu = new BackgroundPopupMenu(graphService);
+        this.placePopupMenu = new PlacePopupMenu(graphService);
+        this.multipleSelectionsPopupMenu = new MultipleSelectionsPopupMenu(graphService);
     }
 
     @Override
@@ -126,7 +127,7 @@ public class PetriNetGraphUI extends BasicGraphUI {
                 if (!isForceMarquee) {
                     if (e.getClickCount() == graph.getEditClickCount() && focus != null) {
                         e.consume();
-                        cellEditHandler.editCell();
+                        cellEditHandler.editCell(focus.getCell());
                         cell = null;
                     } else if (!isToggleSelectionEvent(e)) {
                         if (handle != null) {
@@ -224,10 +225,4 @@ public class PetriNetGraphUI extends BasicGraphUI {
         }
     }
 
-    private class CellEditHandler {
-
-        private void editCell(){
-
-        }
-    }
 }

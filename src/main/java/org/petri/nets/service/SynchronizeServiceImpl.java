@@ -1,8 +1,6 @@
 package org.petri.nets.service;
 
 import org.petri.nets.model.DomainModel;
-import org.petri.nets.model.Place;
-import org.petri.nets.model.Transition;
 import org.petri.nets.synhronize.SynchronizePanel;
 
 /**
@@ -23,15 +21,6 @@ public class SynchronizeServiceImpl implements SynchronizeService {
         synchronizePanel.updateMarking();
     }
 
-
-    @Override
-    public void removePlace() {
-        synchronizePanel.updateMarking();
-    }
-
-    @Override
-    public void removeArc(Transition transition, Place place, boolean isPlaceStart) {
-    }
 
     @Override
     public void updateReachabilityGraph() {

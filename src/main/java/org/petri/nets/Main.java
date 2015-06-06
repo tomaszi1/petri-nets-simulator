@@ -2,9 +2,7 @@ package org.petri.nets;
 
 import org.jgraph.JGraph;
 import org.petri.nets.gui.MainFrame;
-import org.petri.nets.model.JGraphFactory;
-import org.petri.nets.gui.graph.PlaceGraphCell;
-import org.petri.nets.gui.graph.TransitionGraphCell;
+import org.petri.nets.gui.graph.JGraphFactory;
 import org.petri.nets.model.ListPetriNet;
 import org.petri.nets.model.DomainModel;
 import org.petri.nets.service.GraphService;

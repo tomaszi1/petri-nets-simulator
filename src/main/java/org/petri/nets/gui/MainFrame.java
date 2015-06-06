@@ -1,5 +1,8 @@
 package org.petri.nets.gui;
 
+import jdk.nashorn.internal.objects.Global;
+import org.petri.nets.gui.dialog.GlobalDialogsHandler;
+import org.petri.nets.gui.graph.PetriNetGraphUI;
 import org.petri.nets.gui.panel.PetriNetWrapperPanel;
 import org.petri.nets.gui.panel.ReachabilityGraphPanel;
 import org.petri.nets.gui.panel.SideMenuPanel;
@@ -28,10 +31,14 @@ public class MainFrame extends JFrame {
     }
 
     private void initComponents(GraphService graphService) {
+        GlobalDialogsHandler globalDialogsHandler = new GlobalDialogsHandler(this);
+
+        PetriNetGraphUI petriNetGraphUI = new PetriNetGraphUI(graphService, globalDialogsHandler);
+
         sideMenuWrapper = new SideMenuPanel(graphService);
 
         SynchronizePanel synchronizePanel = graphService.getSynchronizeService().getSynchronizePanel();
-        PetriNetWrapperPanel petriNetWrapperPanel = new PetriNetWrapperPanel(graphService, synchronizePanel);
+        PetriNetWrapperPanel petriNetWrapperPanel = new PetriNetWrapperPanel(graphService, petriNetGraphUI, synchronizePanel);
         synchronizePanel.setPetriNetWrapperPanel(petriNetWrapperPanel);
 
         ReachabilityGraphPanel reachGraphPanel = new ReachabilityGraphPanel(graphService);

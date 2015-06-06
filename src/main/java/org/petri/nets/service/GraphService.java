@@ -7,6 +7,7 @@ import org.petri.nets.gui.graph.PetriNetGraphCell;
 import org.petri.nets.gui.graph.PlaceGraphCell;
 import org.petri.nets.gui.graph.TransitionGraphCell;
 import org.petri.nets.model.DomainModel;
+import org.petri.nets.model.Place;
 import org.petri.nets.model.reachability.State;
 import org.petri.nets.model.Transition;
 import org.petri.nets.model.reachability.TransitionEdge;
@@ -32,6 +33,10 @@ public interface GraphService {
 
     Object[] getSelectedCells();
 
+    PlaceGraphCell tryCastToPlace(Object cell);
+
+    TransitionGraphCell tryCastToTransition(Object cell);
+
     boolean isVertex(Object cell);
 
     PetriNetGraphCell[] getSelectedVertices();
@@ -55,4 +60,8 @@ public interface GraphService {
     Graph<State, TransitionEdge> getReachabilityGraph();
 
     SynchronizeService getSynchronizeService();
+
+    Place getModelRepresentative(PlaceGraphCell placeGraphCell);
+
+    Transition getModelRepresentative(TransitionGraphCell transitionGraphCell);
 }

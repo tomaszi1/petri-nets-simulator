@@ -6,31 +6,23 @@ import java.util.HashMap;
 /**
  * Created by Asia on 2015-05-17.
  */
-public class Place implements Serializable{
-    private int id;
+public class Place extends PetriNetElement implements Serializable {
     //z ktorych przejsc wchodzi sie do miejsca
     private HashMap<Transition, Arc> transitionsFrom;
     // do ktorych przejsc mozna isc
     private HashMap<Transition, Arc> transitionsTo;
     private int initialMarking;
 
-    public Place(int id){
+
+    public Place(int id) {
         this(id, 0);
     }
 
-    public Place(int id, int initialMarking){
-        this.id = id;
+    public Place(int id, int initialMarking) {
+        setId(id);
         transitionsFrom = new HashMap<>();
         transitionsTo = new HashMap<>();
         this.initialMarking = initialMarking;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public HashMap<Transition, Arc> getTransitionsFrom() {
@@ -53,19 +45,19 @@ public class Place implements Serializable{
         return initialMarking;
     }
 
-    public void addTransitionFrom(Transition transitionFrom, Arc arc){
+    public void addTransitionFrom(Transition transitionFrom, Arc arc) {
         transitionsFrom.put(transitionFrom, arc);
     }
 
-    public void removeTransitionFrom(Transition transitionFrom){
+    public void removeTransitionFrom(Transition transitionFrom) {
         transitionsFrom.remove(transitionFrom);
     }
 
-    public void addTransitionTo(Transition transitionTo, Arc arc){
+    public void addTransitionTo(Transition transitionTo, Arc arc) {
         transitionsTo.put(transitionTo, arc);
     }
 
-    public void removeTransitionTo(Transition transitionTo){
+    public void removeTransitionTo(Transition transitionTo) {
         transitionsTo.remove(transitionTo);
     }
 
@@ -75,6 +67,11 @@ public class Place implements Serializable{
 
     @Override
     public String toString() {
-        return "P" + id;
+        return getName();
+    }
+
+    @Override
+    public String getName() {
+        return "P" + getId();
     }
 }

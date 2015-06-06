@@ -1,4 +1,4 @@
-package org.petri.nets.model;
+package org.petri.nets.gui.graph;
 
 import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultCellViewFactory;
