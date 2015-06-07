@@ -12,18 +12,21 @@ import edu.uci.ics.jung.visualization.control.ModalGraphMouse;
 import edu.uci.ics.jung.visualization.decorators.EdgeShape;
 import edu.uci.ics.jung.visualization.picking.PickedState;
 import edu.uci.ics.jung.visualization.renderers.VertexLabelAsShapeRenderer;
+import org.petri.nets.gui.graph.reachability.StatePickedListener;
 import org.petri.nets.model.reachability.State;
 import org.petri.nets.model.reachability.TransitionEdge;
 import org.petri.nets.service.GraphService;
 import org.petri.nets.service.ReachabilityGraphGenerator;
 import org.petri.nets.utils.AbstractResizeComponentListener;
-import org.petri.nets.gui.graph.reachability.CustomEdgeLabelRenderer;
-import org.petri.nets.gui.graph.reachability.CustomInitializer;
-import org.petri.nets.gui.graph.reachability.GraphMouseClickListener;
+import org.petri.nets.gui.graph.reachability.ReachGraphEdgeLabelRenderer;
+import org.petri.nets.gui.graph.reachability.ReachGraphInitializer;
+import org.petri.nets.gui.graph.reachability.ReachGraphMouseListener;
+import org.petri.nets.utils.Listener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentEvent;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -59,7 +62,7 @@ public class ReachabilityGraphPanel extends JPanel {
 
         Graph<State, TransitionEdge> graph = new DirectedSparseGraph<>();
 
-        Layout<State, TransitionEdge> layout = new StaticLayout<>(graph, new CustomInitializer(graph.getVertices()));
+        Layout<State, TransitionEdge> layout = new StaticLayout<>(graph, new ReachGraphInitializer(graph.getVertices()));
 
         visualizationViewer = new VisualizationViewer<>(layout);
         DefaultModalGraphMouse gm = new DefaultModalGraphMouse();
@@ -94,8 +97,8 @@ public class ReachabilityGraphPanel extends JPanel {
         visualizationViewer.getRenderContext().setArrowFillPaintTransformer(e -> edgeColor(e, null));
         visualizationViewer.getRenderContext().setEdgeFontTransformer(s -> FONT);
         visualizationViewer.getRenderContext().getEdgeLabelRenderer().setRotateEdgeLabels(false);
-        CustomEdgeLabelRenderer<State, TransitionEdge> customEdgeLabelRenderer = new CustomEdgeLabelRenderer<>(e -> edgeColor(e, Color.BLACK));
-        visualizationViewer.getRenderer().setEdgeLabelRenderer(customEdgeLabelRenderer);
+        ReachGraphEdgeLabelRenderer<State, TransitionEdge> reachGraphEdgeLabelRenderer = new ReachGraphEdgeLabelRenderer<>(e -> edgeColor(e, Color.BLACK));
+        visualizationViewer.getRenderer().setEdgeLabelRenderer(reachGraphEdgeLabelRenderer);
 
         visualizationViewer.setBackground(GRAPH_BACKGROUND);
 
@@ -107,7 +110,7 @@ public class ReachabilityGraphPanel extends JPanel {
             }
         });
 
-        GraphMouseClickListener graphMouseListener = new GraphMouseClickListener(visualizationViewer);
+        ReachGraphMouseListener graphMouseListener = new ReachGraphMouseListener(visualizationViewer, new StatePickedListener(graphService));
         visualizationViewer.addMouseListener(graphMouseListener);
         visualizationViewer.addGraphMouseListener(graphMouseListener);
 
@@ -119,7 +122,7 @@ public class ReachabilityGraphPanel extends JPanel {
             return;
         Layout<State, TransitionEdge> graphLayout = visualizationViewer.getGraphLayout();
         Graph<State, TransitionEdge> graph = graphService.getReachabilityGraph();
-        graphLayout.setInitializer(new CustomInitializer(graph.getVertices()));
+        graphLayout.setInitializer(new ReachGraphInitializer(graph.getVertices()));
         bfsDistanceLabeler.labelDistances(graph, ReachabilityGraphGenerator.findRoot(graph));
         graphLayout.setGraph(graph);
         visualizationViewer.getPickedVertexState().clear();

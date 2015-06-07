@@ -46,19 +46,9 @@ public class ListPetriNet implements PetriNet, Serializable {
     // place
 
 
-    @Override
-    public void setPlaceMap(HashMap<Integer, Place> placeMap) {
-        this.placeMap = Maps.newHashMap(placeMap);
-    }
-
     /////////
     //
     // transition
-
-    @Override
-    public void setTransitionMap(HashMap<Integer, Transition> transitionMap) {
-        this.transitionMap = transitionMap;
-    }
 
     @Override
     public Place addPlace() {
@@ -146,6 +136,16 @@ public class ListPetriNet implements PetriNet, Serializable {
         return !(place == null || transition == null)
                 && (place.getTransitionsFrom().containsKey(transition)
                 || transition.getPlacesFrom().containsKey(place));
+    }
+
+    @Override
+    public Map<Integer, Place> getPlaces() {
+        return Maps.newHashMap(placeMap);
+    }
+
+    @Override
+    public Place getPlace(int id) {
+        return placeMap.get(id);
     }
 
 }

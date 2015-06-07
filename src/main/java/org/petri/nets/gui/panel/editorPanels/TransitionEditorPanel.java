@@ -17,7 +17,10 @@ public class TransitionEditorPanel extends PropertyEditorAbstractPanel<Transitio
     private final JTextField priorityTextField;
 
     public TransitionEditorPanel() {
-        setLayout(new GridLayout(4, 0));
+        GridLayout mgr = new GridLayout(4, 0);
+        mgr.setVgap(10);
+        mgr.setHgap(20);
+        setLayout(mgr);
 
         JLabel descriptionLabel = new JLabel(DESCRIPTION_LABEL_TEXT);
         descriptionTextField = new JTextField(20);

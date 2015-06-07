@@ -6,7 +6,7 @@ import org.jgraph.graph.VertexView;
 
 public class PlaceVertexView extends VertexView {
 
-    private static VertexRenderer vertexRenderer = new CustomVertexRenderer();
+    private static VertexRenderer vertexRenderer = new PlaceVertexRenderer();
 
     @Override
     public CellViewRenderer getRenderer() {

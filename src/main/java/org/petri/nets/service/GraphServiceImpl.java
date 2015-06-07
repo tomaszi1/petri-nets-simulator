@@ -5,11 +5,8 @@ import edu.uci.ics.jung.graph.Graph;
 import org.jgraph.JGraph;
 import org.jgraph.graph.*;
 import org.petri.nets.gui.graph.petriNet.*;
-import org.petri.nets.model.Arc;
-import org.petri.nets.model.DomainModel;
-import org.petri.nets.model.Place;
+import org.petri.nets.model.*;
 import org.petri.nets.model.reachability.State;
-import org.petri.nets.model.Transition;
 import org.petri.nets.model.reachability.TransitionEdge;
 import org.petri.nets.synhronize.SynchronizePanel;
 
@@ -105,7 +102,7 @@ public class GraphServiceImpl implements GraphService {
     public void addArc(PetriNetGraphCell start, PetriNetGraphCell end) {
         Place place = placeGUI.get(start);
         Transition transition = transitonGUI.get(end);
-        if(place!=null && transition!=null && model.getPetriNet().hasArc(place, transition))
+        if (place != null && transition != null && model.getPetriNet().hasArc(place, transition))
             return;
 
         ArcGraphCell edge = new ArcGraphCell();
@@ -269,8 +266,38 @@ public class GraphServiceImpl implements GraphService {
     }
 
     @Override
-    public void repaintGraph() {
+    public void refreshGraph() {
+        model.getPetriNetGraph().invalidate();
         model.getPetriNetGraph().refresh();
+    }
+
+    @Override
+    public void displayMarkingOnGraph(Map<Integer, Integer> marking) {
+        if(marking==null){
+            for (Map.Entry<PlaceGraphCell, Place> entry : placeGUI.entrySet())
+                entry.getKey().setUserObject(entry.getValue().getName());
+            refreshGraph();
+            return;
+        }
+        marking.forEach((placeId, token) -> {
+            Place place = model.getPetriNet().getPlace(placeId);
+            if (place == null)
+                return;
+            PlaceGraphCell placeGraphCell = placeGUI.inverse().get(place);
+            placeGraphCell.setUserObject(place.getName() + "|" + token);
+        });
+        refreshGraph();
+    }
+
+    @Override
+    public String getDescriptionOfCell(Object cell) {
+        Place place = placeGUI.get(cell);
+        if(place!=null)
+            return place.getDescription();
+        Transition transition = transitonGUI.get(cell);
+        if(transition!=null)
+            return transition.getDescription();
+        return null;
     }
 
     public Arc getArc(Place place, Transition transition, boolean startsInPlace) {

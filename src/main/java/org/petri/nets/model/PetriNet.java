@@ -9,11 +9,7 @@ public interface PetriNet {
 
     void setInitialMarking(Integer placeId, int marking);
 
-    void setPlaceMap(HashMap<Integer, Place> placeList);
-
     Collection<Transition> getTransitions();
-
-    void setTransitionMap(HashMap<Integer, Transition> transitionList);
 
     // add
 
@@ -35,4 +31,8 @@ public interface PetriNet {
     void removeTransition(int id);
 
     boolean hasArc(Place place, Transition transition);
+
+    Map<Integer, Place> getPlaces();
+
+    Place getPlace(int id);
 }

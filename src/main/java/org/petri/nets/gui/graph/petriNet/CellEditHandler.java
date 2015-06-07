@@ -23,6 +23,7 @@ class CellEditHandler {
     private PlaceEditorPanel placeEditorPanel;
     private ArcEditorPanel arcEditorPanel;
     private ArcGraphCell arcGraphCell;
+    private PetriNetGraphCell petriNetGraphCell;
 
     public CellEditHandler(GraphService graphService, GlobalDialogsHandler globalDialogsHandler) {
         this.graphService = graphService;
@@ -38,15 +39,17 @@ class CellEditHandler {
 
         if (graphService.isPlace(cell)) {
             PlaceGraphCell placeGraphCell = graphService.tryCastToPlace(cell);
+            petriNetGraphCell = placeGraphCell;
             Place place = graphService.getModelRepresentative(placeGraphCell);
             preparePlaceEditorPanel(place);
             panel = placeEditorPanel;
         } else if (graphService.isTransition(cell)) {
             TransitionGraphCell transitionGraphCell = graphService.tryCastToTransition(cell);
+            petriNetGraphCell = transitionGraphCell;
             Transition transition = graphService.getModelRepresentative(transitionGraphCell);
             prepareTransitionEditorPanel(transition);
             panel = transitionEditorPanel;
-        } else if(graphService.isArc(cell)) {
+        } else if (graphService.isArc(cell)) {
             arcGraphCell = graphService.tryCastToArc(cell);
             Arc arc = graphService.getModelRepresentative(arcGraphCell);
             prepareArcEditorPanel(arc);
@@ -62,10 +65,10 @@ class CellEditHandler {
     private void prepareArcEditorPanel(Arc arc) {
         arcEditorPanel.setValue(arc.getValue());
         arcEditorPanel.setListener(value -> {
-            if(arc.getValue()!=value) {
+            if (arc.getValue() != value) {
                 arc.setValue(value);
                 arcGraphCell.setUserObject(value);
-                graphService.repaintGraph();
+                graphService.refreshGraph();
                 graphService.invalidateReachabilityGraph();
             }
         });
@@ -77,11 +80,15 @@ class CellEditHandler {
         transitionEditorPanel.setListener(props -> {
             transition.setPriority(props.priority);
             transition.setDescription(props.description);
+            petriNetGraphCell.setDescription(props.description);
         });
     }
 
     private void preparePlaceEditorPanel(Place place) {
         placeEditorPanel.setDescription(place.getDescription());
-        placeEditorPanel.setListener(place::setDescription);
+        placeEditorPanel.setListener(description -> {
+            place.setDescription(description);
+            petriNetGraphCell.setDescription(description);
+        });
     }
 }
