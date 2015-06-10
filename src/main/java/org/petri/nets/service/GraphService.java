@@ -72,4 +72,5 @@ public interface GraphService {
     Arc getModelRepresentative(ArcGraphCell arcGraphCell);
 
     void repaintGraph();
+    public void exportMatrixToFile(File file);
 }

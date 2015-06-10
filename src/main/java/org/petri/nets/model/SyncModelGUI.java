@@ -16,10 +16,12 @@ public class SyncModelGUI implements Serializable{
     private BiMap<PlaceGraphCell, Place> placeGUI;
     private BiMap<TransitionGraphCell, Transition> transitonGUI;
     private List<Integer> placeIds;
+    private List<Integer> transitionIds;
     public SyncModelGUI(){
         placeGUI = HashBiMap.create();
         transitonGUI = HashBiMap.create();
         placeIds = new ArrayList<>();
+        transitionIds = new ArrayList<>();
     }
 
     public BiMap<PlaceGraphCell, Place> getPlaceGUI() {
@@ -44,5 +46,13 @@ public class SyncModelGUI implements Serializable{
 
     public void setPlaceIds(List<Integer> placeIds) {
         this.placeIds = placeIds;
+    }
+
+    public List<Integer> getTransitionIds() {
+        return transitionIds;
+    }
+
+    public void setTransitionIds(List<Integer> transitionIds) {
+        this.transitionIds = transitionIds;
     }
 }

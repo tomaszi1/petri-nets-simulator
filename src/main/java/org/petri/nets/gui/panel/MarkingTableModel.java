@@ -31,6 +31,7 @@ public class MarkingTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int ignore, int col) {
+
         return graphService.getInitialMarking(placeIds.get(col));
     }
 

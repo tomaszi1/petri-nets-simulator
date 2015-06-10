@@ -19,9 +19,12 @@ public class SynchronizeServiceImpl implements SynchronizeService {
     @Override
     public void addPlace() {
         synchronizePanel.updateMarking();
+        synchronizePanel.updateNetMatrix();
     }
-
-
+    @Override
+    public void addTransition(){
+        synchronizePanel.updateNetMatrix();
+    }
     @Override
     public void updateReachabilityGraph() {
         synchronizePanel.updateReachabilityGraph();

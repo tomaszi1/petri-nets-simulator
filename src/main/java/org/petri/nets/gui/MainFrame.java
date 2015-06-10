@@ -34,7 +34,7 @@ public class MainFrame extends JFrame {
 
         PetriNetGraphUI petriNetGraphUI = new PetriNetGraphUI(graphService, globalDialogsHandler);
 
-        sideMenuWrapper = new SideMenuPanel(graphService);
+
 
         SynchronizePanel synchronizePanel = graphService.getSynchronizeService().getSynchronizePanel();
         PetriNetWrapperPanel petriNetWrapperPanel = new PetriNetWrapperPanel(graphService, petriNetGraphUI, synchronizePanel);
@@ -43,6 +43,8 @@ public class MainFrame extends JFrame {
         ReachabilityGraphPanel reachGraphPanel = new ReachabilityGraphPanel(graphService);
         synchronizePanel.setReachabilityGraphPanel(reachGraphPanel);
 
+        sideMenuWrapper = new SideMenuPanel(graphService);
+        synchronizePanel.setNetMatrixPanel(sideMenuWrapper.getNetMatrixPanel());
         graphsWrapper = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 petriNetWrapperPanel,
                 reachGraphPanel);

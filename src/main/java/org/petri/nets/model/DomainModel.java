@@ -6,10 +6,16 @@ import org.petri.nets.model.reachability.State;
 import org.petri.nets.model.reachability.TransitionEdge;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class DomainModel implements Serializable {
+
     private JGraph petriNetGraph;
     private Graph<State, TransitionEdge> reachabilityGraph;
+    private PetriNet petriNet;
+    private SyncModelGUI syncModel = new SyncModelGUI();
+
+
 
     public JGraph getPetriNetGraph() {
         return petriNetGraph;
@@ -27,10 +33,6 @@ public class DomainModel implements Serializable {
         this.reachabilityGraph = reachabilityGraph;
     }
 
-/////////////////////////
-
-    private PetriNet petriNet;
-    private SyncModelGUI syncModel = new SyncModelGUI();
     public PetriNet getPetriNet() {
         return petriNet;
     }
@@ -46,4 +48,5 @@ public class DomainModel implements Serializable {
     public void setSyncModel(SyncModelGUI syncModel) {
         this.syncModel = syncModel;
     }
+
 }

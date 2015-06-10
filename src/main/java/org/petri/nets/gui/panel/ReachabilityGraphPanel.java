@@ -53,6 +53,7 @@ public class ReachabilityGraphPanel extends JPanel {
         add(createGraphComponent(), BorderLayout.CENTER);
 
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
+        updateGraph();
     }
 
     private JComponent createGraphComponent() {

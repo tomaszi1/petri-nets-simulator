@@ -12,9 +12,10 @@ import java.io.File;
 public class SideMenuPanel extends JPanel {
     private static final int MENU_WIDTH = 220;
     private GraphService graphService;
-    JButton openButton, saveButton;
+    JButton openButton, saveButton,exportButton;
     JFileChooser fc;
     public static final String PANEL_TITLE = "Menu";
+    private final NetMatrixPanel netMatrixPanel;
 
 
     public SideMenuPanel(GraphService graphService) {
@@ -22,10 +23,13 @@ public class SideMenuPanel extends JPanel {
         this.graphService = graphService;
 
         setLayout(new BorderLayout());
+
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
         setPreferredSize(new Dimension(MENU_WIDTH,500));
         //add(new "Menu",BorderLayout.CENTER);
         createSaveButtom();
+        netMatrixPanel = new NetMatrixPanel(graphService);
+        this.add(netMatrixPanel);
 
     }
 
@@ -41,13 +45,20 @@ public class SideMenuPanel extends JPanel {
         saveButton = new JButton("Zapisz graf");
         saveButton.addActionListener(this::saveGraph);
 
+        //Create the save button.
+        exportButton = new JButton("Eksportuj macierz do pliku");
+        exportButton.addActionListener(this::exportMatrix);
+
         //For layout purposes, put the buttons in a separate panel
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setPreferredSize(new Dimension(200,65));
         buttonPanel.add(openButton);
         buttonPanel.add(saveButton);
+        buttonPanel.add(exportButton, BorderLayout.PAGE_END);
+
 
         //Add the buttons to this panel.
-        add(buttonPanel, BorderLayout.PAGE_END);
+        add(buttonPanel, BorderLayout.PAGE_START);
 
     }
 
@@ -64,7 +75,7 @@ public class SideMenuPanel extends JPanel {
 
     }
 
-    private void openGraph(ActionEvent e){
+    private void openGraph(ActionEvent e) {
         int returnVal = fc.showOpenDialog(SideMenuPanel.this);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -74,9 +85,21 @@ public class SideMenuPanel extends JPanel {
         } else {
             System.out.println("Open command cancelled by user.");
         }
-
+    }
+    private void exportMatrix(ActionEvent e){
+        int returnVal = fc.showOpenDialog(SideMenuPanel.this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File file = fc.getSelectedFile();
+            System.out.println("Save graph matrix in : " + file.getName() + ".");
+            graphService.exportMatrixToFile(file);
+        } else {
+            System.out.println("Open command cancelled by user.");
+        }
 
     }
 
 
+    public NetMatrixPanel getNetMatrixPanel() {
+        return netMatrixPanel;
+    }
 }

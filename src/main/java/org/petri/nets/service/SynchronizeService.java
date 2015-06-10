@@ -11,4 +11,5 @@ public interface SynchronizeService {
     void addPlace();
     void updateReachabilityGraph();
     SynchronizePanel getSynchronizePanel();
+    public void addTransition();
 }

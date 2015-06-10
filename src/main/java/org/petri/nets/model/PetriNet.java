@@ -11,6 +11,9 @@ public interface PetriNet {
 
     void setPlaceMap(HashMap<Integer, Place> placeList);
 
+    HashMap<Integer, Place> getPlaceMap();
+    HashMap<Integer, Transition> getTransitionMap();
+
     Collection<Transition> getTransitions();
 
     void setTransitionMap(HashMap<Integer, Transition> transitionList);

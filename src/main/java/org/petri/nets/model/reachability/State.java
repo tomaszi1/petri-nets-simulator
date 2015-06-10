@@ -4,9 +4,10 @@ import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
 import org.petri.nets.model.Place;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class State {
+public class State  implements Serializable {
     private Map<Integer, Integer> marking;
     private int depth = 0;
 

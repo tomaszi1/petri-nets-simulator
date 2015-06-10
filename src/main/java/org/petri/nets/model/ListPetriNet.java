@@ -16,8 +16,8 @@ public class ListPetriNet implements PetriNet, Serializable {
 
     public ListPetriNet() {
         initialMarking = new LinkedHashMap<>();
-        transitionMap = Maps.newHashMap();
-        placeMap = Maps.newHashMap();
+        setTransitionMap(Maps.newHashMap());
+        setPlaceMap(Maps.newHashMap());
     }
 
     ////////////
@@ -28,7 +28,7 @@ public class ListPetriNet implements PetriNet, Serializable {
     @Override
     public void setInitialMarking(Integer placeId, int marking) {
         initialMarking.put(placeId, marking);
-        placeMap.get(placeId).setInitialMarking(marking);
+        getPlaceMap().get(placeId).setInitialMarking(marking);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class ListPetriNet implements PetriNet, Serializable {
     public Place addPlace() {
         Place place = new Place(placeIdCounter);
         initialMarking.put(placeIdCounter, 0);
-        placeMap.put(placeIdCounter, place);
+        getPlaceMap().put(placeIdCounter, place);
         placeIdCounter++;
         return place;
     }
@@ -72,7 +72,7 @@ public class ListPetriNet implements PetriNet, Serializable {
     @Override
     public Transition addTransition() {
         Transition transition = new Transition(transitionIdCounter, 1);
-        transitionMap.put(transitionIdCounter, transition);
+        getTransitionMap().put(transitionIdCounter, transition);
         transitionIdCounter++;
         return transition;
     }
@@ -82,17 +82,16 @@ public class ListPetriNet implements PetriNet, Serializable {
         Arc arc = new Arc(value);
 
         if (startsInPlace) {
-            placeMap.get(place.getId()).addTransitionTo(transition, arc);
-            transitionMap.get(transition.getId()).addPlaceFrom(place, arc);
+            getPlaceMap().get(place.getId()).addTransitionTo(transition, arc);
+            getTransitionMap().get(transition.getId()).addPlaceFrom(place, arc);
             arc.setStart(place);
             arc.setEnd(transition);
         } else {
-            placeMap.get(place.getId()).addTransitionFrom(transition, arc);
-            transitionMap.get(transition.getId()).addPlaceTo(place, arc);
+            getPlaceMap().get(place.getId()).addTransitionFrom(transition, arc);
+            getTransitionMap().get(transition.getId()).addPlaceTo(place, arc);
             arc.setEnd(place);
             arc.setStart(transition);
         }
-
         return arc;
     }
 
@@ -109,8 +108,9 @@ public class ListPetriNet implements PetriNet, Serializable {
 
     @Override
     public Collection<Transition> getTransitions() {
-        return transitionMap.values();
+        return getTransitionMap().values();
     }
+
 
     @Override
     public void removePlace(Place place) {
@@ -119,7 +119,7 @@ public class ListPetriNet implements PetriNet, Serializable {
 
     @Override
     public void removePlace(int id) {
-        Place removed = placeMap.remove(id);
+        Place removed = getPlaceMap().remove(id);
         if (removed != null) {
             removed.getTransitionsFrom().forEach((transition, arc) -> transition.removePlaceTo(removed));
             removed.getTransitionsTo().forEach((transition, arc) -> transition.removePlaceFrom(removed));
@@ -134,7 +134,7 @@ public class ListPetriNet implements PetriNet, Serializable {
 
     @Override
     public void removeTransition(int id) {
-        Transition removed = transitionMap.remove(id);
+        Transition removed = getTransitionMap().remove(id);
         if (removed != null) {
             removed.getPlacesFrom().forEach((place, arc) -> place.removeTransitionTo(removed));
             removed.getPlacesTo().forEach((place, arc) -> place.removeTransitionFrom(removed));
@@ -148,4 +148,13 @@ public class ListPetriNet implements PetriNet, Serializable {
                 || transition.getPlacesFrom().containsKey(place));
     }
 
+    @Override
+    public HashMap<Integer, Place> getPlaceMap() {
+        return placeMap;
+    }
+
+    @Override
+    public HashMap<Integer, Transition> getTransitionMap() {
+        return transitionMap;
+    }
 }
