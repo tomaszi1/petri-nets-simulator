@@ -2,6 +2,7 @@ package org.petri.nets.service;
 
 import edu.uci.ics.jung.graph.Graph;
 import org.jgraph.JGraph;
+import org.jgraph.graph.CellView;
 import org.petri.nets.gui.graph.petriNet.ArcGraphCell;
 import org.petri.nets.gui.graph.petriNet.PetriNetGraphCell;
 import org.petri.nets.gui.graph.petriNet.PlaceGraphCell;
@@ -16,6 +17,7 @@ import org.petri.nets.model.reachability.TransitionEdge;
 import java.awt.*;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Map;
 
 public interface GraphService {
 
@@ -73,4 +75,10 @@ public interface GraphService {
 
     void repaintGraph();
     public void exportMatrixToFile(File file);
+    void refreshGraph();
+
+    void displayMarkingOnGraph(Map<Integer, Integer> marking);
+
+
+    String getDescriptionOfCell(Object cell);
 }

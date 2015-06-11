@@ -21,6 +21,8 @@ public class PetriNetGraphUI extends BasicGraphUI {
     private GraphService graphService;
     private GlobalDialogsHandler globalDialogsHandler;
     private CellEditHandler cellEditHandler;
+    private ToolTipManager toolTipManager;
+    private CellView hoverView;
 
     public PetriNetGraphUI(GraphService graphService, GlobalDialogsHandler globalDialogsHandler) {
         this.graphService = graphService;
@@ -30,6 +32,9 @@ public class PetriNetGraphUI extends BasicGraphUI {
         this.backgroundPopupMenu = new BackgroundPopupMenu(graphService);
         this.placePopupMenu = new PlacePopupMenu(graphService);
         this.multipleSelectionsPopupMenu = new MultipleSelectionsPopupMenu(graphService);
+        this.toolTipManager = ToolTipManager.sharedInstance();
+        this.toolTipManager.setInitialDelay(0);
+        this.toolTipManager.setReshowDelay(0);
     }
 
     @Override
@@ -39,12 +44,15 @@ public class PetriNetGraphUI extends BasicGraphUI {
     }
 
     @Override
-    protected KeyListener createKeyListener() {
-        return new CustomKeyHandler();
+    public void installUI(JComponent c) {
+        this.toolTipManager.registerComponent(c);
+        this.toolTipManager.setEnabled(true);
+        super.installUI(c);
     }
 
-    public CellView getLastFocus() {
-        return lastFocus;
+    @Override
+    protected KeyListener createKeyListener() {
+        return new CustomKeyHandler();
     }
 
     public class DecoratorHandle implements CellHandle, Serializable {

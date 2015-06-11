@@ -15,7 +15,10 @@ public class ArcEditorPanel extends PropertyEditorAbstractPanel<Integer> {
     private final JTextField valueTextField;
 
     public ArcEditorPanel() {
-        setLayout(new GridLayout(2, 0));
+        GridLayout mgr = new GridLayout(2, 0);
+        mgr.setVgap(10);
+        mgr.setHgap(20);
+        setLayout(mgr);
 
         JLabel descriptionLabel = new JLabel(VALUE_LABEL_TEXT);
         valueTextField = new JTextField(20);

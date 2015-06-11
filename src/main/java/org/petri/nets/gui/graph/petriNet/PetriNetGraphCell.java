@@ -10,6 +10,8 @@ public class PetriNetGraphCell extends DefaultGraphCell {
     private static final int CELL_WIDTH = 40;
     private static final int CELL_HEIGHT = 40;
 
+    private String description;
+
     public PetriNetGraphCell(String text, int posX, int posY) {
         super(text);
         GraphConstants.setBounds(getAttributes(),
@@ -17,5 +19,13 @@ public class PetriNetGraphCell extends DefaultGraphCell {
         GraphConstants.setSizeable(getAttributes(), false);
         GraphConstants.setOpaque(getAttributes(), true);
         addPort();
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

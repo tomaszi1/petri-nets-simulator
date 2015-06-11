@@ -46,25 +46,15 @@ public class ListPetriNet implements PetriNet, Serializable {
     // place
 
 
-    @Override
-    public void setPlaceMap(HashMap<Integer, Place> placeMap) {
-        this.placeMap = Maps.newHashMap(placeMap);
-    }
-
     /////////
     //
     // transition
 
     @Override
-    public void setTransitionMap(HashMap<Integer, Transition> transitionMap) {
-        this.transitionMap = transitionMap;
-    }
-
-    @Override
     public Place addPlace() {
         Place place = new Place(placeIdCounter);
         initialMarking.put(placeIdCounter, 0);
-        getPlaceMap().put(placeIdCounter, place);
+        placeMap.put(placeIdCounter, place);
         placeIdCounter++;
         return place;
     }
@@ -72,7 +62,7 @@ public class ListPetriNet implements PetriNet, Serializable {
     @Override
     public Transition addTransition() {
         Transition transition = new Transition(transitionIdCounter, 1);
-        getTransitionMap().put(transitionIdCounter, transition);
+        transitionMap.put(transitionIdCounter, transition);
         transitionIdCounter++;
         return transition;
     }
@@ -82,16 +72,17 @@ public class ListPetriNet implements PetriNet, Serializable {
         Arc arc = new Arc(value);
 
         if (startsInPlace) {
-            getPlaceMap().get(place.getId()).addTransitionTo(transition, arc);
-            getTransitionMap().get(transition.getId()).addPlaceFrom(place, arc);
+            placeMap.get(place.getId()).addTransitionTo(transition, arc);
+            transitionMap.get(transition.getId()).addPlaceFrom(place, arc);
             arc.setStart(place);
             arc.setEnd(transition);
         } else {
-            getPlaceMap().get(place.getId()).addTransitionFrom(transition, arc);
-            getTransitionMap().get(transition.getId()).addPlaceTo(place, arc);
+            placeMap.get(place.getId()).addTransitionFrom(transition, arc);
+            transitionMap.get(transition.getId()).addPlaceTo(place, arc);
             arc.setEnd(place);
             arc.setStart(transition);
         }
+
         return arc;
     }
 
@@ -108,9 +99,8 @@ public class ListPetriNet implements PetriNet, Serializable {
 
     @Override
     public Collection<Transition> getTransitions() {
-        return getTransitionMap().values();
+        return transitionMap.values();
     }
-
 
     @Override
     public void removePlace(Place place) {
@@ -119,7 +109,7 @@ public class ListPetriNet implements PetriNet, Serializable {
 
     @Override
     public void removePlace(int id) {
-        Place removed = getPlaceMap().remove(id);
+        Place removed = placeMap.remove(id);
         if (removed != null) {
             removed.getTransitionsFrom().forEach((transition, arc) -> transition.removePlaceTo(removed));
             removed.getTransitionsTo().forEach((transition, arc) -> transition.removePlaceFrom(removed));
@@ -134,7 +124,7 @@ public class ListPetriNet implements PetriNet, Serializable {
 
     @Override
     public void removeTransition(int id) {
-        Transition removed = getTransitionMap().remove(id);
+        Transition removed = transitionMap.remove(id);
         if (removed != null) {
             removed.getPlacesFrom().forEach((place, arc) -> place.removeTransitionTo(removed));
             removed.getPlacesTo().forEach((place, arc) -> place.removeTransitionFrom(removed));
@@ -146,6 +136,16 @@ public class ListPetriNet implements PetriNet, Serializable {
         return !(place == null || transition == null)
                 && (place.getTransitionsFrom().containsKey(transition)
                 || transition.getPlacesFrom().containsKey(place));
+    }
+
+    @Override
+    public Map<Integer, Place> getPlaces() {
+        return Maps.newHashMap(placeMap);
+    }
+
+    @Override
+    public Place getPlace(int id) {
+        return placeMap.get(id);
     }
 
     @Override

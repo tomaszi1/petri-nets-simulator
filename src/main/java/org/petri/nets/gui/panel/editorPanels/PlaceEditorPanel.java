@@ -13,7 +13,10 @@ public class PlaceEditorPanel extends PropertyEditorAbstractPanel<String> {
     private final JTextField descriptionTextField;
 
     public PlaceEditorPanel() {
-        setLayout(new GridLayout(2, 0));
+        GridLayout mgr = new GridLayout(2, 0);
+        mgr.setVgap(10);
+        mgr.setHgap(20);
+        setLayout(mgr);
 
         JLabel descriptionLabel = new JLabel(DESCRIPTION_LABEL_TEXT);
         descriptionTextField = new JTextField(20);

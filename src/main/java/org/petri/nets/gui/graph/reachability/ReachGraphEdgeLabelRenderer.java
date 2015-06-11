@@ -10,10 +10,10 @@ import java.awt.*;
 /**
  * Created by Tomasz on 2015-06-06.
  */
-public class CustomEdgeLabelRenderer<V, E> extends BasicEdgeLabelRenderer<V, E> {
+public class ReachGraphEdgeLabelRenderer<V, E> extends BasicEdgeLabelRenderer<V, E> {
     private Transformer<E, Color> transformer;
 
-    public CustomEdgeLabelRenderer(Transformer<E, Color> transformer) {
+    public ReachGraphEdgeLabelRenderer(Transformer<E, Color> transformer) {
         this.transformer = transformer;
     }
 

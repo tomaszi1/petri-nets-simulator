@@ -64,4 +64,18 @@ public class Place extends PetriNetElement implements Serializable {
     public String getName() {
         return "P" + getId();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Place place = (Place) o;
+        return place.getId()==getId();
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
 }

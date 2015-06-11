@@ -12,12 +12,14 @@ import java.awt.event.MouseListener;
 /**
  * Created by Tomasz on 2015-06-06.
  */
-public class GraphMouseClickListener implements GraphMouseListener<State>, MouseListener {
+public class ReachGraphMouseListener implements GraphMouseListener<State>, MouseListener {
 
     private VisualizationViewer<State, TransitionEdge> visualizationViewer;
+    private StatePickedListener listener;
 
-    public GraphMouseClickListener(VisualizationViewer<State, TransitionEdge> visualizationViewer) {
+    public ReachGraphMouseListener(VisualizationViewer<State, TransitionEdge> visualizationViewer, StatePickedListener listener) {
         this.visualizationViewer = visualizationViewer;
+        this.listener = listener;
     }
 
     @Override
@@ -25,11 +27,13 @@ public class GraphMouseClickListener implements GraphMouseListener<State>, Mouse
         PickedState<State> pickedVertexState = visualizationViewer.getPickedVertexState();
         pickedVertexState.clear();
         pickedVertexState.pick(state, true);
+        listener.publish(state);
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
         visualizationViewer.getPickedVertexState().clear();
+        listener.publish(null);
     }
 
     @Override
