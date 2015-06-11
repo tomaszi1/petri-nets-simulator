@@ -73,9 +73,11 @@ public interface GraphService {
 
     Arc getModelRepresentative(ArcGraphCell arcGraphCell);
 
-    void repaintGraph();
-    public void exportMatrixToFile(File file);
     void refreshGraph();
+
+    void refreshMatrix();
+
+    public void exportMatrixToFile(File file);
 
     void displayMarkingOnGraph(Map<Integer, Integer> marking);
 

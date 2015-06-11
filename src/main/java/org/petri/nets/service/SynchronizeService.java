@@ -8,8 +8,10 @@ import org.petri.nets.synhronize.SynchronizePanel;
  * Created by Asia on 2015-05-17.
  */
 public interface SynchronizeService {
-    void addPlace();
     void updateReachabilityGraph();
     SynchronizePanel getSynchronizePanel();
-    public void addTransition();
+    void addTransition(int id);
+    void removeTransition(int id);
+    void removePlace(int id);
+    void addPlace(int id);
 }

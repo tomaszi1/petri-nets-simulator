@@ -101,7 +101,7 @@ public class NetMatrixPanel extends JPanel {
             while (columns.hasMoreElements()) {
                 TableColumn tableColumn = columns.nextElement();
                 tableColumn.setCellRenderer(defaultTableCellRenderer);
-                tableColumn.setMaxWidth(20);
+                tableColumn.setMaxWidth(28);
             }
         }
     }

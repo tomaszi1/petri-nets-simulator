@@ -16,8 +16,8 @@ public class ListPetriNet implements PetriNet, Serializable {
 
     public ListPetriNet() {
         initialMarking = new LinkedHashMap<>();
-        setTransitionMap(Maps.newHashMap());
-        setPlaceMap(Maps.newHashMap());
+        transitionMap = Maps.newHashMap();
+        placeMap = Maps.newHashMap();
     }
 
     ////////////
@@ -28,7 +28,7 @@ public class ListPetriNet implements PetriNet, Serializable {
     @Override
     public void setInitialMarking(Integer placeId, int marking) {
         initialMarking.put(placeId, marking);
-        getPlaceMap().get(placeId).setInitialMarking(marking);
+        placeMap.get(placeId).setInitialMarking(marking);
     }
 
     @Override

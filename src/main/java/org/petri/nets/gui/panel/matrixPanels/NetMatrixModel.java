@@ -22,7 +22,7 @@ public class NetMatrixModel  extends AbstractTableModel {
         this.setGraphService(graphService);
     }
     public void fireTableChanged(TableModelEvent e) {
-        transitionIds = new ArrayList<>(graphService.getDomainModel().getPetriNet().getTransitionMap().keySet());
+        //transitionIds = new ArrayList<>(graphService.getDomainModel().getPetriNet().getTransitionMap().keySet());
         placeIds = new ArrayList<>(graphService.getInitialMarking().keySet());
         super.fireTableChanged(e);
     }
@@ -41,6 +41,10 @@ public class NetMatrixModel  extends AbstractTableModel {
         return null;
     }
 
+    @Override
+    public String getColumnName(int col) {
+        return "T" + transitionIds.get(col);
+    }
 
     public GraphService getGraphService() {
         return graphService;

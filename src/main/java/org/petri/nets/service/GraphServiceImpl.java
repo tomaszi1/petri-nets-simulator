@@ -64,8 +64,10 @@ public class GraphServiceImpl implements GraphService {
         if (isPlace(cell)) {
             model.getPetriNet().removePlace(placeGUI.get(cell));
             placeGUI.remove(cell);
+            syncService.removePlace(placeGUI.get(cell).getId());
         } else if (isTransition(cell)) {
             model.getPetriNet().removeTransition(transitonGUI.get(cell));
+            syncService.removeTransition(transitonGUI.get(cell).getId());
             transitonGUI.remove(cell);
         } else {
             removeArc((ArcGraphCell) cell);
@@ -81,7 +83,7 @@ public class GraphServiceImpl implements GraphService {
                 place.getId(),
                 position);
         model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
-        syncService.addPlace();
+        syncService.addPlace(place.getId());
         placeGUI.put(cell, place);
         invalidateReachabilityGraph();
         return cell;
@@ -95,7 +97,7 @@ public class GraphServiceImpl implements GraphService {
                 position);
         model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
         transitonGUI.put(cell, transition);
-        syncService.addTransition();
+        syncService.addTransition(transition.getId());
         invalidateReachabilityGraph();
         return cell;
     }
@@ -279,7 +281,10 @@ public class GraphServiceImpl implements GraphService {
         model.getPetriNetGraph().invalidate();
         model.getPetriNetGraph().refresh();
     }
-
+    @Override
+    public void refreshMatrix(){
+        syncService.getSynchronizePanel().updateNetMatrix();
+    }
     @Override
     public void displayMarkingOnGraph(Map<Integer, Integer> marking) {
         if(marking==null){

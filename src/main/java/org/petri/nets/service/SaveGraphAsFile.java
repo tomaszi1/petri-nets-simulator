@@ -75,15 +75,25 @@ public class SaveGraphAsFile {
         try {
             // create a new file with an ObjectOutputStream
             FileOutputStream out = new FileOutputStream(file);
-            ObjectOutputStream oout = new ObjectOutputStream(out);
+            PrintWriter oout = new PrintWriter(out);
 
             // write domainModel in the file
-            oout.writeObject("Macierz wejść");
-            oout.writeObject(plusMatrix);
-            oout.writeObject("Macierz wyjść");
-            oout.writeObject(minusMatrix);
-            oout.writeObject("Macierz grafu");
-            oout.writeObject(generalMatrix);
+            oout.println("Input matrix: ");
+            oout.println("");
+            //oout.println(matrixToString(plusMatrix, oout));
+            writeMatrixToFile(plusMatrix, oout);
+            oout.println("");
+            oout.println("");
+            oout.println("Output matrix: ");
+            oout.println("");
+            //oout.println(matrixToString(minusMatrix));
+            writeMatrixToFile(minusMatrix, oout);
+            oout.println("");
+            oout.println("");
+            oout.println("Graph matrix: ");
+            oout.println("");
+            //oout.println(matrixToString(generalMatrix));
+            writeMatrixToFile(generalMatrix, oout);
             oout.flush();
 
         } catch (Exception ex) {
@@ -98,9 +108,9 @@ public class SaveGraphAsFile {
             for(Integer transitKey: domainModel.getSyncModel().getTransitionIds()){
                 Transition transition = domainModel.getPetriNet().getTransitionMap().get(transitKey);
                 if(place.getTransitionsFrom().get(transition) == null){
-                    plusMatrix[placeKey][transitKey] =  0;
+                    plusMatrix[placeKey-1][transitKey-1] =  0;
                 }else{
-                    plusMatrix[placeKey][transitKey] =  place.getTransitionsFrom().get(transition).getValue();
+                    plusMatrix[placeKey-1][transitKey-1] =  place.getTransitionsFrom().get(transition).getValue();
                 }
             }
         }
@@ -113,9 +123,9 @@ public class SaveGraphAsFile {
             for(Integer transitKey: domainModel.getSyncModel().getTransitionIds()){
                 Transition transition = domainModel.getPetriNet().getTransitionMap().get(transitKey);
                 if(place.getTransitionsTo().get(transition) == null){
-                    minusMatrix[placeKey][transitKey] =  0;
+                    minusMatrix[placeKey-1][transitKey-1] =  0;
                 }else{
-                    minusMatrix[placeKey][transitKey] =  place.getTransitionsTo().get(transition).getValue();
+                    minusMatrix[placeKey-1][transitKey-1] =  place.getTransitionsTo().get(transition).getValue();
                 }
             }
         }
@@ -130,6 +140,17 @@ public class SaveGraphAsFile {
             }
         }
         return generalMatrix;
+    }
+    private void writeMatrixToFile(Integer[][] matrix, PrintWriter out){
+        String matrixString = "";
+        for(int i=0; i<matrix.length;i++){
+            for(int j =0; j<matrix[i].length;j++){
+                matrixString += matrix[i][j];
+            }
+            out.println(matrixString);
+            matrixString ="";
+        }
+
     }
     public DomainModel getDomainModel() {
         return domainModel;
