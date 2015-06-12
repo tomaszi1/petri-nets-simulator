@@ -30,6 +30,8 @@ public class SaveGraphAsFile {
             oout.writeObject(domainModel);
             oout.flush();
 
+        }catch (StreamCorruptedException e){
+            System.out.println("Nieprawidłowy plik");
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -37,11 +39,11 @@ public class SaveGraphAsFile {
     }
     public void openGraph(File file){
         try{
-            // create an ObjectInputStream for the file we created before
+            // create an ObjectInputStream for the file
             ObjectInputStream ois =
                     new ObjectInputStream(new FileInputStream(file));
 
-            // read and print an object and cast it as string
+            // read and print an objec
             DomainModel domainModel = (DomainModel) ois.readObject();
 
             try {
@@ -56,6 +58,7 @@ public class SaveGraphAsFile {
 
             GraphService graphService = new GraphServiceImpl(domainModel, synchronizePanel);
             SwingUtilities.invokeLater(() -> new MainFrame(graphService));
+            graphService.invalidateReachabilityGraph();
 
         }catch (StreamCorruptedException e){
          System.out.println("Nieprawidłowy plik");
@@ -80,23 +83,21 @@ public class SaveGraphAsFile {
             // write domainModel in the file
             oout.println("Input matrix: ");
             oout.println("");
-            //oout.println(matrixToString(plusMatrix, oout));
             writeMatrixToFile(plusMatrix, oout);
             oout.println("");
             oout.println("");
             oout.println("Output matrix: ");
             oout.println("");
-            //oout.println(matrixToString(minusMatrix));
             writeMatrixToFile(minusMatrix, oout);
             oout.println("");
             oout.println("");
             oout.println("Graph matrix: ");
             oout.println("");
-            //oout.println(matrixToString(generalMatrix));
             writeMatrixToFile(generalMatrix, oout);
             oout.flush();
 
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             ex.printStackTrace();
         }
     }

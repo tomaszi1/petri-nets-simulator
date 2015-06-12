@@ -17,8 +17,8 @@ public class NetMatrixModel  extends AbstractTableModel {
     private List<Integer> transitionIds;
 
     public NetMatrixModel(GraphService graphService){
-        setTransitionIds(graphService.getDomainModel().getSyncModel().getTransitionIds());
-        setPlaceIds(graphService.getDomainModel().getSyncModel().getPlaceIds());
+        setTransitionIds(new ArrayList<Integer>());
+        setPlaceIds(new ArrayList<Integer>());
         this.setGraphService(graphService);
     }
     public void fireTableChanged(TableModelEvent e) {
