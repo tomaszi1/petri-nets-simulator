@@ -71,7 +71,7 @@ public class MainFrame extends JFrame {
 
     private void confirmClosing() {
         Object[] options = {"Tak", "Nie"};
-        int close = JOptionPane.showOptionDialog(this, "Czy na pewno chcesz zamkn��?", "Zamykanie", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+        int close = JOptionPane.showOptionDialog(this, "Czy na pewno chcesz zamknąć?", "Zamykanie", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
         if (close == 0)
             dispose();
     }

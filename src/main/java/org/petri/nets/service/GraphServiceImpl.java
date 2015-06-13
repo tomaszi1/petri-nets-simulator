@@ -1,11 +1,17 @@
 package org.petri.nets.service;
 
 import com.google.common.collect.BiMap;
+import com.google.common.collect.Lists;
 import edu.uci.ics.jung.graph.Graph;
 import org.jgraph.JGraph;
-import org.jgraph.graph.*;
+import org.jgraph.graph.CellView;
+import org.jgraph.graph.DefaultGraphCell;
+import org.jgraph.graph.Port;
 import org.petri.nets.gui.graph.petriNet.*;
-import org.petri.nets.model.*;
+import org.petri.nets.model.Arc;
+import org.petri.nets.model.DomainModel;
+import org.petri.nets.model.Place;
+import org.petri.nets.model.Transition;
 import org.petri.nets.model.reachability.State;
 import org.petri.nets.model.reachability.TransitionEdge;
 import org.petri.nets.synhronize.SynchronizePanel;
@@ -56,7 +62,8 @@ public class GraphServiceImpl implements GraphService {
                 for (Object child : graphCell.getChildren()) {
                     Port port = CustomCellViewFactory.tryCastToPort(child);
                     if (port != null) {
-                        port.edges().forEachRemaining(this::removeFromGraph);
+                        ArrayList edges = Lists.newArrayList(port.edges());
+                        edges.forEach(this::removeFromGraph);
                     }
                 }
             }
@@ -111,10 +118,19 @@ public class GraphServiceImpl implements GraphService {
 
     @Override
     public void addArc(PetriNetGraphCell start, PetriNetGraphCell end) {
+        boolean startsInPlace = true;
         Place place = placeGUI.get(start);
         Transition transition = transitonGUI.get(end);
-        if (place != null && transition != null && model.getPetriNet().hasArc(place, transition))
+        if (place == null || transition == null) {
+            place = placeGUI.get(end);
+            transition = transitonGUI.get(start);
+            startsInPlace = false;
+        }
+
+        if (model.getPetriNet().hasArc(place, transition, startsInPlace)) {
+            Toolkit.getDefaultToolkit().beep();
             return;
+        }
 
         ArcGraphCell edge = new ArcGraphCell();
         edge.setSource(start.getFirstChild());
@@ -181,8 +197,9 @@ public class GraphServiceImpl implements GraphService {
     public void openGraphFromFile(File file) throws Exception {
         saveGraphAsFile.openGraph(file);
     }
+
     @Override
-    public void exportMatrixToFile(File file){
+    public void exportMatrixToFile(File file) {
         saveGraphAsFile.exportMatrixToFile(file);
     }
 
@@ -279,14 +296,15 @@ public class GraphServiceImpl implements GraphService {
         model.getPetriNetGraph().invalidate();
         model.getPetriNetGraph().refresh();
     }
+
     @Override
-    public void refreshMatrix(){
+    public void refreshMatrix() {
         synchronizePanel.updateNetMatrix();
     }
 
     @Override
     public void displayMarkingOnGraph(Map<Integer, Integer> marking) {
-        if(marking==null){
+        if (marking == null) {
             for (Map.Entry<PlaceGraphCell, Place> entry : placeGUI.entrySet())
                 entry.getKey().setUserObject(entry.getValue().getName());
             refreshGraph();
@@ -305,10 +323,10 @@ public class GraphServiceImpl implements GraphService {
     @Override
     public String getDescriptionOfCell(Object cell) {
         Place place = placeGUI.get(cell);
-        if(place!=null)
+        if (place != null)
             return place.getDescription();
         Transition transition = transitonGUI.get(cell);
-        if(transition!=null)
+        if (transition != null)
             return transition.getDescription();
         return null;
     }

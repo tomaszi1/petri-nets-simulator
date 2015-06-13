@@ -15,29 +15,20 @@ import java.util.Enumeration;
  */
 public class NetMatrixPanel extends JPanel {
 
-    public static final String PANEL_TITLE = "Macierz Grafu";
-    public static final String PANEL_PLUS_TITLE = "Macierz Wejść";
-    public static final String PANEL_MINUS_TITLE = "Macierz Wyjść";
+    public static final String PANEL_TITLE = "Macierz sumaryczna";
+    public static final String PANEL_PLUS_TITLE = "Macierz wejść (+)";
+    public static final String PANEL_MINUS_TITLE = "Macierz wyjść (-)";
     public static final int PANEL_HEIGHT = 200;
-
-    private NetMatrixTable plusTable;
-    private NetMatrixTable minusTable;
-    private NetMatrixTable generalTable;
 
     private NetMatrixPlusModel tablePlusModel;
     private NetMatrixMinusModel tableMinusModel;
     private NetMatrixGeneralModel tableGeneralModel;
 
     public NetMatrixPanel(GraphService graphService) {
-
         this.tablePlusModel = new NetMatrixPlusModel(graphService);
         this.tableMinusModel= new NetMatrixMinusModel(graphService);
         this.tableGeneralModel = new NetMatrixGeneralModel(graphService);
-        this.plusTable = new NetMatrixTable(tablePlusModel);
-        this.minusTable = new NetMatrixTable(tableMinusModel);
-        this.generalTable = new NetMatrixTable(tableGeneralModel);
         initNetMatrixTable();
-
     }
 
     private void initNetMatrixTable() {

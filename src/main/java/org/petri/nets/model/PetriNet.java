@@ -33,7 +33,7 @@ public interface PetriNet {
 
     void removeTransition(int id);
 
-    boolean hasArc(Place place, Transition transition);
+    boolean hasArc(Place place, Transition transition, boolean startsInPlace);
 
     Map<Integer, Place> getPlaces();
 
