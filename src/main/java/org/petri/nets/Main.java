@@ -7,22 +7,29 @@ import org.petri.nets.model.ListPetriNet;
 import org.petri.nets.model.DomainModel;
 import org.petri.nets.service.GraphService;
 import org.petri.nets.service.GraphServiceImpl;
-import org.petri.nets.synhronize.SynchronizePanel;
 
 import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
+        setLookAndFeel();
+
         DomainModel domainModel = new DomainModel();
         domainModel.setPetriNet(new ListPetriNet());
-        JGraph graph = JGraphFactory.createGraph();
 
+        JGraph graph = JGraphFactory.createGraph();
         domainModel.setPetriNetGraph(graph);
 
-        SynchronizePanel synchronizePanel = new SynchronizePanel();
+        GraphService graphService = new GraphServiceImpl(domainModel);
 
-        GraphService graphService = new GraphServiceImpl(domainModel, synchronizePanel);
+        SwingUtilities.invokeLater(() -> {
+            MainFrame mainFrame = new MainFrame(graphService);
+            mainFrame.setVisible(true);
+        });
+    }
 
+
+    private static void setLookAndFeel(){
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (ClassNotFoundException |
@@ -31,9 +38,6 @@ public class Main {
                 IllegalAccessException e) {
             e.printStackTrace();
         }
-
-        SwingUtilities.invokeLater(() -> new MainFrame(graphService));
-
     }
 
 }

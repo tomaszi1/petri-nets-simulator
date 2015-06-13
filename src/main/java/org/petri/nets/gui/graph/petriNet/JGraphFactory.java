@@ -12,6 +12,7 @@ public class JGraphFactory {
         JGraph newGraph = new JGraph(defaultGraphModel, graphLayoutCache);
         newGraph.setDisconnectable(false);
         newGraph.setAntiAliased(true);
+        newGraph.setEditable(false);
         return newGraph;
     }
 }

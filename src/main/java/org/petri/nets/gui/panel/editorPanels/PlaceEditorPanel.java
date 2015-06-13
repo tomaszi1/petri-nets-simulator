@@ -1,5 +1,6 @@
 package org.petri.nets.gui.panel.editorPanels;
 
+import com.google.common.base.Strings;
 import org.petri.nets.gui.panel.PropertyEditorAbstractPanel;
 
 import javax.swing.*;
@@ -27,7 +28,7 @@ public class PlaceEditorPanel extends PropertyEditorAbstractPanel<String> {
 
     @Override
     public void okClicked() {
-        publishChanges(descriptionTextField.getText());
+        publishChanges(Strings.emptyToNull(descriptionTextField.getText()));
         super.okClicked();
     }
 

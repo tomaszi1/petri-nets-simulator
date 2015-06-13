@@ -19,7 +19,6 @@ public class GlobalDialogsHandler {
     private JDialog dialog;
 
     public GlobalDialogsHandler(JFrame mainFrame) {
-//        Preconditions.checkNotNull(mainFrame);
         this.mainFrame = mainFrame;
         dialog = new JDialog();
     }
@@ -48,5 +47,10 @@ public class GlobalDialogsHandler {
 
     public void showDialog() {
         dialog.setVisible(true);
+    }
+
+    public void showWarning(String title, String message) {
+        if(!isDialogShowing())
+            JOptionPane.showMessageDialog(mainFrame,message,title,JOptionPane.WARNING_MESSAGE);
     }
 }

@@ -1,5 +1,6 @@
 package org.petri.nets.gui.panel.editorPanels;
 
+import com.google.common.base.Strings;
 import com.google.common.primitives.Ints;
 import org.petri.nets.gui.panel.PropertyEditorAbstractPanel;
 
@@ -29,8 +30,7 @@ public class ArcEditorPanel extends PropertyEditorAbstractPanel<Integer> {
 
     @Override
     public void okClicked() {
-
-        String text = valueTextField.getText();
+        String text = Strings.nullToEmpty(valueTextField.getText());
         Integer value = Ints.tryParse(text);
         if (value == null) {
             Toolkit.getDefaultToolkit().beep();

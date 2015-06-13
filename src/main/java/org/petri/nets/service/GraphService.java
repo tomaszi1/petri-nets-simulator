@@ -2,7 +2,6 @@ package org.petri.nets.service;
 
 import edu.uci.ics.jung.graph.Graph;
 import org.jgraph.JGraph;
-import org.jgraph.graph.CellView;
 import org.petri.nets.gui.graph.petriNet.ArcGraphCell;
 import org.petri.nets.gui.graph.petriNet.PetriNetGraphCell;
 import org.petri.nets.gui.graph.petriNet.PlaceGraphCell;
@@ -10,16 +9,20 @@ import org.petri.nets.gui.graph.petriNet.TransitionGraphCell;
 import org.petri.nets.model.Arc;
 import org.petri.nets.model.DomainModel;
 import org.petri.nets.model.Place;
-import org.petri.nets.model.reachability.State;
 import org.petri.nets.model.Transition;
+import org.petri.nets.model.reachability.State;
 import org.petri.nets.model.reachability.TransitionEdge;
+import org.petri.nets.synhronize.SynchronizePanel;
 
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
 public interface GraphService {
+
+    SynchronizePanel getSynchronizePanel();
 
     void removeFromGraph(Object cell);
 
@@ -45,9 +48,9 @@ public interface GraphService {
 
     boolean isPlace(Object cell);
 
-    void openGraphfromFile(File file);
+    void openGraphFromFile(File file) throws Exception;
 
-    void saveGraphAsFile(File file);
+    void saveGraphAsFile(File file) throws IOException;
 
     HashMap<Integer, Integer> getInitialMarking();
 
@@ -60,8 +63,6 @@ public interface GraphService {
     DomainModel getDomainModel();
 
     Graph<State, TransitionEdge> getReachabilityGraph();
-
-    SynchronizeService getSynchronizeService();
 
     Place getModelRepresentative(PlaceGraphCell placeGraphCell);
 
@@ -76,7 +77,6 @@ public interface GraphService {
     void refreshGraph();
 
     void displayMarkingOnGraph(Map<Integer, Integer> marking);
-
 
     String getDescriptionOfCell(Object cell);
 }

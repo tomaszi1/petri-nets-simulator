@@ -26,23 +26,12 @@ public class SyncModelGUI implements Serializable{
         return placeGUI;
     }
 
-    public void setPlaceGUI(BiMap<PlaceGraphCell, Place> placeGUI) {
-        this.placeGUI = placeGUI;
-    }
-
     public BiMap<TransitionGraphCell, Transition> getTransitonGUI() {
         return transitonGUI;
-    }
-
-    public void setTransitonGUI(BiMap<TransitionGraphCell, Transition> transitonGUI) {
-        this.transitonGUI = transitonGUI;
     }
 
     public List<Integer> getPlaceIds() {
         return placeIds;
     }
 
-    public void setPlaceIds(List<Integer> placeIds) {
-        this.placeIds = placeIds;
-    }
 }

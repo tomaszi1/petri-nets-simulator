@@ -1,14 +1,10 @@
 package org.petri.nets.gui.graph.petriNet;
 
-import org.jgraph.JGraph;
-import org.jgraph.graph.*;
+import org.jgraph.graph.CellView;
+import org.jgraph.graph.VertexRenderer;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.io.Serializable;
-import java.util.Map;
 
 public class PlaceVertexRenderer extends VertexRenderer {
     private String tooltip;
@@ -70,7 +66,7 @@ public class PlaceVertexRenderer extends VertexRenderer {
             int markingX = (getWidth() - (int) markingBounds.getWidth()) / 2;
             int markingY = 3 * (getHeight() - (int) markingBounds.getHeight()) / 4 + metrics.getAscent();
             g2.setPaint(Color.BLUE);
-            g2.drawString(marking, markingX, markingY);
+            g2.drawString(marking.equals("-1") ? "\u221E" : marking, markingX, markingY);
         }
     }
 }

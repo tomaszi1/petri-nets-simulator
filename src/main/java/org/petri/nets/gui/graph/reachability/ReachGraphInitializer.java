@@ -7,7 +7,6 @@ import java.awt.geom.Point2D;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by Tomasz on 2015-06-06.
@@ -15,12 +14,10 @@ import java.util.Set;
 public class ReachGraphInitializer implements org.apache.commons.collections15.Transformer<State, Point2D> {
     private static final int letterWidth = 10;
     private static final int distanceY = 200;
-    private final Collection<State> vertices;
     private final int distanceX;
     private Map<Integer, Integer> verticesCountAtDepth = Maps.newHashMap();
 
     public ReachGraphInitializer(Collection<State> vertices) {
-        this.vertices = vertices;
         Iterator<State> it = vertices.iterator();
         distanceX = it.hasNext() ? letterWidth * it.next().getMarking().values().toString().length() : 0;
     }

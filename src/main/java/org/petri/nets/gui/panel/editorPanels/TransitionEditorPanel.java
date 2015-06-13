@@ -1,5 +1,6 @@
 package org.petri.nets.gui.panel.editorPanels;
 
+import com.google.common.base.Strings;
 import com.google.common.primitives.Ints;
 import org.petri.nets.gui.panel.PropertyEditorAbstractPanel;
 import org.petri.nets.utils.TransitionProperties;
@@ -36,24 +37,24 @@ public class TransitionEditorPanel extends PropertyEditorAbstractPanel<Transitio
     @Override
     public void okClicked() {
         TransitionProperties props = new TransitionProperties();
-        props.description = descriptionTextField.getText();
+        props.description = Strings.emptyToNull(descriptionTextField.getText());
+
         String priorityText = priorityTextField.getText();
-        if(priorityText!=null){
-            Integer integer = Ints.tryParse(priorityText);
-            if(integer==null) {
-                Toolkit.getDefaultToolkit().beep();
-                return;
-            }
+        Integer priority;
+        if (Strings.isNullOrEmpty(priorityText) || (priority = Ints.tryParse(priorityText)) == null) {
+            Toolkit.getDefaultToolkit().beep();
+            return;
         }
+        props.priority = priority;
         publishChanges(props); // FIXME
         super.okClicked();
     }
 
-    public void setDescription(String description){
+    public void setDescription(String description) {
         descriptionTextField.setText(description);
     }
 
-    public void setPriority(int priority){
+    public void setPriority(int priority) {
         priorityTextField.setText(String.valueOf(priority));
     }
 }

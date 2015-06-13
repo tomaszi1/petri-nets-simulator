@@ -50,7 +50,7 @@ public class InitialMarkingPanel extends JPanel {
     public class InitialMarkingTable extends JTable {
 
         private final DefaultTableCellRenderer defaultTableCellRenderer = new DefaultTableCellRenderer();
-        private final Font FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 12);
+        private final Font FONT = new Font(Font.SANS_SERIF, Font.PLAIN, 14);
 
         public InitialMarkingTable(MarkingTableModel tableModel) {
             super(tableModel);

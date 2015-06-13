@@ -81,6 +81,7 @@ class CellEditHandler {
             transition.setPriority(props.priority);
             transition.setDescription(props.description);
             petriNetGraphCell.setDescription(props.description);
+            graphService.invalidateReachabilityGraph();
         });
     }
 

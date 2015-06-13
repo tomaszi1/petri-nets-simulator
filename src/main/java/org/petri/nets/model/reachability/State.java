@@ -1,13 +1,15 @@
 package org.petri.nets.model.reachability;
 
-import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
 import org.petri.nets.model.Place;
+import org.petri.nets.model.Transition;
 
+import java.util.List;
 import java.util.Map;
 
 public class State {
     private Map<Integer, Integer> marking;
+    private List<Transition> path;
     private int depth = 0;
 
     public State(Map<Integer, Integer> marking) {
@@ -38,12 +40,29 @@ public class State {
         this.depth = depth;
     }
 
+    public boolean isInfinite(){
+        return marking.values().stream().filter(token -> token.equals(-1)).count() > 0;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         State state1 = (State) o;
-        return Maps.difference(state1.marking, marking).areEqual();
+        return Maps.difference(state1.marking,marking).areEqual();
+/*        MapDifference<Integer, Integer> markingDiff = Maps.difference(state1.marking, marking);
+        Map<Integer, MapDifference.ValueDifference<Integer>> differences = markingDiff.entriesDiffering();
+        if(!markingDiff.entriesOnlyOnLeft().isEmpty() || !markingDiff.entriesOnlyOnRight().isEmpty())
+            return false;
+        for (Map.Entry<Integer, MapDifference.ValueDifference<Integer>> diffEntry : differences.entrySet()) {
+            MapDifference.ValueDifference<Integer> diff = diffEntry.getValue();
+            Integer left = diff.leftValue();
+            Integer right = diff.rightValue();
+            if (left != null && (right == null || !right.equals(-1) && !left.equals(-1))) {
+                return false;
+            }
+        }*/
+        //return true;
     }
 
     @Override
@@ -60,4 +79,11 @@ public class State {
     }
 
 
+    public List<Transition> getPath() {
+        return path;
+    }
+
+    public void setPath(List<Transition> path) {
+        this.path = path;
+    }
 }

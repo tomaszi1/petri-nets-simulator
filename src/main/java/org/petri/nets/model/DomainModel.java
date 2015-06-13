@@ -2,20 +2,25 @@ package org.petri.nets.model;
 
 import edu.uci.ics.jung.graph.Graph;
 import org.jgraph.JGraph;
+import org.jgraph.graph.GraphLayoutCache;
 import org.petri.nets.model.reachability.State;
 import org.petri.nets.model.reachability.TransitionEdge;
 
 import java.io.Serializable;
 
 public class DomainModel implements Serializable {
-    private JGraph petriNetGraph;
-    private Graph<State, TransitionEdge> reachabilityGraph;
+    private transient JGraph petriNetGraph;
+    private transient Graph<State, TransitionEdge> reachabilityGraph;
+    private PetriNet petriNet;
+    private SyncModelGUI syncModel = new SyncModelGUI();
+    private GraphLayoutCache graphLayoutCache;
 
     public JGraph getPetriNetGraph() {
         return petriNetGraph;
     }
 
     public void setPetriNetGraph(JGraph petriNetGraph) {
+        graphLayoutCache = petriNetGraph.getGraphLayoutCache();
         this.petriNetGraph = petriNetGraph;
     }
 
@@ -27,10 +32,6 @@ public class DomainModel implements Serializable {
         this.reachabilityGraph = reachabilityGraph;
     }
 
-/////////////////////////
-
-    private PetriNet petriNet;
-    private SyncModelGUI syncModel = new SyncModelGUI();
     public PetriNet getPetriNet() {
         return petriNet;
     }
@@ -43,7 +44,11 @@ public class DomainModel implements Serializable {
         return syncModel;
     }
 
-    public void setSyncModel(SyncModelGUI syncModel) {
-        this.syncModel = syncModel;
+    public void validate() {
+        graphLayoutCache = petriNetGraph.getGraphLayoutCache();
+    }
+
+    public GraphLayoutCache getGraphLayoutCache() {
+        return graphLayoutCache;
     }
 }

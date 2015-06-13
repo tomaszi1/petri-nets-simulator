@@ -12,23 +12,29 @@ import org.petri.nets.synhronize.SynchronizePanel;
 
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class GraphServiceImpl implements GraphService {
     private final DomainModel model;
-    private SynchronizeService syncService;
     private SaveGraphAsFile saveGraphAsFile;
     private BiMap<PlaceGraphCell, Place> placeGUI;
     private BiMap<TransitionGraphCell, Transition> transitonGUI;
+    private SynchronizePanel synchronizePanel;
 
-    public GraphServiceImpl(DomainModel model, SynchronizePanel synchronizePanel) {
+    public GraphServiceImpl(DomainModel model) {
         this.model = model;
-        this.syncService = new SynchronizeServiceImpl(model, synchronizePanel);
+        this.synchronizePanel = new SynchronizePanel();
         saveGraphAsFile = new SaveGraphAsFile(model);
         this.placeGUI = this.model.getSyncModel().getPlaceGUI();
         this.transitonGUI = this.model.getSyncModel().getTransitonGUI();
+    }
+
+    @Override
+    public SynchronizePanel getSynchronizePanel() {
+        return synchronizePanel;
     }
 
     @Override
@@ -70,7 +76,7 @@ public class GraphServiceImpl implements GraphService {
         } else {
             removeArc((ArcGraphCell) cell);
         }
-        syncService.getSynchronizePanel().updateMarking();
+        synchronizePanel.updateMarking();
     }
 
     @Override
@@ -80,7 +86,7 @@ public class GraphServiceImpl implements GraphService {
                 place.getId(),
                 position);
         model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
-        syncService.addPlace();
+        synchronizePanel.updateMarking();
         placeGUI.put(cell, place);
         invalidateReachabilityGraph();
         return cell;
@@ -118,10 +124,6 @@ public class GraphServiceImpl implements GraphService {
             model.getPetriNet().addArc(placeGUI.get(end), transitonGUI.get(start), 1, false);
 
         invalidateReachabilityGraph();
-    }
-
-    public DomainModel getModel() {
-        return model;
     }
 
 
@@ -165,12 +167,12 @@ public class GraphServiceImpl implements GraphService {
     }
 
     @Override
-    public void saveGraphAsFile(File file) {
+    public void saveGraphAsFile(File file) throws IOException {
         saveGraphAsFile.saveGaph(file);
     }
 
     @Override
-    public void openGraphfromFile(File file) {
+    public void openGraphFromFile(File file) throws Exception {
         saveGraphAsFile.openGraph(file);
     }
 
@@ -203,7 +205,7 @@ public class GraphServiceImpl implements GraphService {
         ReachabilityGraphGenerator reachGraph = new ReachabilityGraphGenerator(model.getPetriNet(), 50);
         Graph<State, TransitionEdge> reachabilityGraph = reachGraph.generateGraph();
         model.setReachabilityGraph(reachabilityGraph);
-        syncService.updateReachabilityGraph();
+        synchronizePanel.updateReachabilityGraph();
     }
 
     @Override
@@ -219,11 +221,6 @@ public class GraphServiceImpl implements GraphService {
     @Override
     public Graph<State, TransitionEdge> getReachabilityGraph() {
         return model.getReachabilityGraph();
-    }
-
-    @Override
-    public SynchronizeService getSynchronizeService() {
-        return syncService;
     }
 
     @Override

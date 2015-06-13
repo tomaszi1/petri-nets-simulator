@@ -18,7 +18,7 @@ public class Transition extends PetriNetElement implements Serializable {
     private String description;
 
     public Transition() {
-        this(-1, -1);
+        this(0, 0);
     }
 
     public Transition(int id, int priority) {
