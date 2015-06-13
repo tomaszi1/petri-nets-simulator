@@ -148,4 +148,13 @@ public class ListPetriNet implements PetriNet, Serializable {
         return placeMap.get(id);
     }
 
+    @Override
+    public HashMap<Integer, Place> getPlaceMap() {
+        return placeMap;
+    }
+
+    @Override
+    public HashMap<Integer, Transition> getTransitionMap() {
+        return transitionMap;
+    }
 }

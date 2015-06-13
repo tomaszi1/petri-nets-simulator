@@ -56,6 +56,7 @@ public class ReachabilityGraphPanel extends JPanel {
         edgeColoring = new HashMap<>();
         updateColoring();
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
+        updateGraph();
     }
 
     private JComponent createGraphComponent() {

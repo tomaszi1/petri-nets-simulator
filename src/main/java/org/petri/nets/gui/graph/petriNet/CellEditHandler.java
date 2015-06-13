@@ -70,6 +70,7 @@ class CellEditHandler {
                 arcGraphCell.setUserObject(value);
                 graphService.refreshGraph();
                 graphService.invalidateReachabilityGraph();
+                graphService.refreshMatrix();
             }
         });
     }

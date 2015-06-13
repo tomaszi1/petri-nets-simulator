@@ -4,11 +4,12 @@ import com.google.common.collect.Lists;
 import org.petri.nets.model.Transition;
 
 import java.util.List;
+import java.io.Serializable;
 
 /**
  * Created by Tomasz on 2015-06-05.
  */
-public class TransitionEdge {
+public class TransitionEdge implements Serializable{
     private Transition transition;
     private List<TransitionEdge> pathFromRoot;
 

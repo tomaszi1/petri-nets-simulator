@@ -11,7 +11,6 @@ public class PetriNetWrapperPanel extends JPanel{
 
     public PetriNetWrapperPanel(GraphService graphService) {
         setLayout(new BorderLayout());
-
         initialMarkingPanel = new InitialMarkingPanel(graphService);
 
         PetriNetGraphPanel petriNetGraphPanel = new PetriNetGraphPanel(graphService);

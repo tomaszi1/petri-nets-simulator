@@ -11,9 +11,11 @@ import java.io.Serializable;
 public class DomainModel implements Serializable {
     private transient JGraph petriNetGraph;
     private transient Graph<State, TransitionEdge> reachabilityGraph;
+    private GraphLayoutCache graphLayoutCache;
     private PetriNet petriNet;
     private SyncModelGUI syncModel = new SyncModelGUI();
-    private GraphLayoutCache graphLayoutCache;
+
+
 
     public JGraph getPetriNetGraph() {
         return petriNetGraph;

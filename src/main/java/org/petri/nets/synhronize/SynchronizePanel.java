@@ -1,7 +1,7 @@
 package org.petri.nets.synhronize;
 
-import org.petri.nets.gui.MainFrame;
 import org.petri.nets.gui.panel.InitialMarkingPanel;
+import org.petri.nets.gui.panel.NetMatrixPanel;
 import org.petri.nets.gui.panel.PetriNetWrapperPanel;
 import org.petri.nets.gui.panel.ReachabilityGraphPanel;
 
@@ -11,7 +11,7 @@ import org.petri.nets.gui.panel.ReachabilityGraphPanel;
 public class SynchronizePanel {
     private PetriNetWrapperPanel petriNetWrapperPanel;
     private ReachabilityGraphPanel reachabilityGraphPanel;
-
+    private NetMatrixPanel netMatrixPanel;
     public InitialMarkingPanel getInitialMarkingPanel() {
         return petriNetWrapperPanel.getInitialMarkingPanel();
     }
@@ -30,5 +30,13 @@ public class SynchronizePanel {
 
     public void updateMarking() {
         getInitialMarkingPanel().updateMarking();
+    }
+
+    public void updateNetMatrix(){
+        netMatrixPanel.updateTable();
+    }
+
+    public void setNetMatrixPanel(NetMatrixPanel netMatrixPanel) {
+        this.netMatrixPanel = netMatrixPanel;
     }
 }

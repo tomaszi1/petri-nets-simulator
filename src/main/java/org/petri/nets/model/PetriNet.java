@@ -9,6 +9,9 @@ public interface PetriNet {
 
     void setInitialMarking(Integer placeId, int marking);
 
+    HashMap<Integer, Place> getPlaceMap();
+    HashMap<Integer, Transition> getTransitionMap();
+
     Collection<Transition> getTransitions();
 
     // add

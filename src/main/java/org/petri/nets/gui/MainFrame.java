@@ -54,6 +54,8 @@ public class MainFrame extends JFrame {
         ReachabilityGraphPanel reachGraphPanel = new ReachabilityGraphPanel(graphService);
         synchronizePanel.setReachabilityGraphPanel(reachGraphPanel);
 
+        sideMenuWrapper = new SideMenuPanel(graphService, globalDialogsHandler);
+        synchronizePanel.setNetMatrixPanel(sideMenuWrapper.getNetMatrixPanel());
         graphsWrapper = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 petriNetWrapperPanel,
                 reachGraphPanel);
@@ -69,7 +71,7 @@ public class MainFrame extends JFrame {
 
     private void confirmClosing() {
         Object[] options = {"Tak", "Nie"};
-        int close = JOptionPane.showOptionDialog(this, "Czy na pewno chcesz zamknąć?", "Zamykanie", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+        int close = JOptionPane.showOptionDialog(this, "Czy na pewno chcesz zamkn��?", "Zamykanie", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
         if (close == 0)
             dispose();
     }

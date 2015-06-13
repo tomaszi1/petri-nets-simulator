@@ -63,6 +63,7 @@ public class GraphServiceImpl implements GraphService {
             model.getPetriNetGraph().getGraphLayoutCache().remove(new Object[]{cell});
             synhronizeRemoveFromGraph(cell);
         }
+        refreshMatrix();
         invalidateReachabilityGraph();
     }
 
@@ -77,6 +78,7 @@ public class GraphServiceImpl implements GraphService {
             removeArc((ArcGraphCell) cell);
         }
         synchronizePanel.updateMarking();
+        refreshMatrix();
     }
 
     @Override
@@ -86,8 +88,9 @@ public class GraphServiceImpl implements GraphService {
                 place.getId(),
                 position);
         model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
-        synchronizePanel.updateMarking();
         placeGUI.put(cell, place);
+        synchronizePanel.updateMarking();
+        refreshMatrix();
         invalidateReachabilityGraph();
         return cell;
     }
@@ -100,6 +103,8 @@ public class GraphServiceImpl implements GraphService {
                 position);
         model.getPetriNetGraph().getGraphLayoutCache().insert(cell);
         transitonGUI.put(cell, transition);
+//        syncService.addTransition(transition.getId()); // !!!!
+        refreshMatrix();
         invalidateReachabilityGraph();
         return cell;
     }
@@ -123,6 +128,7 @@ public class GraphServiceImpl implements GraphService {
         else
             model.getPetriNet().addArc(placeGUI.get(end), transitonGUI.get(start), 1, false);
 
+        refreshMatrix();
         invalidateReachabilityGraph();
     }
 
@@ -175,6 +181,10 @@ public class GraphServiceImpl implements GraphService {
     public void openGraphFromFile(File file) throws Exception {
         saveGraphAsFile.openGraph(file);
     }
+    @Override
+    public void exportMatrixToFile(File file){
+        saveGraphAsFile.exportMatrixToFile(file);
+    }
 
     private void removeArc(ArcGraphCell arc) {
         if (isPlace(arc.getStart())) {
@@ -182,12 +192,14 @@ public class GraphServiceImpl implements GraphService {
         } else {
             model.getPetriNet().removeArc(placeGUI.get(arc.getEnd()), transitonGUI.get(arc.getStart()), false);
         }
+        synchronizePanel.updateNetMatrix();
     }
 
     @Override
     public void setInitialMarking(int placeId, int marking) {
         model.getPetriNet().setInitialMarking(placeId, marking);
         invalidateReachabilityGraph();
+        synchronizePanel.updateNetMatrix();
     }
 
     @Override
@@ -266,6 +278,10 @@ public class GraphServiceImpl implements GraphService {
     public void refreshGraph() {
         model.getPetriNetGraph().invalidate();
         model.getPetriNetGraph().refresh();
+    }
+    @Override
+    public void refreshMatrix(){
+        synchronizePanel.updateNetMatrix();
     }
 
     @Override

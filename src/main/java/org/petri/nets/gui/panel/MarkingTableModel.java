@@ -17,7 +17,7 @@ public class MarkingTableModel extends AbstractTableModel {
 
     public MarkingTableModel(GraphService graphService) {
         this.graphService = graphService;
-        placeIds =graphService.getDomainModel().getSyncModel().getPlaceIds();
+        placeIds =new ArrayList<Integer>();
     }
     @Override
     public int getRowCount() {
@@ -31,6 +31,7 @@ public class MarkingTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int ignore, int col) {
+
         return graphService.getInitialMarking(placeIds.get(col));
     }
 
