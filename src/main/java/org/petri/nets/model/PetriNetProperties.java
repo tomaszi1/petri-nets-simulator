@@ -32,8 +32,8 @@ public class PetriNetProperties {
         isPetriNetLive = properties.isPetriNetLive;
         isPetriNetSafe = properties.isPetriNetSafe;
 
-        kBoundedness = Maps.newHashMap(kBoundedness);
-        transitionLiveness = Sets.newHashSet(transitionLiveness);
+        kBoundedness = Maps.newHashMap(properties.kBoundedness);
+        transitionLiveness = Sets.newHashSet(properties.transitionLiveness);
     }
 
     public boolean isPetriNetConservative() {
@@ -84,6 +84,8 @@ public class PetriNetProperties {
             isPetriNetSafe = true;
             return;
         }
+        if(kBoundedness.values().stream().filter(i -> i==-1).findFirst().isPresent())
+            isPetriNetBounded = false;
         isPetriNetSafe = (max.getAsInt() == 1);
     }
 

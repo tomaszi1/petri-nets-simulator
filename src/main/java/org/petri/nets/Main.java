@@ -22,9 +22,12 @@ public class Main {
 
         GraphService graphService = new GraphServiceImpl(domainModel);
 
-        SwingUtilities.invokeLater(() -> {
-            MainFrame mainFrame = new MainFrame(graphService);
-            mainFrame.setVisible(true);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                MainFrame mainFrame = new MainFrame(graphService);
+                mainFrame.setVisible(true);
+            }
         });
     }
 

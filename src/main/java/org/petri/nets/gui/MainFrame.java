@@ -56,7 +56,6 @@ public class MainFrame extends JFrame {
         ReachabilityGraphPanel reachGraphPanel = new ReachabilityGraphPanel(graphService);
         synchronizePanel.setReachabilityGraphPanel(reachGraphPanel);
 
-        sideMenuWrapper = new SideMenuPanel(graphService, globalDialogsHandler);
         synchronizePanel.setNetMatrixPanel(sideMenuWrapper.getNetMatrixPanel());
         graphsWrapper = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 petriNetWrapperPanel,
