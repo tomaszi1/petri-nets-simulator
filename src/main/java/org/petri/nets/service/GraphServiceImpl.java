@@ -231,10 +231,11 @@ public class GraphServiceImpl implements GraphService {
 
     @Override
     public void invalidateReachabilityGraph() {
-        ReachabilityGraphGenerator reachGraph = new ReachabilityGraphGenerator(model.getPetriNet(), 50);
-        Graph<State, TransitionEdge> reachabilityGraph = reachGraph.generateGraph();
+        ReachabilityGraphGenerator reachGraphGenerator = new ReachabilityGraphGenerator(model.getPetriNet(), 50);
+        Graph<State, TransitionEdge> reachabilityGraph = reachGraphGenerator.generateGraph();
         model.setReachabilityGraph(reachabilityGraph);
         synchronizePanel.updateReachabilityGraph();
+        synchronizePanel.updatePetriNetProperties(reachGraphGenerator.getPetriNetProperties());
     }
 
     @Override

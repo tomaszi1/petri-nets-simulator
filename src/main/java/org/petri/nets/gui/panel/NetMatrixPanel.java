@@ -25,8 +25,9 @@ public class NetMatrixPanel extends JPanel {
     private NetMatrixGeneralModel tableGeneralModel;
 
     public NetMatrixPanel(GraphService graphService) {
+        setLayout(new GridLayout(3, 0));
         this.tablePlusModel = new NetMatrixPlusModel(graphService);
-        this.tableMinusModel= new NetMatrixMinusModel(graphService);
+        this.tableMinusModel = new NetMatrixMinusModel(graphService);
         this.tableGeneralModel = new NetMatrixGeneralModel(graphService);
         initNetMatrixTable();
     }
@@ -46,8 +47,9 @@ public class NetMatrixPanel extends JPanel {
         initNetMatrixTable(tableGeneralModel, PANEL_TITLE);
         updateTable();
     }
-    private void initNetMatrixTable(NetMatrixModel model, String title){
-        JPanel panel = new JPanel( );//panel.setTable(new NetMatrixTable(tableModel));
+
+    private void initNetMatrixTable(NetMatrixModel model, String title) {
+        JPanel panel = new JPanel();//panel.setTable(new NetMatrixTable(tableModel));
         panel.setPreferredSize(new Dimension(200, 150));
         panel.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), title));
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
@@ -56,7 +58,7 @@ public class NetMatrixPanel extends JPanel {
         scrollPane.setPreferredSize(new Dimension(2000, 150));
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        panel.add(scrollPane );
+        panel.add(scrollPane);
         add(panel);
     }
 

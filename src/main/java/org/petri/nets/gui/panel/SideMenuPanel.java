@@ -16,25 +16,29 @@ public class SideMenuPanel extends JPanel {
     private static final String EXPORT_MATRIX_TO_FILE_BUTTON_TEXT = "Eksportuj macierz do pliku";
     private static final String PANEL_TITLE = "Menu";
 
+
+    private PetriNetPropertiesPanel petriNetPropertiesPanel;
     private GraphService graphService;
     private GlobalDialogsHandler dialogsHandler;
-    JButton openButton, saveButton, exportButton;
-    JFileChooser fc;
-    private final NetMatrixPanel netMatrixPanel;
+    private NetMatrixPanel netMatrixPanel;
+    private JButton openButton, saveButton, exportButton;
+    private JFileChooser fc;
 
 
     public SideMenuPanel(GraphService graphService, GlobalDialogsHandler dialogsHandler) {
         this.graphService = graphService;
         this.dialogsHandler = dialogsHandler;
 
-        setLayout(new BorderLayout());
+        setLayout(new FlowLayout());
 
         setBorder(BorderFactory.createTitledBorder(BorderFactory.createEmptyBorder(), PANEL_TITLE));
         setPreferredSize(new Dimension(MENU_WIDTH, 500));
-        //add(new "Menu",BorderLayout.CENTER);
         createButtons();
         netMatrixPanel = new NetMatrixPanel(graphService);
-        this.add(netMatrixPanel);
+        petriNetPropertiesPanel = new PetriNetPropertiesPanel();
+        petriNetPropertiesPanel.setPreferredSize(new Dimension(MENU_WIDTH - 20, 200));
+        add(petriNetPropertiesPanel);
+        add(netMatrixPanel);
     }
 
     private void createButtons() {
@@ -108,4 +112,9 @@ public class SideMenuPanel extends JPanel {
     public NetMatrixPanel getNetMatrixPanel() {
         return netMatrixPanel;
     }
+
+    public PetriNetPropertiesPanel getPetriNetPropertiesPanel() {
+        return petriNetPropertiesPanel;
+    }
+
 }

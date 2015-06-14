@@ -51,6 +51,8 @@ public class MainFrame extends JFrame {
         PetriNetWrapperPanel petriNetWrapperPanel = new PetriNetWrapperPanel(graphService);
         synchronizePanel.setPetriNetWrapperPanel(petriNetWrapperPanel);
 
+        synchronizePanel.setPetriNetPropertiesPanel(sideMenuWrapper.getPetriNetPropertiesPanel());
+
         ReachabilityGraphPanel reachGraphPanel = new ReachabilityGraphPanel(graphService);
         synchronizePanel.setReachabilityGraphPanel(reachGraphPanel);
 

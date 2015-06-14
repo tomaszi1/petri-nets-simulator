@@ -25,13 +25,15 @@ public class ReachabilityGraphGenerator {
         this.maxVertexCount = maxVertexCount;
         this.petriNet = petriNet;
         properties = new PetriNetProperties();
-        properties.setIsPetriNetConservative(true);
-        properties.setIsPetriNetBounded(true);
         lastStateAfterTransitionMap = Maps.newHashMap();
     }
 
 
     public Graph<State, TransitionEdge> generateGraph() {
+        properties.setIsPetriNetConservative(true);
+        properties.setIsPetriNetBounded(true);
+        properties.setIsPetriNetLive(true);
+
         Graph<State, TransitionEdge> reachGraph = new DirectedOrderedSparseMultigraph<>();
         Queue<State> stateQueue = new LinkedList<>();
         int vertexCount = 0;
@@ -49,7 +51,12 @@ public class ReachabilityGraphGenerator {
             State state = stateQueue.poll();
             Set<Transition> doableTransitions = findDoableTransitions(state);
 
-            properties.getTransitionLiveness().addAll(doableTransitions);
+            Set<Transition> transitionLiveness = properties.getTransitionLiveness();
+            transitionLiveness.addAll(doableTransitions);
+            properties.setTransitionLiveness(transitionLiveness);
+
+            if (doableTransitions.isEmpty() && !state.isInfinite())
+                properties.setIsPetriNetLive(false);
 
             transitionLoop:
             for (Transition transition : doableTransitions) {
@@ -154,7 +161,7 @@ public class ReachabilityGraphGenerator {
             Place place = placeArcEntry.getKey();
             Arc arc = placeArcEntry.getValue();
 
-            if (state.getMarkingForPlace(place) - arc.getValue() < 0 && state.getMarkingForPlace(place)!=-1)
+            if (state.getMarkingForPlace(place) - arc.getValue() < 0 && state.getMarkingForPlace(place) != -1)
                 return false;
 
             for (Transition t : place.getTransitionsTo().keySet()) {
@@ -174,7 +181,13 @@ public class ReachabilityGraphGenerator {
     private void updateKBoundedness(State state) {
         Map<Integer, Integer> kBoundedness = properties.getkBoundedness();
         state.getMarking().forEach(
-                (placeId, marking) -> kBoundedness.put(placeId, Math.max(marking, kBoundedness.getOrDefault(placeId, 0))));
+                (placeId, marking) -> {
+                    if (marking == -1)
+                        kBoundedness.put(placeId, -1);
+                    else
+                        kBoundedness.put(placeId, Math.max(marking, kBoundedness.getOrDefault(placeId, 0)));
+                });
+        properties.setkBoundedness(kBoundedness);
     }
 
     private void updateConservation(State state) {
