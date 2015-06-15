@@ -1,15 +1,6 @@
 package org.petri.nets.gui.dialog;
 
-import com.google.common.base.Preconditions;
-import com.sun.istack.internal.NotNull;
-import org.petri.nets.gui.MainFrame;
-
 import javax.swing.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by Tomasz on 2015-06-05.

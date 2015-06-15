@@ -6,7 +6,7 @@
 
     <groupId>org.petri.nets</groupId>
     <artifactId>petri-nets-simulator</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <properties>
